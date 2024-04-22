@@ -20,15 +20,16 @@ def check_bid(region) ->tuple | bool:
         return pag.center(location)
     except:
         try:
-            location = pag.locateOnScreen(ImagesBtns.has_close, grayscale=False,confidence=0.8, region=region)
+            location = pag.locateOnScreen(ImagesBtns.has_bid_ba, grayscale=False,confidence=0.8, region=region)
             return pag.center(location)
         except:
             try:
-                location = pag.locateOnScreen(ImagesBtns.has_bid_2, grayscale=False,confidence=0.8, region=region)
+                location = pag.locateOnScreen(ImagesBtns.has_bid_bb, grayscale=False,confidence=0.8, region=region)
                 return pag.center(location)
             except:
                 return False
+        
     
-    
-
+# while True:
+#     print(check_bid((0,0,1990,1058)))
     

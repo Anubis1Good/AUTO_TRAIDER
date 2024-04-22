@@ -5,16 +5,15 @@
 4. Иначе -> Send_bid
 '''
 import pyautogui as pag
-import operations as o
-from State import State
+from traid_utils import click_bid, reset_bid, click_ask, reset_ask, click_ask
 from conditions import check_pos, check_bid
 class VisualTraider():
     def __init__(self,left,top,right,bottom) -> None:
         self.region = (left,top,right,bottom)
-        self.Send_bid = State(o.send_bid)
-        self.Has_bid = State(o.has_bid)
-        self.Has_close = State(o.has_close)
-        self.Need_close = State(o.need_close)
+        self.Send_bid = click_ask
+        self.Has_bid = reset_ask
+        self.Has_close = reset_bid
+        self.Need_close = click_bid
         self.current_state = self.Send_bid
 
     def run(self):
@@ -26,7 +25,7 @@ class VisualTraider():
         if pos:
             if bid:
                 self.current_state = self.Has_close
-            else:
+            else: 
                 self.current_state = self.Need_close
         else:
             if bid:
@@ -35,15 +34,16 @@ class VisualTraider():
                 self.current_state = self.Send_bid
 
         
-        self.current_state.do_operation(self.region)
+        self.current_state(self.region)
         pag.PAUSE
+        # print(self.current_state)
 
-# test1 = VisualTraider(324,49,960,1055)
-# test2 = VisualTraider(1280,48,1916,1058)
-# while True:
-#     for i in range(30):
-#         test1.run()
-#         test2.run()
-#     pag.press('space')
-#     print('space')
+test1 = VisualTraider(0,0,1990,1058)
+
+while True:
+    for i in range(30): 
+        test1.run()
+         
+    pag.press('space')
+
 

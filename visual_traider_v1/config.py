@@ -7,8 +7,14 @@ class ImagesBtns:
     get_long = os.path.join(path,'Long_1.png')
     get_short = os.path.join(path, 'Short_1.png')
     header = os.path.join(path,'Header.png')
-    has_bid = os.path.join(path,'Has_bid_4.png')
-    has_close = os.path.join(path, 'Has_close_2.png')
-    has_bid_2 = os.path.join(path,'Has_bid_3.png')
+    has_bid = os.path.join(path,'Has_bid.png')
+    has_bid_bb = os.path.join(path,'hBB.png')
+    has_bid_ba = os.path.join(path,'hBA.png')
     has_long = os.path.join(path,'Has_long1.png')
+
+    best_bid = os.path.join(path,'BB.png')
+    best_ask = os.path.join(path,'BA.png')
+    plate_bid = os.path.join(path,'Plate_bid.png')
+    plate_bid_full = os.path.join(path,'Plate_bid_full.png')
+    plate_ask_full = os.path.join(path,'Plate_ask_full.png')
 
