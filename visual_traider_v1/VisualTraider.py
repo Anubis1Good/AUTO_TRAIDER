@@ -1,9 +1,3 @@
-'''
-1. Проверка наличия позиции -> Need_close
-2. Проверка наличия заявки на закрытие позиции -> Has_close
-3. Проверка наличия заявки на открытие позиции -> Has_bid
-4. Иначе -> Send_bid
-'''
 import pyautogui as pag
 from traid_utils import click_bid, reset_bid, click_ask, reset_ask, click_ask
 from conditions import check_pos, check_bid
@@ -31,19 +25,20 @@ class VisualTraider():
             if bid:
                 self.current_state = self.Has_bid
             else:
-                self.current_state = self.Send_bid
-
-        
+                self.current_state = self.Send_bid    
+  
+  
         self.current_state(self.region)
         pag.PAUSE
-        # print(self.current_state)
+        print(self.current_state)
+     
+# test1 = VisualTraider(0,0,1990,1058)
 
-test1 = VisualTraider(0,0,1990,1058)
-
-while True:
-    for i in range(30): 
-        test1.run()
+# while True:
+#     for i in range(30): 
+#         test1.run()
          
-    pag.press('space')
+#     pag.press('space')
 
 
+ 

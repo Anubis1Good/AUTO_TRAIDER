@@ -13,23 +13,21 @@ def check_pos(region)->tuple | bool:
         return True
     except:
         return False
-    
+
+def search_bid(btn,region,grayscale):
+    location = pag.locateOnScreen(btn, grayscale=grayscale,confidence=0.8, region=region)
+    return pag.center(location)
+
 def check_bid(region) ->tuple | bool:
     try:
-        location = pag.locateOnScreen(ImagesBtns.has_bid, grayscale=True,confidence=0.8, region=region)
-        return pag.center(location)
+        return search_bid(ImagesBtns.has_bid,region,True)
     except:
         try:
-            location = pag.locateOnScreen(ImagesBtns.has_bid_ba, grayscale=False,confidence=0.8, region=region)
-            return pag.center(location)
+            return search_bid(ImagesBtns.has_bid_ba,region, False)
         except:
             try:
-                location = pag.locateOnScreen(ImagesBtns.has_bid_bb, grayscale=False,confidence=0.8, region=region)
-                return pag.center(location)
+                return search_bid(ImagesBtns.has_bid_bb,region, False)
             except:
                 return False
         
-    
-# while True:
-#     print(check_bid((0,0,1990,1058)))
     

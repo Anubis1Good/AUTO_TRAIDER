@@ -13,8 +13,10 @@ class ImagesBtns:
     has_long = os.path.join(path,'Has_long1.png')
 
     best_bid = os.path.join(path,'BB.png')
+    best_bid = os.path.join(path,'BB_full.png')
     best_ask = os.path.join(path,'BA.png')
     plate_bid = os.path.join(path,'Plate_bid.png')
+    plate_ask = os.path.join(path,'Plate_ask.png')
     plate_bid_full = os.path.join(path,'Plate_bid_full.png')
     plate_ask_full = os.path.join(path,'Plate_ask_full.png')
 

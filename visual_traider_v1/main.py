@@ -7,4 +7,3 @@ while True:
         test1.run()
         test2.run()
     pag.press('space')
-    print('space')
