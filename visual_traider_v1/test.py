@@ -8,23 +8,30 @@ import cv2
 import sys
 import keyboard
 
-while True:
-    if keyboard.is_pressed('Esc'):
-        print("\nyou pressed Esc, so exiting...")
-        sys.exit(0)
-    pag.screenshot('Screen.png')
+pag.screenshot('Screen.png')
+# while True:
+#     if keyboard.is_pressed('Esc'):
+#         print("\nyou pressed Esc, so exiting...")
+#         sys.exit(0)
+#     pag.screenshot('Screen.png')
 
-    img = cv2.imread('Screen.png')
+#     img = cv2.imread('Screen.png')
 
-    x,y = color_search(img,ColorsBtnBGR.color_x_shadow,(1380,49,1918,1050),reverse=True)
-    if x>0:
-        pag.moveTo(x,y)
-    else:
-        x,y = color_search(img,ColorsBtnBGR.color_x,(1380,49,1918,1050),reverse=True)
-        if x>0:
-            pag.moveTo(x,y)
-        else:
-            print('Not Found!')
+#     # x,y = color_search(img,ColorsBtnBGR.best_bid,(1600,49,1918,1050))
+#     region = (1600,49,1918,1050)
+#     xbb,ybb = color_search(img,ColorsBtnBGR.best_bid,region)
+#     if xbb > 0:
+#         new_region = (xbb,ybb,region[2],region[3])
+#         x,y = color_search(img,ColorsBtnBGR.large_value_2,new_region)
+#         pag.moveTo(x,y)
+
+    # if x>0:
+    # else:
+    #     x,y = color_search(img,ColorsBtnBGR.color_x,(1380,49,1918,1050),reverse=True)
+    #     if x>0:
+    #         pag.moveTo(x,y)
+    #     else:
+    #         print('Not Found!')
 
 # print(type(img))
 # img[400:600,400:600] = [0,0,255]
