@@ -6,16 +6,17 @@ from time import sleep
 from VisualTraider import VisualTraider
 
 traiders = [
-    VisualTraider(58,50,318,1055),
-    VisualTraider(378,50,639,1055),
-    VisualTraider(698,50,958,1055),
-    VisualTraider(1018,50,1278,1055),
-    VisualTraider(1338,50,1598,1055),
-    VisualTraider(1658,50,1917,1055),
+    VisualTraider(58,52,270,740),
+    VisualTraider(331,52,543,740),
+    VisualTraider(603,52,816,740),
+    VisualTraider(877,52,1090,740),
+    VisualTraider(1151,52,1363,740),
+
+
 ]   
-sleep(2)
+sleep(3)
 while True:
-    for i in range(60):
+    for i in range(50):
         sleep(1)
         pag.press('shift')
         pag.screenshot('Screen.png')

@@ -41,7 +41,7 @@ def reset_lr(image,region):
 
 
 def check_sr(image,region):
-    xbb,ybb = color_search(image,ColorsBtnBGR.best_ask,region,reverse=True)
+    xbb,ybb = color_search(image,ColorsBtnBGR.best_bid,region)
     if xbb > 0:
         new_region = (region[0],region[1]-11,xbb,ybb)
         x1,y1 = color_search(image,ColorsBtnBGR.large_value_1,new_region,reverse=True)

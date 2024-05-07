@@ -7,7 +7,7 @@ from time import time
 import cv2
 import sys
 import keyboard
-    
+sleep(5)
 pag.screenshot('Screen.png')
 # while True:
 #     if keyboard.is_pressed('Esc'):
