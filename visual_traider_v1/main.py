@@ -12,10 +12,10 @@ traiders = [
     VisualTraider(1018,50,1278,1055),
     VisualTraider(1338,50,1598,1055),
     VisualTraider(1658,50,1917,1055),
-]
+]   
 sleep(2)
 while True:
-    for i in range(20):
+    for i in range(60):
         sleep(1)
         pag.press('shift')
         pag.screenshot('Screen.png')

@@ -11,9 +11,10 @@ def check_lr(image,region):
     if xbb > 0:
         new_region = (xbb,ybb,region[2],region[3])
         x,y = color_search(image,ColorsBtnBGR.large_value_2,new_region)
-        return x,y
-    else:
-        return -1,-1
+        delta = y - ybb
+        if delta < 300:
+            return x,y
+    return -1,-1
 
 def reset_and_click_lr(x,y):
     pag.moveTo(x,y)
@@ -28,21 +29,21 @@ def click_lr(image,region):
 
 
 def reset_lr(image,region):
-    pass
-    # xr,yr = check_req(image, region)
-    # if xr > 0:
-    #     xnr,ynr = check_lr(image,region)
-    #     if xnr > 0:
-    #         if yr-ynr > 20:
-    #             reset_and_click_lr(xnr,ynr)
+    xr,yr = check_req(image, region)
+    if xr > 0:
+        xnr,ynr = check_lr(image,region)
+        if xnr > 0:
+            delta = yr-ynr
+            if delta > 20:
+                reset_and_click_lr(xnr,ynr)
 # bid          
 # help functions
 
 
 def check_sr(image,region):
-    xbb,ybb = color_search(image,ColorsBtnBGR.best_ask,region)
+    xbb,ybb = color_search(image,ColorsBtnBGR.best_ask,region,reverse=True)
     if xbb > 0:
-        new_region = (region[0],region[1],xbb,ybb)
+        new_region = (region[0],region[1]-11,xbb,ybb)
         x1,y1 = color_search(image,ColorsBtnBGR.large_value_1,new_region,reverse=True)
         x2,y2 = color_search(image,ColorsBtnBGR.large_value_2,new_region,reverse=True)
         if y1 > y2:
@@ -66,11 +67,14 @@ def click_sr(image,region):
         reset_and_click_sr(x,y+10)
 
 def reset_sr(image,region):
-    pass
-    # xr,yr = check_req(image, region)
-    # if xr > 0:
-    #     xnr,ynr = check_sr(image,region)
-    #     if xnr > 0:
-    #         if ynr > yr:
-    #             reset_and_click_sr(xnr,ynr)
+    xr,yr = check_req(image, region)
+    if xr > 0:  
+        xbb,ybb = color_search(image,ColorsBtnBGR.best_ask,region,reverse=True)
+        xnr,ynr = check_sr(image,region)
+        if xnr > 0:
+            delta = ynr - yr
+            if delta > 20 or ybb < yr:
+                reset_and_click_sr(xnr,ynr) 
+                    
+
 
