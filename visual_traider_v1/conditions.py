@@ -21,5 +21,23 @@ def check_req(img,region) ->tuple | bool:
     else:
         x,y = color_search(img,ColorsBtnBGR.color_x,region)
         return x,y
-
     
+def help_graphic_level(img,region,color,buy_level,sell_level):
+    x,y = color_search(img,color,region)
+    if y>0:
+        if region[3] > y > buy_level:
+            return 'buy'
+        if region[1] < y < sell_level:
+            return 'sell'
+        return 'wait'
+    return 'Not found'
+
+def check_graphic_level(img,region):
+    graphic_part = (region[3] - region[1])//3
+    buy_level = region[3] - graphic_part
+    sell_level = region[1] + graphic_part
+    result = help_graphic_level(img,region,ColorsBtnBGR.cur_price_1,buy_level,sell_level)
+    if result == 'Not found':
+        result = help_graphic_level(img,region,ColorsBtnBGR.cur_price_2,buy_level,sell_level)
+        return result
+    return result

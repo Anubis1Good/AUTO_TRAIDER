@@ -27,6 +27,11 @@ def click_lr(image,region):
     if x > 0:
         reset_and_click_lr(x,y)
 
+def click_bl(image,region):
+    pag.moveTo(region[0]+10,region[1]+10)
+    pag.press('f')
+    pag.press('a')
+
 
 def reset_lr(image,region):
     xr,yr = check_req(image, region)
@@ -66,6 +71,11 @@ def click_sr(image,region):
     if x > 0:
         reset_and_click_sr(x,y+10)
 
+def click_bs(image,region):
+    x,y = color_search(image, ColorsBtnBGR.best_bid,region)
+    if x > 0:
+        reset_and_click_sr(x,y)
+
 def reset_sr(image,region):
     xr,yr = check_req(image, region)
     if xr > 0:  
@@ -77,4 +87,12 @@ def reset_sr(image,region):
                 reset_and_click_sr(xnr,ynr) 
                     
 
+# wait function
+def not_idea(image,region):
+    xr,yr = check_req(image, region)
+    if xr > 0: 
+        pag.moveTo(xr,yr)
+        pag.press('f')
 
+def idle(image,region):
+    pass

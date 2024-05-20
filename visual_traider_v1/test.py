@@ -7,12 +7,12 @@ from time import time
 import cv2
 import sys
 import keyboard
-sleep(5)
+sleep(2)
 pag.screenshot('Screen.png')
 # while True:
 #     if keyboard.is_pressed('Esc'):
 #         print("\nyou pressed Esc, so exiting...")
-#         sys.exit(0)
+#         sys.exit(0) 
 #     pag.screenshot('Screen.png')
 
 #     img = cv2.imread('Screen.png')

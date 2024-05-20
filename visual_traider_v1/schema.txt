@@ -1,0 +1,2 @@
+States:
+1.Idle -> Send_req -> Has_req -> Need_close -> Has_close
