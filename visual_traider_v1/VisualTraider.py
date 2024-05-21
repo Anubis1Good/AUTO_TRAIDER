@@ -48,21 +48,8 @@ class VisualTraider():
   
   
         self.current_state(img,self.region_glass)
-        # pag.PAUSE
-        print(self, self.current_state)
-     
-# test1 = VisualTraider(1240,49,1918,1057)
-# sleep(2)
-# while True:
-#     for i in range(30): 
-#         pag.screenshot('Screen.png')
-#         img = cv2.imread('Screen.png')
-#         test1.run(img)
-#         if keyboard.is_pressed('Esc'):
-#             print("\nyou pressed Esc, so exiting...")
-#             sys.exit(0)
+        # print(self, self.current_state)
 
-#     pag.press('space')
 
 
  

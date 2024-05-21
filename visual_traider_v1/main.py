@@ -10,7 +10,7 @@ sleep(3)
 while True:
     for i in range(50):
         sleep(1)
-        pag.press('shift')
+        keyboard.send('shift')
         pag.screenshot('Screen.png')
         img = cv2.imread('Screen.png')
         for traider in traiders:
@@ -19,5 +19,5 @@ while True:
                 print("\nyou pressed Esc, so exiting...")
                 sys.exit(0)
         pag.moveTo(traiders[0].region_glass[0]+10,traiders[0].region_glass[1]+10)
-        # pag.press('tab') 
+        keyboard.send('tab') 
     # pag.press('space')

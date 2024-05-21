@@ -1,4 +1,5 @@
 import pyautogui as pag
+import pydirectinput as pdi
 from config import ColorsBtnBGR
 from conditions import check_req
 from utils import color_search
@@ -18,7 +19,7 @@ def check_lr(image,region):
 
 def reset_and_click_lr(x,y):
     pag.moveTo(x,y)
-    pag.press('f')
+    pdi.press('f')
     pag.click(x, y-10)
 
 # work functions
@@ -29,8 +30,12 @@ def click_lr(image,region):
 
 def click_bl(image,region):
     pag.moveTo(region[0]+10,region[1]+10)
-    pag.press('f')
-    pag.press('a')
+    pdi.press('f')
+    pdi.press('a')
+
+    # x,y = color_search(image, ColorsBtnBGR.best_bid,region)
+    # if x > 0:
+    #     reset_and_click_lr(x,y)
 
 
 def reset_lr(image,region):
@@ -61,9 +66,12 @@ def check_sr(image,region):
 
 def reset_and_click_sr(x,y):
     pag.moveTo(x,y)
-    pag.press('f')
-    with pag.hold('altleft'):
-        pag.click(x, y,button='right')
+    pdi.press('f')
+    pdi.keyDown('altleft')
+    pag.click(x, y,button='right')
+    pdi.keyUp('altleft')
+
+    
 
 # work functions
 def click_sr(image,region):
@@ -72,7 +80,7 @@ def click_sr(image,region):
         reset_and_click_sr(x,y+10)
 
 def click_bs(image,region):
-    x,y = color_search(image, ColorsBtnBGR.best_bid,region)
+    x,y = color_search(image, ColorsBtnBGR.best_ask,region)
     if x > 0:
         reset_and_click_sr(x,y)
 
@@ -92,7 +100,7 @@ def not_idea(image,region):
     xr,yr = check_req(image, region)
     if xr > 0: 
         pag.moveTo(xr,yr)
-        pag.press('f')
+        pdi.press('f')
 
 def idle(image,region):
     pass

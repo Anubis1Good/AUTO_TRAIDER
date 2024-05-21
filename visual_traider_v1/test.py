@@ -1,4 +1,5 @@
-import pyautogui as pag 
+import pyautogui as pag
+import pydirectinput as pdi 
 from time import sleep
 import numpy as np
 from config import ColorsBtnBGR
@@ -7,8 +8,11 @@ from time import time
 import cv2
 import sys
 import keyboard
-sleep(2)
-pag.screenshot('Screen.png')
+# sleep(2)
+# pag.screenshot('Screen.png')
+# pdi.press("f")
+# keyboard.send('f')
+
 # while True:
 #     if keyboard.is_pressed('Esc'):
 #         print("\nyou pressed Esc, so exiting...")

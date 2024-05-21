@@ -2,3 +2,4 @@ PyAutoGUI
 opencv-python
 keyboard
 numpy
+PyDirectInput
