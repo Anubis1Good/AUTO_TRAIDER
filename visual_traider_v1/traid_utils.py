@@ -80,9 +80,9 @@ def click_sr(image,region):
         reset_and_click_sr(x,y+10)
 
 def click_bs(image,region):
-    x,y = color_search(image, ColorsBtnBGR.best_ask,region)
+    x,y = color_search(image, ColorsBtnBGR.best_ask,region,reverse=True)
     if x > 0:
-        reset_and_click_sr(x,y)
+        reset_and_click_sr(x-50,y-5)
 
 def reset_sr(image,region):
     xr,yr = check_req(image, region)

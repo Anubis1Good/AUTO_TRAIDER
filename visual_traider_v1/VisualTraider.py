@@ -28,7 +28,7 @@ class VisualTraider():
         pos = check_pos(img,self.region_pos)
         x,y = check_req(img,self.region_glass)
         graphic_level = check_graphic_level(img,self.region_graphic)
-        print(self,x,y)
+        # print(self,x,y)
         if pos:
             if graphic_level == 'sell':
                 if x > 0:

@@ -20,7 +20,12 @@ def check_req(img,region) ->tuple | bool:
         return x,y
     else:
         x,y = color_search(img,ColorsBtnBGR.color_x,region)
-        return x,y
+        if x > 0:
+            return x,y
+        else:
+            x,y = color_search(img,ColorsBtnBGR.color_x_bb,region)
+            return x,y
+
     
 def help_graphic_level(img,region,color,buy_level,sell_level):
     x,y = color_search(img,color,region)
@@ -33,9 +38,11 @@ def help_graphic_level(img,region,color,buy_level,sell_level):
     return 'Not found'
 
 def check_graphic_level(img,region):
-    graphic_part = (region[3] - region[1])//3
-    buy_level = region[3] - graphic_part
-    sell_level = region[1] + graphic_part
+    graphic_part = (region[3] - region[1])
+    long_zone = graphic_part//4
+    short_zone = graphic_part//3
+    buy_level = region[3] - long_zone
+    sell_level = region[1] + short_zone
     result = help_graphic_level(img,region,ColorsBtnBGR.cur_price_1,buy_level,sell_level)
     if result == 'Not found':
         result = help_graphic_level(img,region,ColorsBtnBGR.cur_price_2,buy_level,sell_level)
