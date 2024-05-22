@@ -39,7 +39,7 @@ def help_graphic_level(img,region,color,buy_level,sell_level):
 
 def check_graphic_level(img,region):
     graphic_part = (region[3] - region[1])
-    long_zone = graphic_part//4
+    long_zone = graphic_part//5
     short_zone = graphic_part//3
     buy_level = region[3] - long_zone
     sell_level = region[1] + short_zone
