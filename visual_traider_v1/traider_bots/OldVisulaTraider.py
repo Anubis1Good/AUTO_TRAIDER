@@ -1,11 +1,6 @@
-import sys
-import cv2
-import keyboard
-import pyautogui as pag
-from traid_utils import click_lr, reset_lr, click_sr, reset_sr, idle, click_bl,click_bs, not_idea
-from conditions import check_pos, check_req, check_graphic_level
-from time import sleep
-class VisualTraider():
+from utils.conditions import check_pos,check_req,check_graphic_level
+from utils.traid_utils import click_bl,click_bs, idle, not_idea
+class OldVisualTraider():
     def __init__(self,left,top,right,bottom,high_graphic) -> None:
         self.region_glass = (left,top,right,high_graphic-25)
         self.region_pos = (left,high_graphic-25,right,high_graphic)
@@ -49,7 +44,3 @@ class VisualTraider():
   
         self.current_state(img,self.region_glass)
         # print(self, self.current_state)
-
-
-
- 

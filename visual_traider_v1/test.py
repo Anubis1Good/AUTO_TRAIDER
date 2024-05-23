@@ -2,8 +2,8 @@ import pyautogui as pag
 import pydirectinput as pdi 
 from time import sleep
 import numpy as np
-from config import ColorsBtnBGR
-from utils import color_search
+from utils.config import ColorsBtnBGR
+from utils.utils import color_search
 from time import time
 import cv2
 import sys

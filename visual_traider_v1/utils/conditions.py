@@ -4,8 +4,8 @@
 3. Проверка наличия заявки на открытие позиции -> Has_bid
 4. Иначе -> Send_bid
 '''
-from config import ColorsBtnBGR
-from utils import color_search
+from utils.config import ColorsBtnBGR
+from utils.utils import color_search
 
 def check_pos(img,region)->tuple | bool:
     

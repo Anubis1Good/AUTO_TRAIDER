@@ -1,8 +1,8 @@
 import pyautogui as pag
 import pydirectinput as pdi
-from config import ColorsBtnBGR
-from conditions import check_req
-from utils import color_search
+from utils.config import ColorsBtnBGR
+from utils.conditions import check_req
+from utils.utils import color_search
 
 
 # long_request
