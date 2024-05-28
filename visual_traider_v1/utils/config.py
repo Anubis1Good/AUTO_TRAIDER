@@ -13,4 +13,7 @@ class ColorsBtnBGR:
     cur_price_1 = (96,118,50)
     cur_price_2 = (75,75,173)
 
+    candle_color_1 = (111,111,111)
+    candle_color_2 = (200,200,200)
+
 
