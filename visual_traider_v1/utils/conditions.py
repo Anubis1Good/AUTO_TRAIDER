@@ -25,8 +25,21 @@ def check_req(img,region) ->tuple | bool:
         else:
             x,y = color_search(img,ColorsBtnBGR.color_x_bb,region)
             return x,y
+# chart condition
+def get_level_variant(img,region,color):
+    x,y = color_search(img,color,region,True)
+    return y
 
-    
+def get_current_level(img,region) -> int:
+    y = get_level_variant(img,region,ColorsBtnBGR.cur_price_1)
+    if y > 0:
+        return y
+    y = get_level_variant(img,region,ColorsBtnBGR.cur_price_2)
+    if y > 0:
+        return y
+    return None
+
+# for Begginer2    
 def help_graphic_level(img,region,color,buy_level,sell_level):
     x,y = color_search(img,color,region)
     if y>0:
@@ -37,6 +50,7 @@ def help_graphic_level(img,region,color,buy_level,sell_level):
         return 'wait'
     return 'Not found'
 
+# for Begginer2  
 def check_graphic_level(img,region):
     graphic_part = (region[3] - region[1])
     long_zone = graphic_part//5
@@ -48,3 +62,5 @@ def check_graphic_level(img,region):
         result = help_graphic_level(img,region,ColorsBtnBGR.cur_price_2,buy_level,sell_level)
         return result
     return result
+
+# for SimpleTrander

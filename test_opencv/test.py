@@ -9,7 +9,8 @@ pag.screenshot('Screen.png')
 # image = cv2.imread('Screenshot_7.png')
 image = cv2.imread('Screen.png')
 # image = cv2.resize(image,(480,540))
-image = image[0:540,0:480]
+# image = image[0:540,0:480]
+image = image[747:1040,0:420]
 # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 color1 = np.array([111,111,111])
 color2 = np.array([200,200,200])
@@ -58,11 +59,11 @@ for cnt in countours:
 
 tops = np.array(tops)
 bottoms = np.array(bottoms)
+print(tops,bottoms)
 tops = tops[tops[:,0].argsort()]
 bottoms = bottoms[bottoms[:,0].argsort()]
 cv2.polylines(image,[tops],False,(255,0,0),1)
 cv2.polylines(image,[bottoms],False,(0,255,0),1)
-
 # print(cum_sumx)
 # Loop through the array elements
 def get_SMA(points):

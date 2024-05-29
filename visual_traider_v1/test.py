@@ -8,7 +8,7 @@ from time import time
 import cv2
 import sys
 import keyboard
-sleep(5)
+sleep(2)
 pag.screenshot('Screen.png')
 # pdi.press("f")
 # keyboard.send('f')
