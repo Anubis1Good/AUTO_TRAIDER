@@ -82,7 +82,7 @@ def angle_between(p1, p2):
         d = dx/dy
     except:
         d = 0
-    r = math.degrees(math.pi/2 - math.atan(dx/dy))
+    r = math.degrees(math.pi/2 - math.atan(d))
     if dy > 0:
         return 90-r
     else:

@@ -70,7 +70,7 @@ class SimpleTraider(VisualTraider):
                 if x > 0:
                     self.current_state = self.Has_req
                 else:
-                    if main_points[0][1] > y > bottom_mean-self.buff and cur_formation != 'short':
+                    if y > bottom_mean-self.buff and cur_formation != 'short':
                         self.current_state = self.Send_req
                     else:
                         self.current_state = self.Not_idea
