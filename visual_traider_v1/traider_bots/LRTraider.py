@@ -26,35 +26,37 @@ class LRTraider(VisualTraider):
             self.region_chart[0]:int((self.chart_width)*0.98)+self.region_chart[0]]
         try:
             slope,top_trend,bottom_trend = get_last_points_trend(chart)
+            
             # if pos:
             #     if req_x > 0:
-            #         if y_cur_price < top_trend+self.buff:
+            #         if y_cur_price < top_trend[1]+self.buff:
             #             self.current_state = self.Has_close
             #         else:
             #             self.current_state = self.Not_idea
             #     else:
-            #         if y_cur_price < top_trend+self.buff:
+            #         if y_cur_price < top_trend[1]+self.buff:
             #             self.current_state = self.Need_close
             #         else:
             #             self.current_state = self.Not_idea
             # else:
             #     if req_x > 0:
-            #         if y_cur_price > bottom_trend-self.buff:
+            #         if y_cur_price > bottom_trend[1]-self.buff:
             #             self.current_state = self.Has_req
             #         else:
             #             self.current_state = self.Not_idea
             #     else:
-            #         if y_cur_price > bottom_trend-self.buff and slope < 0.1:
+            #         if y_cur_price > bottom_trend[1]-self.buff and slope < 0.1:
             #             self.current_state = self.Send_req
             #         else:
             #             self.current_state = self.Not_idea
             # test
-            if y_cur_price > bottom_trend-self.buff and slope < 0.1:
+            if y_cur_price > bottom_trend[0]-self.buff and slope < 0.1:
                 self.current_state = self.Send_req
-            elif y_cur_price < top_trend+self.buff:
+            elif y_cur_price < top_trend[0]+self.buff:
                 self.current_state = self.Need_close
             else:
                 self.current_state = self.Has_close
+            print(self.name, y_cur_price, bottom_trend) 
         except:
             # self.current_state = self.Not_idea
             # test

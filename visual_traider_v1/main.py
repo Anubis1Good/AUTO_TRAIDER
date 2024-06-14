@@ -4,11 +4,9 @@ import keyboard
 import sys
 from time import sleep
 from settings import configurtion_traiders
-
+from stock_groups import stock_groups
 traiders = configurtion_traiders()
-stock_groups = [
-    ['APTK','FIXP','MTLR','ROSN','SELG']
-]
+
 sleep(3)
 while True:
     for stock in stock_groups:
@@ -23,6 +21,6 @@ while True:
                 print("\nyou pressed Esc, so exiting...")
                 sys.exit(0)
         # sys.exit(0)
-        # pag.moveTo(traiders[0].region_glass[0]+10,traiders[0].region_glass[1]+10)
-        # keyboard.send('tab') 
+        pag.moveTo(traiders[0].region_glass[0]+10,traiders[0].region_glass[1]+10)
+        keyboard.send('tab') 
     # pag.press('space')
