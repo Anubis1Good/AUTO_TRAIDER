@@ -1,7 +1,7 @@
 from utils.traid_utils import not_idea
 
 class VisualTraider():
-    def __init__(self,glass_region:tuple,chart_region:tuple) -> None:
+    def __init__(self,glass_region:tuple,chart_region:tuple,name:str='none') -> None:
         self.region_glass = (
             glass_region[0],
             glass_region[1],
@@ -17,9 +17,10 @@ class VisualTraider():
         self.region_chart = chart_region
         self.Not_idea = not_idea
         self.current_state = self.Not_idea
+        self.name = name
     
     def __repr__(self):
-        return f'VT: glass - {self.region_glass}, chart - {self.region_chart}'
+        return f'{self.name}: glass - {self.region_glass}, chart - {self.region_chart}'
 
     def run(self,img):         
         self.current_state(img,self.region_glass)

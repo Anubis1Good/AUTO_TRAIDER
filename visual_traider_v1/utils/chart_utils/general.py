@@ -2,6 +2,7 @@ import math
 import cv2
 import numpy as np
 from utils.config import ColorsBtnBGR
+from utils.ML_utils.LR_utils import learn_LR,predict_LR
 
 # function for search point of chart
 def get_chart_point(region):
@@ -11,7 +12,7 @@ def get_chart_point(region):
     mask2 = cv2.inRange(region,color2,color2)
     mask = cv2.add(mask1,mask2)
     kernel = np.ones((2, 1), np.uint8) 
-    mask = cv2.erode(mask,kernel)
+    # mask = cv2.erode(mask,kernel)
     del kernel,mask1,mask2
     countours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     tops = []
@@ -32,6 +33,37 @@ def get_chart_point(region):
     tops = tops[tops[:,0].argsort()]
     bottoms = bottoms[bottoms[:,0].argsort()]
     return tops,bottoms
+
+# function for getting training data of linear regression
+def get_xy_for_LR(region):
+    tops,bottoms = get_chart_point(region)
+    x = np.concatenate((tops[:,0],bottoms[:,0]))
+    y = np.concatenate((tops[:,1],bottoms[:,1]))
+    return x,y
+
+def get_trend_lines(region):
+    x,y = get_xy_for_LR(region)
+    slope,intercept = learn_LR(x,y)
+    std_y = np.std(y)
+    # middle_line = list(map(lambda x:predict_LR(x,0,slope,intercept), x))
+    top_line = list(map(lambda x:predict_LR(x,std_y,slope,intercept), x))
+    bottom_line = list(map(lambda x:predict_LR(x,-std_y,slope,intercept), x))
+    # trend = np.column_stack([x, middle_line])
+    top_trend = np.column_stack([x, top_line])
+    bottom_trend = np.column_stack([x, bottom_line])
+    return slope,top_trend,bottom_trend
+
+def get_last_points_trend(region):
+    x,y = get_xy_for_LR(region)
+    slope,intercept = learn_LR(x,y)
+    std_y = np.std(y)
+    # middle_point = predict_LR(x[-1],0,slope,intercept)
+    top_point = predict_LR(x[-1],std_y,slope,intercept)
+    bottom_point = predict_LR(x[-1],-std_y,slope,intercept)
+    # trend = (x[-1],middle_point)
+    top_trend = (x[-1],top_point)
+    bottom_trend = (x[-1],bottom_point)
+    return slope,top_trend,bottom_trend
 
 # function for search rotate points
 def levels(points,dir=True):

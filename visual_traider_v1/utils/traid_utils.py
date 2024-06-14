@@ -104,3 +104,5 @@ def not_idea(image,region):
 
 def idle(image,region):
     pass
+
+
