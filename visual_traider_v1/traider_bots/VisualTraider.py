@@ -24,6 +24,9 @@ class VisualTraider():
 
     def run(self,img):         
         self.current_state(img,self.region_glass)
+
+    def test(self,img):
+        print(f'{self.name} test')
         
 
 
