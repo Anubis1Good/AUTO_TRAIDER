@@ -32,3 +32,9 @@ def convertHEXtoRGB(color: str) -> tuple:
 # print(convertHEXtoRGB('#FF427564'))
 # print(convertHEXtoRGB('#FF308CC6'))
 # print(convertHEXtoRGB('#FF2DC9B2'))
+
+def change_coords(point,offset):
+    point = list(point)
+    point[0] += offset[0]
+    point[1] += offset[1]
+    return tuple(point)
