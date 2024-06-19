@@ -22,6 +22,6 @@ while True:
                 print("\nyou pressed Esc, so exiting...")
                 sys.exit(0)
         # sys.exit(0)
-        # pag.moveTo(traiders[0].region_glass[0]+10,traiders[0].region_glass[1]+10)
-        # keyboard.send('tab') 
+        pag.moveTo(traiders[0].region_glass[0]+10,traiders[0].region_glass[1]+10)
+        keyboard.send('tab') 
     # pag.press('space')

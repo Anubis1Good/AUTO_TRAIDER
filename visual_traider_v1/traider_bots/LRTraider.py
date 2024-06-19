@@ -74,9 +74,10 @@ class LRTraider(VisualTraider):
 
     def test(self,img):
         y_cur_price = get_current_level(img,self.region_chart)
-        chart = self.get_chart
+        chart = self.get_chart(img)
         try:
             slope,top_offset,bottom_offset = self.get_keys(chart)
+            # print(self.name,y_cur_price)
             if y_cur_price > bottom_offset and slope < 0.1:
                 self.current_state = self.Test_send_req
             elif y_cur_price < top_offset:
@@ -86,7 +87,7 @@ class LRTraider(VisualTraider):
 
         except Exception as err:
             self.current_state = self.Test_sleep
-            # print(err)   
+            print(err)   
 
         self.current_state(img,self.name)
 
