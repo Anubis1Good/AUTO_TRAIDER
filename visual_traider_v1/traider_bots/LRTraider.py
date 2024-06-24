@@ -32,16 +32,18 @@ class LRTraider(VisualTraider):
         bottom_trend = change_coords(bottom_trend,self.region_chart)
         offset = (bottom_trend[1]-top_trend[1])//10
         top_offset  = top_trend[1]+offset
+        top_stop = top_trend[1]-offset*5
         bottom_offset = bottom_trend[1]-offset
-        return slope,top_offset,bottom_offset
+        bottom_stop = bottom_trend[1]+offset*5
+        return slope,top_offset,bottom_offset,top_stop,bottom_stop
     
     def run(self, img):
         pos = check_pos(img,self.region_pos)
         req_x, req_y = check_req(img,self.region_glass)
         y_cur_price = get_current_level(img,self.region_chart)
-        chart = self.get_chart
+        chart = self.get_chart(img)
         try:
-            slope,top_offset,bottom_offset = self.get_keys(chart)
+            slope,top_offset,bottom_offset,top_stop,bottom_stop = self.get_keys(chart)
             if pos:
                 if req_x > 0:
                     if y_cur_price < top_offset:
@@ -76,11 +78,11 @@ class LRTraider(VisualTraider):
         y_cur_price = get_current_level(img,self.region_chart)
         chart = self.get_chart(img)
         try:
-            slope,top_offset,bottom_offset = self.get_keys(chart)
-            # print(self.name,y_cur_price)
-            if y_cur_price > bottom_offset and slope < 0.1:
+            slope,top_offset,bottom_offset,top_stop,bottom_stop = self.get_keys(chart)
+
+            if bottom_stop > y_cur_price > bottom_offset and slope < 0.1:
                 self.current_state = self.Test_send_req
-            elif y_cur_price < top_offset:
+            elif y_cur_price < top_offset or y_cur_price > bottom_stop or slope > 0.2:
                 self.current_state = self.Test_need_close
             else:
                 self.current_state = self.Test_sleep
@@ -89,12 +91,4 @@ class LRTraider(VisualTraider):
             self.current_state = self.Test_sleep
             print(err)   
 
-        self.current_state(img,self.name)
-
-
-        
-        # cv2.imwrite('test.png',chart)
-            # cv2.circle(chart, trend,2, (255,0,0),-1)
-            # cv2.polylines(chart,[trend],False,(255,255,255),2)
-            # cv2.polylines(chart,[top_trend],False,(255,255,255),2)
-            # cv2.polylines(chart,[bottom_trend],False,(255,255,255),2)
+        self.current_state(chart,self.name)

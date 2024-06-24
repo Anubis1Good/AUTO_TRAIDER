@@ -7,7 +7,7 @@ from settings import configurtion_traiders
 from stock_groups import stock_groups
 traiders = configurtion_traiders()
 
-sleep(1)
+sleep(3)
 while True:
     for stock in stock_groups:
         sleep(1)
