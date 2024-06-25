@@ -1,4 +1,4 @@
-import cv2
+# import cv2
 from traider_bots.VisualTraider import VisualTraider
 from utils.conditions import check_pos, check_req, get_current_level
 from utils.traid_utils import click_bl,click_bs,idle
@@ -23,18 +23,18 @@ class LRTraider(VisualTraider):
     def get_chart(self,img):
             chart = img[
             self.region_chart[1]:self.region_chart[3],
-            self.region_chart[0]:int((self.chart_width)*0.98)+self.region_chart[0]]
+            self.region_chart[0]:int((self.chart_width)*0.99)+self.region_chart[0]]
             return chart
     
     def get_keys(self,chart):
         slope,top_trend,bottom_trend = get_last_points_trend(chart)
         top_trend = change_coords(top_trend,self.region_chart)
         bottom_trend = change_coords(bottom_trend,self.region_chart)
-        offset = (bottom_trend[1]-top_trend[1])//10
-        top_offset  = top_trend[1]+offset
-        top_stop = top_trend[1]-offset*5
-        bottom_offset = bottom_trend[1]-offset
-        bottom_stop = bottom_trend[1]+offset*5
+        self.offset = (bottom_trend[1]-top_trend[1])//10
+        top_offset  = top_trend[1]+self.offset
+        top_stop = top_trend[1]-self.offset*10
+        bottom_offset = bottom_trend[1]-self.offset
+        bottom_stop = bottom_trend[1]+self.offset*10
         return slope,top_offset,bottom_offset,top_stop,bottom_stop
     
     def run(self, img):
@@ -80,9 +80,9 @@ class LRTraider(VisualTraider):
         try:
             slope,top_offset,bottom_offset,top_stop,bottom_stop = self.get_keys(chart)
 
-            if bottom_stop > y_cur_price > bottom_offset and slope < 0.1:
+            if bottom_offset+self.offset*2 > y_cur_price > bottom_offset and slope < 0.05:
                 self.current_state = self.Test_send_req
-            elif y_cur_price < top_offset or y_cur_price > bottom_stop or slope > 0.2:
+            elif y_cur_price < top_offset or y_cur_price > bottom_stop or slope > 0.25:
                 self.current_state = self.Test_need_close
             else:
                 self.current_state = self.Test_sleep

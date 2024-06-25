@@ -10,7 +10,7 @@ traiders = configurtion_traiders()
 sleep(3)
 while True:
     for stock in stock_groups:
-        sleep(1)
+        sleep(2)
         keyboard.send('shift')
         pag.screenshot('Screen.png')
         img = cv2.imread('Screen.png')
@@ -23,5 +23,6 @@ while True:
                 sys.exit(0)
         # sys.exit(0)
         pag.moveTo(traiders[0].region_glass[0]+10,traiders[0].region_glass[1]+10)
+        sleep(2)
         keyboard.send('tab') 
     # pag.press('space')
