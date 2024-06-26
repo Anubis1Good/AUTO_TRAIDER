@@ -21,7 +21,7 @@ def save_img(image,name,now):
     cv2.imwrite(img_name,image)
     return img_name
 
-def test_open(image,name):
+def test_open(image,name,pos):
     saves = get_save_test()
     saves_length = len(saves)
     for i in range(saves_length-1,-1,-1):
@@ -34,16 +34,17 @@ def test_open(image,name):
         "open":now,
         "close":"",
         "open_image":image_name,
-        "close_img":""
+        "close_img":"",
+        "pos":pos
     })
     send_save_test(saves)
 
-def test_close(image,name):
+def test_close(image,name,pos):
     saves = get_save_test()
     saves_length = len(saves)
     now = str(datetime.now())
     for i in range(saves_length-1,-1,-1):
-        if saves[i]['name'] == name and not saves[i]['close']:
+        if saves[i]['name'] == name and not saves[i]['close'] and saves[i]['pos'] == pos:
             img_name = save_img(image,name,now)
             saves[i]['close'] = now
             saves[i]['close_img'] = img_name

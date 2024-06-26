@@ -81,9 +81,13 @@ class LRTraider(VisualTraider):
             slope,top_offset,bottom_offset,top_stop,bottom_stop = self.get_keys(chart)
 
             if bottom_offset+self.offset*2 > y_cur_price > bottom_offset and slope < 0.05:
-                self.current_state = self.Test_send_req
+                self.current_state = lambda image,name: self.Test_send_req(image,name,'long')
             elif y_cur_price < top_offset or y_cur_price > bottom_stop or slope > 0.25:
-                self.current_state = self.Test_need_close
+                self.current_state = lambda image,name: self.Test_need_close(image,name,'long')
+            elif top_offset-self.offset*2 < y_cur_price < top_offset and slope > 0.15:
+                self.current_state = lambda image,name: self.Test_send_req(image,name,'short')
+            elif y_cur_price > bottom_offset or y_cur_price < top_stop or slope < -0.20:
+                self.current_state = lambda image,name: self.Test_need_close(image,name,'short')
             else:
                 self.current_state = self.Test_sleep
 
