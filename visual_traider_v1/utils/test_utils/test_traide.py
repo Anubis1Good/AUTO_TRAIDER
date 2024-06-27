@@ -26,7 +26,7 @@ def test_open(image,name,pos):
     saves_length = len(saves)
     for i in range(saves_length-1,-1,-1):
         if saves[i]['name'] == name and not saves[i]['close']:
-            return None
+            return 0
     now = str(datetime.now())
     image_name = save_img(image,name,now)
     saves.append({
@@ -38,6 +38,7 @@ def test_open(image,name,pos):
         "pos":pos
     })
     send_save_test(saves)
+    return 1
 
 def test_close(image,name,pos):
     saves = get_save_test()
@@ -49,9 +50,9 @@ def test_close(image,name,pos):
             saves[i]['close'] = now
             saves[i]['close_img'] = img_name
             send_save_test(saves)
-            break
+            return 1
     else:
-        return None
+        return 0
 
 # print('name' in get_save_test()[0])
 # test_open(1,'moex')

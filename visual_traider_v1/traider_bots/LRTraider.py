@@ -32,9 +32,9 @@ class LRTraider(VisualTraider):
         bottom_trend = change_coords(bottom_trend,self.region_chart)
         self.offset = (bottom_trend[1]-top_trend[1])//10
         top_offset  = top_trend[1]+self.offset
-        top_stop = top_trend[1]-self.offset*10
+        top_stop = top_trend[1]-self.offset*5
         bottom_offset = bottom_trend[1]-self.offset
-        bottom_stop = bottom_trend[1]+self.offset*10
+        bottom_stop = bottom_trend[1]+self.offset*5
         return slope,top_offset,bottom_offset,top_stop,bottom_stop
     
     def run(self, img):
@@ -79,17 +79,29 @@ class LRTraider(VisualTraider):
         chart = self.get_chart(img)
         try:
             slope,top_offset,bottom_offset,top_stop,bottom_stop = self.get_keys(chart)
-
+            success = 0
             if bottom_offset+self.offset*2 > y_cur_price > bottom_offset and slope < 0.05:
                 self.current_state = lambda image,name: self.Test_send_req(image,name,'long')
-            elif y_cur_price < top_offset or y_cur_price > bottom_stop or slope > 0.25:
+                success = self.current_state(chart,self.name)
+                if success == 1:
+                    return None
+            if y_cur_price < top_offset or y_cur_price > bottom_stop or slope > 0.20:
                 self.current_state = lambda image,name: self.Test_need_close(image,name,'long')
-            elif top_offset-self.offset*2 < y_cur_price < top_offset and slope > 0.15:
+                success = self.current_state(chart,self.name)
+                if success == 1:
+                    return None
+            if top_offset-self.offset*2 < y_cur_price < top_offset and slope > 0.10:
                 self.current_state = lambda image,name: self.Test_send_req(image,name,'short')
-            elif y_cur_price > bottom_offset or y_cur_price < top_stop or slope < -0.20:
+                success = self.current_state(chart,self.name)
+                if success == 1:
+                    return None
+            if y_cur_price > bottom_offset or y_cur_price < top_stop or slope < -0.10:
                 self.current_state = lambda image,name: self.Test_need_close(image,name,'short')
-            else:
-                self.current_state = self.Test_sleep
+                success = self.current_state(chart,self.name)
+                if success == 1:
+                    return None
+            self.current_state = self.Test_sleep
+
 
         except Exception as err:
             self.current_state = self.Test_sleep
