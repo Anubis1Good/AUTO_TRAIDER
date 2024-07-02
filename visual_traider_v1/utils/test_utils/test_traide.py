@@ -21,11 +21,11 @@ def save_img(image,name,now):
     cv2.imwrite(img_name,image)
     return img_name
 
-def test_open(image,name,pos):
+def test_open(image,name,pos,traider):
     saves = get_save_test()
     saves_length = len(saves)
     for i in range(saves_length-1,-1,-1):
-        if saves[i]['name'] == name and not saves[i]['close']:
+        if saves[i]['name'] == name and not saves[i]['close'] and saves[i]['traider'] == traider:
             return 0
     now = str(datetime.now())
     image_name = save_img(image,name,now)
@@ -35,17 +35,18 @@ def test_open(image,name,pos):
         "close":"",
         "open_image":image_name,
         "close_img":"",
-        "pos":pos
+        "pos":pos,
+        "traider":traider
     })
     send_save_test(saves)
     return 1
 
-def test_close(image,name,pos):
+def test_close(image,name,pos,traider):
     saves = get_save_test()
     saves_length = len(saves)
     now = str(datetime.now())
     for i in range(saves_length-1,-1,-1):
-        if saves[i]['name'] == name and not saves[i]['close'] and saves[i]['pos'] == pos:
+        if saves[i]['name'] == name and not saves[i]['close'] and saves[i]['pos'] == pos and saves[i]['traider'] == traider:
             img_name = save_img(image,name,now)
             saves[i]['close'] = now
             saves[i]['close_img'] = img_name

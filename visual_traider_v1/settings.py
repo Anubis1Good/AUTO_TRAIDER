@@ -1,6 +1,6 @@
-from traider_bots.LRTraider import LRTraider as Traider
 
-def configurtion_traiders():
+
+def configurtion_traiders(Traider):
     traiders = []
     with open('config.txt','r') as f:
         lines = f.readlines()

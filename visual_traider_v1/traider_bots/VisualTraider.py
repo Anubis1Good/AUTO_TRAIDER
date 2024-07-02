@@ -18,6 +18,7 @@ class VisualTraider():
         self.Not_idea = not_idea
         self.current_state = self.Not_idea
         self.name = name
+        self.traider_name = 'VisualTraider'
     
     def __repr__(self):
         return f'{self.name}: glass - {self.region_glass}, chart - {self.region_chart}'
