@@ -1,8 +1,8 @@
 
 
-def configurtion_traiders(Traider):
+def configurtion_traiders(Traider,filename):
     traiders = []
-    with open('config.txt','r') as f:
+    with open(filename,'r') as f:
         lines = f.readlines()
         for line in lines:
             line = line.split('-')

@@ -4,9 +4,15 @@ import keyboard
 import sys
 from time import sleep
 from settings import configurtion_traiders
-from stock_groups import stock_groups
-from traider_bots.LRTraider import LRTraider
-LR_traiders = configurtion_traiders(LRTraider,'config.txt')
+from sg_dev import stock_groups
+from utils.test_utils.windows import draw_borders
+from traider_bots.VisualTraider import VisualTraider
+
+
+traiders = configurtion_traiders(VisualTraider,'config_dev.txt')
+pag.screenshot('Screen.png')
+img = cv2.imread('Screen.png')
+draw_borders(img,traiders)
 
 sleep(3)
 while True:
@@ -15,15 +21,15 @@ while True:
         keyboard.send('shift')
         pag.screenshot('Screen.png')
         img = cv2.imread('Screen.png')
-        for i in range(len(LR_traiders)):
-            LR_traiders[i].name = stock[i]
+        for i in range(len(traiders)):
+            traiders[i].name = stock[i]
             # traiders[i].run(img)
-            LR_traiders[i].test(img)
+            traiders[i].test(img)
             if keyboard.is_pressed('Esc'):
                 print("\nyou pressed Esc, so exiting...")
                 sys.exit(0)
         # sys.exit(0)
-        pag.moveTo(LR_traiders[0].region_glass[0]+10,LR_traiders[0].region_glass[1]+10)
+        pag.moveTo(traiders[0].region_glass[0]+10,traiders[0].region_glass[1]+10)
         sleep(2)
-        keyboard.send('tab') 
+        # keyboard.send('tab') 
     # pag.press('space')
