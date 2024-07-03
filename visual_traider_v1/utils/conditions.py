@@ -7,12 +7,21 @@
 from utils.config import ColorsBtnBGR
 from utils.utils import color_search
 
+# for old bot
 def check_pos(img,region)->tuple | bool:
     
     x,y = color_search(img,ColorsBtnBGR.best_bid,region) 
     return x >= 0
 
-
+# for bot start before 03.07.24
+def check_position(img,region) -> int:
+    x,y = color_search(img,ColorsBtnBGR.best_bid,region)
+    if x >= 0:
+        return 1
+    x,y = color_search(img,ColorsBtnBGR.best_ask,region)
+    if x >= 0:
+        return -1
+    return 0
 
 def check_req(img,region) ->tuple | bool:
     x,y = color_search(img,ColorsBtnBGR.color_x_shadow,region)

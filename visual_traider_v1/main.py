@@ -16,9 +16,9 @@ while True:
         pag.screenshot('Screen.png')
         img = cv2.imread('Screen.png')
         for i in range(len(LR_traiders)):
-            LR_traiders[i].name = stock[i]
-            # traiders[i].run(img)
-            LR_traiders[i].test(img)
+            # LR_traiders[i].name = stock[i]
+            LR_traiders[i].run(img)
+            # LR_traiders[i].test(img)
             if keyboard.is_pressed('Esc'):
                 print("\nyou pressed Esc, so exiting...")
                 sys.exit(0)

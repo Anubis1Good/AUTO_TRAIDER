@@ -27,16 +27,16 @@ def click_lr(image,region):
     x,y = check_lr(image,region)
     if x > 0:
         reset_and_click_lr(x,y)
-
-def click_bl(image,region):
+# click best long
+def click_bl_open(image,region):
     pag.moveTo(region[0]+10,region[1]+10)
     pdi.press('f')
     pdi.press('a')
 
-    # x,y = color_search(image, ColorsBtnBGR.best_bid,region)
-    # if x > 0:
-    #     reset_and_click_lr(x,y)
-
+def click_bs_open(image,region):
+    pag.moveTo(region[0]+10,region[1]+10)
+    pdi.press('f')
+    pdi.press('s')
 
 def reset_lr(image,region):
     xr,yr = check_req(image, region)
@@ -64,25 +64,36 @@ def check_sr(image,region):
         return -1,-1
 
 
-def reset_and_click_sr(x,y):
+def reset_and_click_sr_close(x,y):
     pag.moveTo(x,y)
     pdi.press('f')
     pdi.keyDown('altleft')
     pag.click(x, y,button='right')
     pdi.keyUp('altleft')
 
+def reset_and_click_lr_close(x,y):
+    pag.moveTo(x,y)
+    pdi.press('f')
+    pdi.keyDown('altleft')
+    pag.click(x, y)
+    pdi.keyUp('altleft')
     
 
 # work functions
 def click_sr(image,region):
     x,y = check_sr(image,region)
     if x > 0:
-        reset_and_click_sr(x,y+10)
+        reset_and_click_sr_close(x,y+10)
 
-def click_bs(image,region):
+def click_bs_close(image,region):
     x,y = color_search(image, ColorsBtnBGR.best_ask,region,reverse=True)
     if x > 0:
-        reset_and_click_sr(x-50,y-5)
+        reset_and_click_sr_close(x-50,y-5)
+
+def click_bl_close(image,region):
+    x,y = color_search(image, ColorsBtnBGR.best_bid,region,reverse=False)
+    if x > 0:
+        reset_and_click_sr_close(x+50,y+5)
 
 def reset_sr(image,region):
     xr,yr = check_req(image, region)
@@ -92,7 +103,7 @@ def reset_sr(image,region):
         if xnr > 0:
             delta = ynr - yr
             if delta > 20 or ybb < yr:
-                reset_and_click_sr(xnr,ynr) 
+                reset_and_click_sr_close(xnr,ynr) 
                     
 
 # wait function
