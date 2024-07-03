@@ -6,15 +6,15 @@ from time import sleep
 from settings import configurtion_traiders
 from sg_dev import stock_groups
 from utils.test_utils.windows import draw_borders
-from traider_bots.VisualTraider import VisualTraider
+from traider_bots.TestTraider import TestTraider
 
 
-traiders = configurtion_traiders(VisualTraider,'config_dev.txt')
-pag.screenshot('Screen.png')
-img = cv2.imread('Screen.png')
-draw_borders(img,traiders)
+traiders = configurtion_traiders(TestTraider,'config_dev.txt')
+# pag.screenshot('Screen.png')
+# img = cv2.imread('Screen.png')
+# draw_borders(img,traiders)
 
-sleep(3)
+# sleep(3)
 while True:
     for stock in stock_groups:
         sleep(2)

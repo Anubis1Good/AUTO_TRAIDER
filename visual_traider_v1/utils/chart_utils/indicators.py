@@ -10,3 +10,6 @@ def get_SMA(points):
         moving_averages.append([window_averagex,window_averagey])
         i += 1
     return np.array(moving_averages)
+
+def SA_point(points):
+    return (np.average(points[:,0],axis=0).astype(np.int32),np.average(points[:,1],axis=0).astype(np.int32))
