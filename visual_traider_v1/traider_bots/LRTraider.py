@@ -52,7 +52,7 @@ class LRTraider(VisualTraider):
                     self.current_state = self.Has_req
                 else:
                     self.current_state = self.Send_req_long
-            elif y_cur_price < top_offset or y_cur_price > bottom_stop or slope > 0.20 and pos == 1:
+            elif (y_cur_price < top_offset or y_cur_price > bottom_stop or slope > 0.20) and pos == 1:
                 if req_x > 0:
                     self.current_state = self.Has_close
                 else:
@@ -62,7 +62,7 @@ class LRTraider(VisualTraider):
                     self.current_state = self.Has_req
                 else:
                     self.current_state = self.Send_req_short
-            elif y_cur_price > bottom_offset or y_cur_price < top_stop or slope < -0.10 and pos == -1:
+            elif (y_cur_price > bottom_offset or y_cur_price < top_stop or slope < -0.10) and pos == -1:
                 if req_x > 0:
                     self.current_state = self.Has_close
                 else:
