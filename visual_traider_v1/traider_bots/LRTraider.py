@@ -35,38 +35,38 @@ class LRTraider(VisualTraider):
         bottom_trend = change_coords(bottom_trend,self.region_chart)
         self.offset = (bottom_trend[1]-top_trend[1])//10
         top_offset  = top_trend[1]+self.offset
-        top_stop = top_trend[1]-self.offset*5
+        top_stop = top_trend[1]-self.offset*10
         bottom_offset = bottom_trend[1]-self.offset
-        bottom_stop = bottom_trend[1]+self.offset*5
+        bottom_stop = bottom_trend[1]+self.offset*10
         return slope,top_offset,bottom_offset,top_stop,bottom_stop
     
     def run(self, img):
         pos = check_position(img,self.region_pos)
-        req_x, req_y = check_req(img,self.region_glass)
+        # req_x, req_y = check_req(img,self.region_glass)
         y_cur_price = get_current_level(img,self.region_chart)
         chart = self.get_chart(img)
         try:
             slope,top_offset,bottom_offset,top_stop,bottom_stop = self.get_keys(chart)
             if bottom_offset+self.offset*2 > y_cur_price > bottom_offset and slope < 0.05 and pos == 0:
-                if req_x > 0:
-                    self.current_state = self.Has_req
-                else:
-                    self.current_state = self.Send_req_long
+                # if req_x > 0:
+                #     self.current_state = self.Has_req
+                # else:
+                self.current_state = self.Send_req_long
             elif (y_cur_price < top_offset or y_cur_price > bottom_stop or slope > 0.20) and pos == 1:
-                if req_x > 0:
-                    self.current_state = self.Has_close
-                else:
-                    self.current_state = self.Need_close_long
+                # if req_x > 0:
+                #     self.current_state = self.Has_close
+                # else:
+                self.current_state = self.Need_close_long
             elif top_offset-self.offset*2 < y_cur_price < top_offset and slope > 0.10 and pos == 0:
-                if req_x > 0:
-                    self.current_state = self.Has_req
-                else:
-                    self.current_state = self.Send_req_short
+                # if req_x > 0:
+                #     self.current_state = self.Has_req
+                # else:
+                self.current_state = self.Send_req_short
             elif (y_cur_price > bottom_offset or y_cur_price < top_stop or slope < -0.10) and pos == -1:
-                if req_x > 0:
-                    self.current_state = self.Has_close
-                else:
-                    self.current_state = self.Need_close_short
+                # if req_x > 0:
+                #     self.current_state = self.Has_close
+                # else:
+                self.current_state = self.Need_close_short
             else:
                 self.current_state = self.Not_idea
         # pos = check_pos(img,self.region_pos)
@@ -101,7 +101,7 @@ class LRTraider(VisualTraider):
         except Exception as err:
             self.current_state = self.Not_idea
             # print(err)   
-
+        # print(self.name,self.current_state)
         self.current_state(img,self.region_glass)
 
 

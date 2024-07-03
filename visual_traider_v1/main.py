@@ -15,14 +15,15 @@ sleep(3)
 # draw_borders(img,LR_traiders)
 while True:
     for stock in stock_groups:
-        sleep(2)
+        sleep(1)
         keyboard.send('shift')
+        sleep(1)
         pag.screenshot('Screen.png')
         img = cv2.imread('Screen.png')
         for i in range(len(LR_traiders)):
             LR_traiders[i].name = stock[i]
-            LR_traiders[i].run(img)
-            # LR_traiders[i].test(img)
+            # LR_traiders[i].run(img)
+            LR_traiders[i].test(img)
             if keyboard.is_pressed('Esc'):
                 print("\nyou pressed Esc, so exiting...")
                 sys.exit(0)
