@@ -93,7 +93,7 @@ def click_bs_close(image,region):
 def click_bl_close(image,region):
     x,y = color_search(image, ColorsBtnBGR.best_bid,region,reverse=False)
     if x > 0:
-        reset_and_click_sr_close(x+50,y+5)
+        reset_and_click_lr_close(x+10,y+5)
 
 def reset_sr(image,region):
     xr,yr = check_req(image, region)
