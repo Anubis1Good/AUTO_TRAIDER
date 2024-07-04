@@ -35,14 +35,14 @@ def get_chart_point(region):
     return tops,bottoms
 
 # function for getting training data of linear regression
-def get_xy_for_LR(region):
-    tops,bottoms = get_chart_point(region)
+def get_xy_for_LR(tops,bottoms):
     x = np.concatenate((tops[:,0],bottoms[:,0]))
     y = np.concatenate((tops[:,1],bottoms[:,1]))
     return x,y
 
 def get_trend_lines(region):
-    x,y = get_xy_for_LR(region)
+    tops,bottoms = get_chart_point(region)
+    x,y = get_xy_for_LR(tops,bottoms)
     slope,intercept = learn_LR(x,y)
     std_y = np.std(y)
     # middle_line = list(map(lambda x:predict_LR(x,0,slope,intercept), x))
@@ -54,7 +54,8 @@ def get_trend_lines(region):
     return slope,top_trend,bottom_trend
 
 def get_last_points_trend(region):
-    x,y = get_xy_for_LR(region)
+    tops,bottoms = get_chart_point(region)
+    x,y = get_xy_for_LR(tops,bottoms)
     slope,intercept = learn_LR(x,y)
     std_y = np.std(y)
     # middle_point = predict_LR(x[-1],0,slope,intercept)
@@ -64,6 +65,17 @@ def get_last_points_trend(region):
     top_trend = (x[-1],top_point)
     bottom_trend = (x[-1],bottom_point)
     return slope,top_trend,bottom_trend
+
+def get_four_points_and_slope(region):
+    tops,bottoms = get_chart_point(region)
+    x,y = get_xy_for_LR(tops,bottoms)
+    slope,intercept = learn_LR(x,y)
+    top_median = (np.average(tops[:,0],axis=0).astype(np.int32),np.average(tops[:,1],axis=0).astype(np.int32))
+    top_quantile = (np.quantile(tops[:,0],0.2,axis=0).astype(np.int32),np.quantile(tops[:,1],0.2,axis=0).astype(np.int32))
+    bottom_median = (np.average(bottoms[:,0],axis=0).astype(np.int32),np.average(bottoms[:,1],axis=0).astype(np.int32))
+    bottom_quantile = (np.quantile(bottoms[:,0],0.8,axis=0).astype(np.int32),np.quantile(bottoms[:,1],0.8,axis=0).astype(np.int32))
+    points = [top_median,top_quantile,bottom_median,bottom_quantile]
+    return slope, points
 
 # function for search rotate points
 def levels(points,dir=True):

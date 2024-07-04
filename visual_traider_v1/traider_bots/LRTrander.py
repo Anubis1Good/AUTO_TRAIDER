@@ -4,6 +4,7 @@ from utils.conditions import check_position, get_current_level
 from utils.traid_utils import idle,click_bl_open,click_bl_close,click_bs_open,click_bs_close
 from utils.chart_utils.general import get_last_points_trend
 from utils.test_utils.test_traide import test_close,test_open
+from utils.test_utils.test_draws_funcs import draw_trendlines
 from utils.utils import change_coords
 
 
@@ -22,6 +23,7 @@ class LRTrander(VisualTraider):
         self.buff = (self.region_chart[3]-self.region_chart[1])//12
         self.chart_width = chart_region[2] - chart_region[0]
         self.traider_name = 'LRTrander'
+        self.test_draw = draw_trendlines
     
     def get_chart(self,img):
             chart = img[
@@ -71,22 +73,22 @@ class LRTrander(VisualTraider):
             slope,top_offset,bottom_offset,top_stop,bottom_stop = self.get_keys(chart)
             success = 0
             if bottom_offset+self.offset*2 > y_cur_price > bottom_offset and slope < 0.05:
-                self.current_state = lambda image,name: self.Test_send_req(image,name,'long',self.traider_name)
+                self.current_state = lambda image,name: self.Test_send_req(image,name,'long',self.traider_name,self.test_draw)
                 success = self.current_state(chart,self.name)
                 if success == 1:
                     return None
             if y_cur_price < top_offset or y_cur_price > bottom_stop or slope > 0.20:
-                self.current_state = lambda image,name: self.Test_need_close(image,name,'long',self.traider_name)
+                self.current_state = lambda image,name: self.Test_need_close(image,name,'long',self.traider_name,self.test_draw)
                 success = self.current_state(chart,self.name)
                 if success == 1:
                     return None
             if top_offset-self.offset*2 < y_cur_price < top_offset and slope > 0.10:
-                self.current_state = lambda image,name: self.Test_send_req(image,name,'short',self.traider_name)
+                self.current_state = lambda image,name: self.Test_send_req(image,name,'short',self.traider_name,self.test_draw)
                 success = self.current_state(chart,self.name)
                 if success == 1:
                     return None
             if y_cur_price > bottom_offset or y_cur_price < top_stop or slope < -0.10:
-                self.current_state = lambda image,name: self.Test_need_close(image,name,'short',self.traider_name)
+                self.current_state = lambda image,name: self.Test_need_close(image,name,'short',self.traider_name,self.test_draw)
                 success = self.current_state(chart,self.name)
                 if success == 1:
                     return None
