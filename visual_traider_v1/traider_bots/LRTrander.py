@@ -1,13 +1,13 @@
 # import cv2
 from traider_bots.VisualTraider import VisualTraider
-from utils.conditions import check_position, check_req, get_current_level
+from utils.conditions import check_position, get_current_level
 from utils.traid_utils import idle,click_bl_open,click_bl_close,click_bs_open,click_bs_close
 from utils.chart_utils.general import get_last_points_trend
 from utils.test_utils.test_traide import test_close,test_open
 from utils.utils import change_coords
 
 
-class LRTraider(VisualTraider):
+class LRTrander(VisualTraider):
     def __init__(self, glass_region: tuple, chart_region: tuple) -> None:
         super().__init__(glass_region, chart_region)
         self.Test_send_req = test_open
@@ -21,7 +21,7 @@ class LRTraider(VisualTraider):
         self.Need_close_short = click_bl_close
         self.buff = (self.region_chart[3]-self.region_chart[1])//12
         self.chart_width = chart_region[2] - chart_region[0]
-        self.traider_name = 'LRTraider'
+        self.traider_name = 'LRTrander'
     
     def get_chart(self,img):
             chart = img[
@@ -42,61 +42,20 @@ class LRTraider(VisualTraider):
     
     def run(self, img):
         pos = check_position(img,self.region_pos)
-        # req_x, req_y = check_req(img,self.region_glass)
         y_cur_price = get_current_level(img,self.region_chart)
         chart = self.get_chart(img)
         try:
             slope,top_offset,bottom_offset,top_stop,bottom_stop = self.get_keys(chart)
             if bottom_offset+self.offset*2 > y_cur_price > bottom_offset and slope < 0.05 and pos == 0:
-                # if req_x > 0:
-                #     self.current_state = self.Has_req
-                # else:
                 self.current_state = self.Send_req_long
             elif (y_cur_price < top_offset or y_cur_price > bottom_stop or slope > 0.20) and pos == 1:
-                # if req_x > 0:
-                #     self.current_state = self.Has_close
-                # else:
                 self.current_state = self.Need_close_long
             elif top_offset-self.offset*2 < y_cur_price < top_offset and slope > 0.10 and pos == 0:
-                # if req_x > 0:
-                #     self.current_state = self.Has_req
-                # else:
                 self.current_state = self.Send_req_short
             elif (y_cur_price > bottom_offset or y_cur_price < top_stop or slope < -0.10) and pos == -1:
-                # if req_x > 0:
-                #     self.current_state = self.Has_close
-                # else:
                 self.current_state = self.Need_close_short
             else:
                 self.current_state = self.Not_idea
-        # pos = check_pos(img,self.region_pos)
-        # req_x, req_y = check_req(img,self.region_glass)
-        # y_cur_price = get_current_level(img,self.region_chart)
-        # chart = self.get_chart(img)
-        # try:
-        #     slope,top_offset,bottom_offset,top_stop,bottom_stop = self.get_keys(chart)
-        #     if pos:
-        #         if req_x > 0:
-        #             if y_cur_price < top_offset:
-        #                 self.current_state = self.Has_close
-        #             else:
-        #                 self.current_state = self.Not_idea
-        #         else:
-        #             if y_cur_price < top_offset:
-        #                 self.current_state = self.Need_close
-        #             else:
-        #                 self.current_state = self.Not_idea
-        #     else:
-        #         if req_x > 0:
-        #             if y_cur_price > bottom_offset:
-        #                 self.current_state = self.Has_req
-        #             else:
-        #                 self.current_state = self.Not_idea
-        #         else:
-        #             if y_cur_price > bottom_offset and slope < 0.1:
-        #                 self.current_state = self.Send_req
-        #             else:
-        #                 self.current_state = self.Not_idea
 
         except Exception as err:
             self.current_state = self.Not_idea
