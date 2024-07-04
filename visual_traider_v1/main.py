@@ -8,10 +8,12 @@ from stock_groups import stock_groups
 from traider_bots.LRTrander import LRTrander
 from traider_bots.LRConter import LRConter
 from traider_bots.AntiLR import AntiLR
+from traider_bots.FourPointsLR import FourPointsLR
 from utils.test_utils.windows import draw_borders
 LR_tranders = configurtion_traiders(LRTrander,'config.txt')
 LR_conter = configurtion_traiders(LRConter,'config.txt')
 LR_anti = configurtion_traiders(AntiLR,'config.txt')
+Four_points = configurtion_traiders(FourPointsLR,'config.txt')
 
 sleep(3)
 # pag.screenshot('Screen.png')
@@ -28,10 +30,12 @@ while True:
             LR_tranders[i].name = stock[i]
             LR_conter[i].name = stock[i]
             LR_anti[i].name = stock[i]
+            Four_points[i].name = stock[i]
             # LR_tranders[i].run(img)
             LR_tranders[i].test(img)
             LR_conter[i].test(img)
             LR_anti[i].test(img)
+            Four_points[i].test(img)
             if keyboard.is_pressed('Esc'):
                 print("\nyou pressed Esc, so exiting...")
                 sys.exit(0)
