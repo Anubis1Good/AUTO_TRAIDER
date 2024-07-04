@@ -89,7 +89,7 @@ class FourPointsLR(VisualTraider):
                 success = self.current_state(chart,self.name)
                 if success == 1:
                     return None
-            if y_cur_price < top_median[1] and -0.1 > slope > 0.1:
+            if y_cur_price < top_median[1] and (-0.1 > slope > 0.1):
                 self.current_state = lambda image,name: self.Test_need_close(image,name,'long',self.traider_name,self.test_draw)
                 success = self.current_state(chart,self.name)
                 if success == 1:

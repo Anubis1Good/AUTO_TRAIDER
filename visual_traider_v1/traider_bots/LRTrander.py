@@ -36,10 +36,10 @@ class LRTrander(VisualTraider):
         top_trend = change_coords(top_trend,self.region_chart)
         bottom_trend = change_coords(bottom_trend,self.region_chart)
         self.offset = (bottom_trend[1]-top_trend[1])//10
-        top_offset  = top_trend[1]+self.offset
-        top_stop = top_trend[1]-self.offset*10
-        bottom_offset = bottom_trend[1]-self.offset
-        bottom_stop = bottom_trend[1]+self.offset*10
+        top_offset  = top_trend[1]+self.offset*5
+        top_stop = top_trend[1]-self.offset*5
+        bottom_offset = bottom_trend[1]-self.offset*5
+        bottom_stop = bottom_trend[1]+self.offset*5
         return slope,top_offset,bottom_offset,top_stop,bottom_stop
     
     def run(self, img):
