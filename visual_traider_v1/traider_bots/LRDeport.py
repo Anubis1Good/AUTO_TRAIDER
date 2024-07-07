@@ -8,7 +8,7 @@ from utils.test_utils.test_draws_funcs import draw_trendlines
 from utils.utils import change_coords
 
 
-class LRTrander(VisualTraider):
+class LRDeport(VisualTraider):
     def __init__(self, glass_region: tuple, chart_region: tuple) -> None:
         super().__init__(glass_region, chart_region)
         self.Test_send_req = test_open
@@ -22,7 +22,7 @@ class LRTrander(VisualTraider):
         self.Need_close_short = click_bl_close
         self.buff = (self.region_chart[3]-self.region_chart[1])//12
         self.chart_width = chart_region[2] - chart_region[0]
-        self.traider_name = 'LRTrander'
+        self.traider_name = 'LRDeport'
         self.test_draw = draw_trendlines
     
     def get_chart(self,img):
@@ -37,33 +37,35 @@ class LRTrander(VisualTraider):
         bottom_trend = change_coords(bottom_trend,self.region_chart)
         self.offset = (bottom_trend[1]-top_trend[1])//10
         top_offset  = top_trend[1]+self.offset
-        top_stop = top_trend[1]-self.offset*5
+        top_stop = top_trend[1]-self.offset*7
         bottom_offset = bottom_trend[1]-self.offset
-        bottom_stop = bottom_trend[1]+self.offset*5
+        bottom_stop = bottom_trend[1]+self.offset*7
         return slope,top_offset,bottom_offset,top_stop,bottom_stop
     
     def run(self, img):
-        pos = check_position(img,self.region_pos)
-        y_cur_price = get_current_level(img,self.region_chart)
-        chart = self.get_chart(img)
-        try:
-            slope,top_offset,bottom_offset,top_stop,bottom_stop = self.get_keys(chart)
-            if bottom_offset+self.offset*2 > y_cur_price > bottom_offset and slope < 0.05 and pos == 0:
-                self.current_state = self.Send_req_long
-            elif (y_cur_price < top_offset or y_cur_price > bottom_stop or slope > 0.20) and pos == 1:
-                self.current_state = self.Need_close_long
-            elif top_offset-self.offset*2 < y_cur_price < top_offset and slope > 0.10 and pos == 0:
-                self.current_state = self.Send_req_short
-            elif (y_cur_price > bottom_offset or y_cur_price < top_stop or slope < -0.10) and pos == -1:
-                self.current_state = self.Need_close_short
-            else:
-                self.current_state = self.Not_idea
+        pass
+    # TODO
+        # pos = check_position(img,self.region_pos)
+        # y_cur_price = get_current_level(img,self.region_chart)
+        # chart = self.get_chart(img)
+        # try:
+        #     slope,top_offset,bottom_offset,top_stop,bottom_stop = self.get_keys(chart)
+        #     if bottom_offset+self.offset*2 > y_cur_price > bottom_offset and slope < 0.05 and pos == 0:
+        #         self.current_state = self.Send_req_long
+        #     elif (y_cur_price < top_offset or y_cur_price > bottom_stop or slope > 0.20) and pos == 1:
+        #         self.current_state = self.Need_close_long
+        #     elif top_offset-self.offset*2 < y_cur_price < top_offset and slope > 0.10 and pos == 0:
+        #         self.current_state = self.Send_req_short
+        #     elif (y_cur_price > bottom_offset or y_cur_price < top_stop or slope < -0.10) and pos == -1:
+        #         self.current_state = self.Need_close_short
+        #     else:
+        #         self.current_state = self.Not_idea
 
-        except Exception as err:
-            self.current_state = self.Not_idea
-            # print(err)   
-        # print(self.name,self.current_state)
-        self.current_state(img,self.region_glass)
+        # except Exception as err:
+        #     self.current_state = self.Not_idea
+        #     # print(err)   
+        # # print(self.name,self.current_state)
+        # self.current_state(img,self.region_glass)
 
 
     def test(self,img):
@@ -72,23 +74,23 @@ class LRTrander(VisualTraider):
         try:
             slope,top_offset,bottom_offset,top_stop,bottom_stop = self.get_keys(chart)
             success = 0
-            if bottom_offset+self.offset*2 > y_cur_price > bottom_offset and slope < 0.05:
-                self.current_state = lambda image,name: self.Test_send_req(image,name,'long',self.traider_name,self.test_draw)
+            if y_cur_price > top_offset:
+                self.current_state = lambda image,name: self.Test_need_close(image,name,'short',self.traider_name,self.test_draw)
                 success = self.current_state(chart,self.name)
                 if success == 1:
                     return None
-            if y_cur_price < top_offset or y_cur_price > bottom_stop or slope > 0.20:
-                self.current_state = lambda image,name: self.Test_need_close(image,name,'long',self.traider_name,self.test_draw)
-                success = self.current_state(chart,self.name)
-                if success == 1:
-                    return None
-            if top_offset-self.offset*2 < y_cur_price < top_offset and slope > 0.10:
+            if y_cur_price < top_stop:
                 self.current_state = lambda image,name: self.Test_send_req(image,name,'short',self.traider_name,self.test_draw)
                 success = self.current_state(chart,self.name)
                 if success == 1:
                     return None
-            if y_cur_price > bottom_offset or y_cur_price < top_stop or slope < -0.10:
-                self.current_state = lambda image,name: self.Test_need_close(image,name,'short',self.traider_name,self.test_draw)
+            if y_cur_price < bottom_offset:
+                self.current_state = lambda image,name: self.Test_need_close(image,name,'long',self.traider_name,self.test_draw)
+                success = self.current_state(chart,self.name)
+                if success == 1:
+                    return None
+            if y_cur_price > bottom_stop:
+                self.current_state = lambda image,name: self.Test_send_req(image,name,'long',self.traider_name,self.test_draw)
                 success = self.current_state(chart,self.name)
                 if success == 1:
                     return None

@@ -13,6 +13,6 @@ def draw_four_points(image):
     colors = ((200,200,0),(150,150,0),(0,200,200),(0,150,150))
     for i in range(4):
         cv2.circle(image,points[i],1,colors[i],3)
-    cv2.putText(image, str(slope), (50, 50) , cv2.FONT_HERSHEY_SIMPLEX,  
-                   1, (255, 0, 0), 3, cv2.LINE_AA)
+    cv2.putText(image, str(round(slope,2)), (30, 30) , cv2.FONT_HERSHEY_SIMPLEX,  
+                   1, (255, 255, 255), 3, cv2.LINE_AA)
     return image
