@@ -17,7 +17,7 @@ sleep(3)
 # draw_borders(img,LR_tranders)
 while True:
     for stock in stock_groups:
-        sleep(1)
+        sleep(5)
         keyboard.send('shift')
         sleep(1)
         pag.screenshot('Screen.png')
@@ -31,6 +31,6 @@ while True:
                 sys.exit(0)
         # sys.exit(0)
         pag.moveTo(main_bots[0].region_glass[0]+10,main_bots[0].region_glass[1]+10)
-        sleep(2)
+        sleep(4)
         keyboard.send('tab') 
     # pag.press('space')

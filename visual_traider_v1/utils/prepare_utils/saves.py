@@ -8,13 +8,15 @@ def save_img(image,name):
     img_name = './learn_data/images/'+ name + str(time()) +'.png'
     cv2.imwrite(img_name,image)
     saves = {}
-    with open('./learn_data/images.json','r+') as f:
+    with open('./learn_data/images.json','r') as f:
         saves = json.load(f)
         if name in saves:
             saves[name].append(img_name)
         else:
             saves[name] = [img_name]
+    with open('./learn_data/images.json','w') as f:
         json.dump(saves,f)
+
 
 
 def save_points(image):
