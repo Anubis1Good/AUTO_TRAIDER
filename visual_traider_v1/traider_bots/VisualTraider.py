@@ -28,6 +28,12 @@ class VisualTraider():
 
     def test(self,img):
         print(f'{self.name} test')
+    
+    def get_chart(self,img):
+        chart = img[
+        self.region_chart[1]:self.region_chart[3],
+        self.region_chart[0]:self.region_chart[2]]
+        return chart
         
 
 
