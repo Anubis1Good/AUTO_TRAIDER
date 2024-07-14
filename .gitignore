@@ -1,5 +1,10 @@
-**/__pycache__/
-*.pyc
 visual_traider_v1/test_images
 ml/images/
 ml/images.json
+ml/DataForLearning/
+ml/Data/
+ml/DataFrames/
+ml/Models/
+ml/test_prediction/
+**/__pycache__/
+*.pyc

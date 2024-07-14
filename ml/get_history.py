@@ -2,6 +2,7 @@ import os
 from time import time
 from QuikPy import QuikPy
 import pandas as pd
+from sec_codes import sec_codes,sec_codes_fut
 def save_candles_to_file(class_code='TQBR', sec_codes=('SBER',), time_frame='D', compression=1,
                          skip_first_date=False, skip_last_date=False, four_price_doji=False):
     """Получение баров, объединение с имеющимися барами в файле (если есть), сохранение баров в файл
@@ -75,25 +76,10 @@ def save_candles_to_file(class_code='TQBR', sec_codes=('SBER',), time_frame='D',
 qp_provider = QuikPy()
 
 class_code = 'TQBR'
-
-sec_codes = ('APTK','ABIO','CNTLP',
-    'ALRS','ASTR','CIAN','FEES','FIXP',
-    'GAZP','GECO','GLTR','HYDR','KZOSP',
-    'MAGN','MRKC','MTLR','NLMK','OKEY',
-    'POLY','RENI','ROSN','RUAL','SELG',
-    'VTBR','TTLK','SOFL','TATN','MRKV',
-    'AGRO','BANEP','FLOT','IRAO','SIBN',
-    'SBER','AFLT','TRMK','GEMC','KMAZ',
-    'MOEX','BSPB','CBOM','CHMF','MRKP',
-    'NVTK','GMKN','LSRG','NMTP','FESH',
-    'PIKK','TATNP','RTKM','RTKMP','SVAV',
-    'UNAC','UPRO','AQUA','QIWI','LSNGP')
-
 class_code_fut = 'SPBFUT'
-sec_codes_fut = ('MMU4','CRU4')
 
 datapath = os.path.join('Data', '')
-skip_last_date = True 
-# save_candles_to_file(class_code, sec_codes, four_price_doji=True, time_frame='T')
+skip_last_date = False 
+save_candles_to_file(class_code, sec_codes, four_price_doji=True, time_frame='T')
 save_candles_to_file(class_code_fut, sec_codes_fut, four_price_doji=True, time_frame='T')
 qp_provider.CloseConnectionAndThread()

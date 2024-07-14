@@ -72,8 +72,8 @@ if __name__ == '__main__':
     # print(type(img))
     # img = Image.fromarray(img.astype(np.uint8))
     # img.show()
-    cv2.imshow('test',img)
     # cv2.imshow('test',img.astype(np.uint8))
+    cv2.imshow('test',img)
     cv2.waitKey(0)
 
 
