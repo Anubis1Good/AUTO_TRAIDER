@@ -46,9 +46,9 @@ class Agent:
 
     def get_action(self, state):
         # random moves: tradeoff exploration / exploitation
-        self.epsilon = 80 - self.n_games
+        self.epsilon = 1000 - self.n_games
         final_move = [0,0,0]
-        if random.randint(0, 200) < self.epsilon:
+        if random.randint(0, 5000) < self.epsilon:
             move = random.randint(0, 2)
             final_move[move] = 1
         else:
@@ -104,6 +104,7 @@ def train():
                 plot(plot_profit, plot_mean_profit)
         except Exception as err:
             print(err)
+            env.reset()
 
 
 

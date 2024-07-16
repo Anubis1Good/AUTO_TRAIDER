@@ -25,7 +25,9 @@ class EmulationStock:
         self.global_profit = 0
         self.img_path = f'{img_path}/{self.day}/images/'
         self.step = 0
-        self.limit = self.df.shape[0] - 2
+        self.zero_pos = 0
+        self.limit = self.df.shape[0] - 5
+        print(self.name,self.day)
 
     def give_state(self):
         img = cv2.imread(self.img_path+self.df.iloc[self.step]['img'])
@@ -51,17 +53,22 @@ class EmulationStock:
 # DataForLearning\9.07.24\images\MRKV1720516447.2800508.png
     def change_pos(self,action):
         if action == self.position and action != 0:
-            return -100
+            return -10000
         else:
             self.position += action
             if action == 0:
                 return -1
             else:
                 if self.position == 0:
+                    self.zero_pos += 1
                     self.price_pos = 0
+                    if self.zero_pos < 8:
+                        return -10
+                    self.zero_pos = 0
+                    return -10000
                 else:
                     self.price_pos = self.df.iloc[self.step]['price']
-                return 1
+                    return 10
     
     def make_step(self,action):
         if np.array_equal(action, [1, 0, 0]):
@@ -77,7 +84,7 @@ class EmulationStock:
             self.profit = int(((self.df.iloc[self.step]['price']/self.price_pos)-1) * 10000)
         reward += self.profit
         self.step += 1
-        print(self.name,self.day)
+        
         done = True
         if self.step < self.limit:
             done = False
