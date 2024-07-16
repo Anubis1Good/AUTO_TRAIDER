@@ -63,13 +63,12 @@ def change_img(img:str):
     image = image/255
     return image.tolist()
 
-def create_df(ticker):
-    global test_re1, test_re2, df_bars, df_data, delta_std, path_images
+def create_df(ticker,path_images,date):
+    global test_re1, test_re2, df_bars, df_data, delta_std
     path_bars = f'./Data/TQBR.{ticker}_T1.txt'
     df_bars = pd.read_csv(path_bars,sep='\t')
     df_bars['datetime'] = df_bars['datetime'].apply(change_date)
     df_bars = df_bars.drop_duplicates()
-    path_images = './DataForLearning/9.07.24/images/'
     files = os.listdir(path_images)
     filter_files = list(filter(lambda x: x.find(ticker) != -1, files))
     test_re1 = f'[{ticker}]'
@@ -85,11 +84,15 @@ def create_df(ticker):
     delta_std = df_data['delta'].std()
     df_data['direction'] = df_data.apply(add_direction,axis=1)
     df_data = df_data.iloc[:-5]
-    df_data.to_csv(f'./DataFrames/{ticker}.csv', index=False) 
+    folder_path = f'./DataFrames/{date}'
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+    df_data.to_csv(f'{folder_path}/{ticker}.csv', index=False) 
 
 if __name__ == '__main__':
+    path_images = './DataForLearning/10.07.24/images/'
     for ticker in sec_codes:
-        create_df(ticker)
+        create_df(ticker,path_images,'10.07.24')
 
 
 
