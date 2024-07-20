@@ -90,9 +90,10 @@ def create_df(ticker,path_images,date):
     df_data.to_csv(f'{folder_path}/{ticker}.csv', index=False) 
 
 if __name__ == '__main__':
-    path_images = './DataForLearning/10.07.24/images/'
+    day = '16.07.24'
+    path_images = f'./DataForLearning/{day}/images/'
     for ticker in sec_codes:
-        create_df(ticker,path_images,'10.07.24')
+        create_df(ticker,path_images,day)
 
 
 

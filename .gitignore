@@ -6,5 +6,6 @@ ml/Data/
 ml/DataFrames/
 ml/Models/
 ml/test_prediction/
+test_opencv/09.07.24/
 **/__pycache__/
 *.pyc

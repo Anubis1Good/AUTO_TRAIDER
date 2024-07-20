@@ -4,4 +4,9 @@ import numpy as np
 
 # print(x[:,1:])
 
-print(['a']*3)
+# print(['a']*3)
+b = (10,22,23)
+a = (b,)
+
+for idx in range(len(a)):
+    print(idx)

@@ -4,16 +4,18 @@ import numpy as np
 import pyautogui as pag
 from scipy import stats
 from scipy.spatial.distance import euclidean
-pag.screenshot('Screen.png')
+# pag.screenshot('Screen.png')
 
-# image = cv2.imread('Screenshot_7.png')
-image = cv2.imread('Screen.png')
+image = cv2.imread('Screenshot_6.png')
+# image = cv2.imread('./09.07.24/images/ABIO1720516068.2549531.png')
 # image = cv2.resize(image,(480,540))
-# image = image[0:540,0:480]
-image = image[550:1040,0:450]
+image = image[0:540,0:480]
+# image = image[550:1040,0:450]
 # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 color1 = np.array([111,111,111])
 color2 = np.array([200,200,200])
+color_val1 = np.array([92,107,61])
+color_val2 = np.array([89,89,128])
 # mask = image.copy()
 # mask[(mask[:,:,0] != 111) & (mask[:,:,1] != 111) & (mask[:,:,2] != 111)] = np.array([0,0,0])
 # mask2 = image.copy()
@@ -21,6 +23,9 @@ color2 = np.array([200,200,200])
 # mask = mask + mask2
 # _,mask = cv2.threshold(mask,100,255, cv2.THRESH_BINARY)
 # print(mask)
+mask_val1 = cv2.inRange(image,color_val1,color_val1)
+mask_val2 = cv2.inRange(image,color_val2,color_val2)
+mask_val = cv2.add(mask_val1,mask_val2)
 mask1 = cv2.inRange(image,color1,color1)
 mask2 = cv2.inRange(image,color2,color2)
 mask = cv2.add(mask1,mask2)
@@ -31,64 +36,65 @@ mask = cv2.add(mask1,mask2)
 # mask = cv2.medianBlur(mask,5)
 
 # image = cv2.bitwise_and(image,image,mask=mask)
-countours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-tops = []
-bottoms = []
-for cnt in countours:
-    approx = cv2.approxPolyDP(cnt, 0.009 * cv2.arcLength(cnt,True),True)
-    # approx = cnt
-    area = cv2.contourArea(approx)
-    if area > 5:
-        bottom = np.max(approx,0)[0]
-        top = np.min(approx,0)[0]
-        mean = np.mean(approx,0,int)[0]
-        bottom_point = (mean[0],bottom[1])
-        top_point = (mean[0],top[1])
-        # print(mean)
-        # print(top,bottom)
-        # cv2.drawContours(image, [approx], 0, (0, 0, 255), 2)  
-        # image[top[1],top[0]] = [255,0,0]
-        cv2.circle(image, top_point,2, (255,0,0),-1)
-        cv2.circle(image, bottom_point,2, (0,255,0),-1)
-        tops.append(top_point)
-        bottoms.append(bottom_point)
+# countours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+# countours, _ = cv2.findContours(mask_val, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+# tops = []
+# bottoms = []
+# for cnt in countours:
+#     approx = cv2.approxPolyDP(cnt, 0.009 * cv2.arcLength(cnt,True),True)
+#     # approx = cnt
+#     area = cv2.contourArea(approx)
+#     if area > 5:
+#         bottom = np.max(approx,0)[0]
+#         top = np.min(approx,0)[0]
+#         mean = np.mean(approx,0,int)[0]
+#         bottom_point = (mean[0],bottom[1])
+#         top_point = (mean[0],top[1])
+#         # print(mean)
+#         # print(top,bottom)
+#         # cv2.drawContours(image, [approx], 0, (0, 0, 255), 2)  
+#         # image[top[1],top[0]] = [255,0,0]
+#         cv2.circle(image, top_point,2, (255,0,0),-1)
+#         cv2.circle(image, bottom_point,2, (0,255,0),-1)
+#         tops.append(top_point)
+#         bottoms.append(bottom_point)
         # cv2.circle(image, top,2, (255,0,0),-1)
         # cv2.circle(image, bottom,2, (0,255,0),-1)
         # cv2.circle(image, mean,1, (255,255,0),-1)
 
 
-tops = np.array(tops)
-bottoms = np.array(bottoms)
-# print(tops,bottoms)
-tops = tops[tops[:,0].argsort()]
-bottoms = bottoms[bottoms[:,0].argsort()]
-x = np.concatenate((tops[:,0],bottoms[:,0]))
-y = np.concatenate((tops[:,1],bottoms[:,1]))
-# print(y)
-# print(x)
-cv2.polylines(image,[tops],False,(255,0,0),1)
-cv2.polylines(image,[bottoms],False,(0,255,0),1)
+# tops = np.array(tops)
+# bottoms = np.array(bottoms)
+# # print(tops,bottoms)
+# tops = tops[tops[:,0].argsort()]
+# bottoms = bottoms[bottoms[:,0].argsort()]
+# x = np.concatenate((tops[:,0],bottoms[:,0]))
+# y = np.concatenate((tops[:,1],bottoms[:,1]))
+# # print(y)
+# # print(x)
+# cv2.polylines(image,[tops],False,(255,0,0),1)
+# cv2.polylines(image,[bottoms],False,(0,255,0),1)
 
 
-slope, intercept, r, p, std_err = stats.linregress(x, y)
+# slope, intercept, r, p, std_err = stats.linregress(x, y)
 
-def get_points_linear_reg(x,offset):
-  return int(slope * x + intercept+offset)
+# def get_points_linear_reg(x,offset):
+#   return int(slope * x + intercept+offset)
 
 # print(slope)
-std_y = np.std(y)
-middle_line = list(map(lambda x:get_points_linear_reg(x,0), x))
-top_line = list(map(lambda x:get_points_linear_reg(x,std_y), x))
-bottom_line = list(map(lambda x:get_points_linear_reg(x,-std_y), x))
-trend = np.column_stack([x, middle_line])
-top_trend = np.column_stack([x, top_line])
-bottom_trend = np.column_stack([x, bottom_line])
+# std_y = np.std(y)
+# middle_line = list(map(lambda x:get_points_linear_reg(x,0), x))
+# top_line = list(map(lambda x:get_points_linear_reg(x,std_y), x))
+# bottom_line = list(map(lambda x:get_points_linear_reg(x,-std_y), x))
+# trend = np.column_stack([x, middle_line])
+# top_trend = np.column_stack([x, top_line])
+# bottom_trend = np.column_stack([x, bottom_line])
 # print(trend)
 # print(mymodel)
-cv2.polylines(image,[trend],False,(255,255,255),2)
-cv2.polylines(image,[top_trend],False,(255,255,255),2)
-cv2.polylines(image,[bottom_trend],False,(255,255,255),2)
-print(slope)
+# cv2.polylines(image,[trend],False,(255,255,255),2)
+# cv2.polylines(image,[top_trend],False,(255,255,255),2)
+# cv2.polylines(image,[bottom_trend],False,(255,255,255),2)
+# print(slope)
 # top_border = list(map(lambda x:myfunc(x,y.std()), x))
 # bottom_border = list(map(lambda x:myfunc(x,-y.std()), x))
 # print(cum_sumx)
@@ -223,8 +229,9 @@ print(slope)
 # cv2.circle(image, lpb,5, (200,200,100),-1)
 # cv2.circle(image, rpb,5, (200,200,100),-1)
 # cv2.imwrite('output.png',image)
+# image = cv2.resize(image,(600,400))
 cv2.imshow('Chart',image)
-# cv2.imshow('mask',mask)
+cv2.imshow('mask1',mask_val)
 # cv2.imshow('mask1',mask1)
 cv2.waitKey(0)
 cv2.destroyAllWindows()

@@ -67,5 +67,7 @@ class QTrainer:
  
         self.optimizer.step()
 
-
+if __name__ == '__main__':
+    model = Linear_QNet(26,512,3)
+    print(model.state_dict())
 

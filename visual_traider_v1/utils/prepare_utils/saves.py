@@ -2,7 +2,6 @@ import os
 import cv2
 import json
 import numpy as np
-from PIL import Image
 from time import time
 from utils.chart_utils.general import get_chart_point,get_last_points_trend
 
