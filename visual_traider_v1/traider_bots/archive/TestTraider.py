@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from traider_bots.VisualTraider import VisualTraider
+from traider_bots.archive.VisualTraider import VisualTraider
 from utils.chart_utils.general import get_chart_point, get_trend_lines
 
 

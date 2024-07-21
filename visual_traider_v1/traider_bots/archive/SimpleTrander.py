@@ -1,5 +1,5 @@
 import cv2
-from traider_bots.VisualTraider import VisualTraider
+from traider_bots.archive.VisualTraider import VisualTraider
 from utils.conditions import check_pos, check_req, get_current_level
 from utils.traid_utils import click_bl,click_bs,idle
 from utils.chart_utils.general import get_formation, get_main_points, get_mean_y

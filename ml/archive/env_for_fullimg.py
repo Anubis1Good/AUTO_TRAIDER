@@ -4,7 +4,7 @@ from time import time
 import pandas as pd
 import numpy as np
 import cv2
-from sec_codes import sec_codes
+from info_for_study import sec_codes
 from help_about_VT import get_chart_point,get_last_points_trend,get_current_level
 from help_our_func import change_amount_points
 
@@ -38,24 +38,9 @@ class EmulationStock:
 
     def give_state(self):
         self.img = cv2.imread(self.img_path+self.df.iloc[self.step]['img'])
-        tops,bottoms = get_chart_point(self.img)
-        slope,top_trend,bottom_trend = get_last_points_trend(tops,bottoms)
-        tops = tops.flatten()
-        bottoms = bottoms.flatten()
-        norm = np.max(bottoms)
-        tops = change_amount_points(tops,20)/norm
-        bottoms = change_amount_points(bottoms,20)/norm
-        top_trend = top_trend[1]/norm
-        bottom_trend = bottom_trend[1]/norm
-        y_cur_price = get_current_level(self.img)/norm
-        slope = (slope+1)/2
-        state = list(tops) + list(bottoms)
-        state.append(top_trend)
-        state.append(bottom_trend)
-        state.append(slope)
-        state.append(y_cur_price)
-        state.append(self.position)
-        state.append(self.profit_dir)
+        self.img = cv2.resize(self.img, (300,200))
+        self.img = cv2.cvtColor(self.img,cv2.COLOR_BGR2GRAY)
+        state = np.array(self.img).flatten()
         return tuple(state)
         
     def _calc_profit(self,direction):
@@ -85,7 +70,7 @@ class EmulationStock:
             self.profit_dir = 0
 # DataForLearning\9.07.24\images\MRKV1720516447.2800508.png
     def change_pos(self,delta_pos):
-        reward = 0
+        reward = -0.1
         if self.position == delta_pos:
             self._calc_profit(self.position)
             return self._get_reward_profit(reward)
@@ -122,6 +107,12 @@ class EmulationStock:
     def make_step(self,action):
         delta_pos = self._convert_action(action)
         reward = self.change_pos(delta_pos)
+        # if self.position == -1:
+        #     self.profit = round(((1 - (self.df.iloc[self.step]['price']/self.price_pos)) * 100),2)
+        # if self.position == 1:
+        #     self.profit = round((((self.df.iloc[self.step]['price']/self.price_pos)-1) * 100),2)
+        # if self.profit > 0:
+        #     reward += self.profit
         self.count_pos += abs(delta_pos)
         self.step += 1
         
@@ -150,13 +141,8 @@ class EmulationStock:
 
 if __name__ == '__main__':
     es = EmulationStock()
-    print(es.give_state())
-    # print(es.make_step([1,0,0]))
-    # print(es.give_state())
-    # print(es.make_step([1,0,0]))
-    # print(es.give_state())
-    # print(es.make_step([1,0,0]))
-    # print(es.give_state())
+    print(len(es.give_state()))
+
     # print(len(es.give_state()))
 
 

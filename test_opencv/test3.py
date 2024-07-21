@@ -1,9 +1,11 @@
 import cv2
 import numpy as np
 image = cv2.imread('Screenshot_6.png')
-# image = cv2.imread('./09.07.24/images/AFLT1720522320.5738642.png')
-image = image[0:540,0:480]
-
+image = cv2.imread('./09.07.24/images/SBER1720516220.255987.png')
+# image = image[0:540,0:480]
+print(image.shape)
+image = image[None:None,None:None]
+print(image.shape)
 # constantes colors
 color1 = np.array([111,111,111])
 color2 = np.array([200,200,200])
@@ -40,7 +42,7 @@ corners = np.int0(corners)
 shape = corners.shape
 corners = corners.reshape((shape[0],shape[2]))
 corners = corners[corners[:, 0].argsort()]
-print(corners)
+# print(corners)
 for i in range(1,len(corners)-1): 
     x1, y1 = corners[i].ravel()
     x0, y0 = corners[i-1].ravel()
@@ -49,12 +51,31 @@ for i in range(1,len(corners)-1):
     # if  x0 >= x1 <= x2 or x0 <= x1 >= x2:
         cv2.circle(image, (x1, y1), 2, (20,200,0), -1) 
     cv2.circle(mask, (x1, y1), 1, (120,0,0), -1) 
+last_i = 0
+len_corners = len(corners)
+step = len_corners//5
+# print(len_corners)
+for i in range(step-1,len_corners,step):
+    print(i)
+    if len_corners - i < step:
+        distict = corners[last_i:len_corners-1]
+    else:
+        distict = corners[last_i:i]
+    last_i = i
+
+    y_max = np.max(distict[:,1:])
+    x_max = np.max(distict[:,:1])
+    y_min = np.min(distict[:,1:])
+    x_min = np.min(distict[:,:1])
+    
+    cv2.rectangle(image,(x_min,y_min),(x_max,y_max),(0,0,200),2)
+    # cv2.circle(image,(y_max,x_max),3,(0,100,200),-1)
 # print(cords_charts)
 # print(mean_charts)
 
 # draw in image
 cv2.line(image,(0,mean_val),(400,mean_val),(250,200,10),2)
-cv2.line(image,(0,max_val),(400,max_val),(200,200,9),2)
+# cv2.line(image,(0,max_val),(400,max_val),(200,200,9),2)
 
 # experiment
 # mask = cv2.blur(mask,(100,100))

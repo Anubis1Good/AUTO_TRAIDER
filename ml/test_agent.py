@@ -6,7 +6,7 @@ from env import EmulationStock
 from model_RL import Linear_QNet, QTrainer
 
 
-model = Linear_QNet(26, 512, 3)
+model = Linear_QNet(46, 64, 32, 3)
 model.load_state_dict(torch.load('./Models/RL_model.pth'))
 
 env = EmulationStock()

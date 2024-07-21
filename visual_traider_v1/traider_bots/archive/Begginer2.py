@@ -1,4 +1,4 @@
-from traider_bots.VisualTraider import VisualTraider
+from traider_bots.archive.VisualTraider import VisualTraider
 from utils.traid_utils import click_bl, idle, click_bs
 from utils.conditions import check_pos, check_req, check_graphic_level
 

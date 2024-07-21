@@ -1,5 +1,5 @@
 # import cv2
-from traider_bots.VisualTraider import VisualTraider
+from traider_bots.archive.VisualTraider import VisualTraider
 from utils.conditions import check_position, get_current_level
 from utils.traid_utils import idle,click_bl_open,click_bl_close,click_bs_open,click_bs_close
 from utils.chart_utils.general import get_last_points_trend
