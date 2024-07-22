@@ -12,7 +12,11 @@ from traider_bots.help_bots.ResearchBot import ResearchBot
 
 
 param_bots = configuration_traiders_v2('config.txt')
-traider = ResearchBot(*param_bots,name=stock_groups[0])
+traiders = []
+for stock in stock_groups:
+    traider = ResearchBot(*param_bots,name=stock)
+    traiders.append(traider)
+
 # print(traider)
 # pag.screenshot('Screen.png')
 # img = cv2.imread('Screen.png')
@@ -21,13 +25,13 @@ traider = ResearchBot(*param_bots,name=stock_groups[0])
 # sleep(3)
 i = 0
 while True:
-    for stock in stock_groups:
-        print(i)
+    for traider in traiders:
+        # print(i)
         sleep(2)
         keyboard.send('shift')
         pag.screenshot('Screen.png')
         img = cv2.imread('Screen.png')
-        traider.name = stock
+
         traider.run(img)
         if keyboard.is_pressed('Esc'):
             print("\nyou pressed Esc, so exiting...")
@@ -35,6 +39,6 @@ while True:
         # sys.exit(0)
         pag.moveTo(traider.glass_region[0]+10,traider.glass_region[1]+10)
         sleep(2)
-        i += 1
+        # i += 1
         keyboard.send('tab') 
     # pag.press('space')

@@ -8,8 +8,8 @@ from time import time
 import cv2
 import sys
 import keyboard
-# sleep(2)
-# pag.screenshot('Screen.png')
+sleep(5)
+pag.screenshot('Screen.png')
 
 a = np.array([1,2,3])
 print(a)
