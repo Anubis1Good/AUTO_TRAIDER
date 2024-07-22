@@ -16,4 +16,8 @@ class ColorsBtnBGR:
     candle_color_1 = (111,111,111)
     candle_color_2 = (200,200,200)
 
+    volume_color_1 = (92,107,61)
+    volume_color_2 = (89,89,128)
+
+
 

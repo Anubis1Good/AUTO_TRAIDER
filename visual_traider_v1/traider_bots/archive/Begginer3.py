@@ -2,7 +2,7 @@
 from traider_bots.archive.VisualTraider import VisualTraider
 from utils.conditions import check_pos, check_req, get_current_level
 from utils.traid_utils import click_bl,click_bs,idle
-from utils.chart_utils.general import get_last_points_trend
+from utils.chart_utils.archive.general import get_last_points_trend
 from utils.test_utils.test_traide import test_close,test_open
 from utils.utils import change_coords
 class Begginer3(VisualTraider):

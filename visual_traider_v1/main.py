@@ -3,34 +3,38 @@ import cv2
 import keyboard
 import sys
 from time import sleep
-from settings import configurtion_traiders
+from settings import configuration_traiders_v2
 from stock_groups import stock_groups
-from traider_bots.help_bots.PrepareBot import PrepareBot
 from utils.test_utils.windows import draw_borders
-main_bots = configurtion_traiders(PrepareBot,'config.txt')
+from traider_bots.help_bots.ResearchBot import ResearchBot
 
 
 
-sleep(3)
+
+param_bots = configuration_traiders_v2('config.txt')
+traider = ResearchBot(*param_bots,name=stock_groups[0])
+# print(traider)
 # pag.screenshot('Screen.png')
 # img = cv2.imread('Screen.png')
-# draw_borders(img,LR_tranders)
+# draw_borders(img,traider)
+
+# sleep(3)
+i = 0
 while True:
     for stock in stock_groups:
-        sleep(5)
+        print(i)
+        sleep(2)
         keyboard.send('shift')
-        sleep(1)
         pag.screenshot('Screen.png')
         img = cv2.imread('Screen.png')
-        for i in range(len(main_bots)):
-            main_bots[i].name = stock[i]
-            # LR_tranders[i].run(img)
-            main_bots[i].test(img)
-            if keyboard.is_pressed('Esc'):
-                print("\nyou pressed Esc, so exiting...")
-                sys.exit(0)
+        traider.name = stock
+        traider.run(img)
+        if keyboard.is_pressed('Esc'):
+            print("\nyou pressed Esc, so exiting...")
+            sys.exit(0)
         # sys.exit(0)
-        pag.moveTo(main_bots[0].region_glass[0]+10,main_bots[0].region_glass[1]+10)
-        sleep(4)
+        pag.moveTo(traider.glass_region[0]+10,traider.glass_region[1]+10)
+        sleep(2)
+        i += 1
         keyboard.send('tab') 
     # pag.press('space')

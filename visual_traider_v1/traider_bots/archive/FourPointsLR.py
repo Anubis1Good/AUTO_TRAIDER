@@ -2,7 +2,7 @@
 from traider_bots.archive.VisualTraider import VisualTraider
 from utils.conditions import check_position, get_current_level
 from utils.traid_utils import idle,click_bl_open,click_bl_close,click_bs_open,click_bs_close
-from utils.chart_utils.general import get_four_points_and_slope
+from utils.chart_utils.archive.general import get_four_points_and_slope
 from utils.test_utils.test_traide import test_close,test_open
 from utils.test_utils.test_draws_funcs import draw_four_points
 from utils.utils import change_coords

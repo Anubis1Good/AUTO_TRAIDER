@@ -1,6 +1,5 @@
 from utils.utils import color_search
 from utils.config import ColorsBtnBGR
-
 class VisualTraider_v2():
     def __init__(
             self,
@@ -78,4 +77,10 @@ class VisualTraider_v2():
             else:
                 x,y = color_search(img,ColorsBtnBGR.color_x_bb,self.glass_region)
                 return x,y
+    
+    def _change_coords(self,point,region:tuple) -> tuple:
+        point = list(point)
+        point[0] += region[0]
+        point[1] += region[1]
+        return tuple(point)
 

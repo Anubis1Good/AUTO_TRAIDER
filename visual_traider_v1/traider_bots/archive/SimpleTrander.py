@@ -2,7 +2,7 @@ import cv2
 from traider_bots.archive.VisualTraider import VisualTraider
 from utils.conditions import check_pos, check_req, get_current_level
 from utils.traid_utils import click_bl,click_bs,idle
-from utils.chart_utils.general import get_formation, get_main_points, get_mean_y
+from utils.chart_utils.archive.general import get_formation, get_main_points, get_mean_y
 class SimpleTraider(VisualTraider):
     def __init__(self, glass_region: tuple, chart_region: tuple) -> None:
         super().__init__(glass_region, chart_region)

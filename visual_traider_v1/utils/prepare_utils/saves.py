@@ -3,7 +3,7 @@ import cv2
 import json
 import numpy as np
 from time import time
-from utils.chart_utils.general import get_chart_point,get_last_points_trend
+from utils.chart_utils.archive.general import get_chart_point,get_last_points_trend
 
 def save_img(image,name):
     image = image.copy()
