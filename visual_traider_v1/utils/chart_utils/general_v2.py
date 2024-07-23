@@ -28,7 +28,7 @@ def get_statistic_volume(cords:npt.NDArray):
     return mean_val,max_val
 
 def get_corners(mask:npt.ArrayLike) -> npt.NDArray:
-    corners = cv2.goodFeaturesToTrack(mask,1000,0.01,1)
+    corners = cv2.goodFeaturesToTrack(mask,3000,0.01,1)
     corners = np.intp(corners) 
     shape = corners.shape
     corners = corners.reshape((shape[0],shape[2]))

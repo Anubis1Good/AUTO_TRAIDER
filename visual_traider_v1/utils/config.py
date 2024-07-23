@@ -1,4 +1,4 @@
-
+import numpy as np
 class ColorsBtnBGR:
     ask = (67, 67, 67)
     bid = (76, 76, 76)
@@ -19,5 +19,19 @@ class ColorsBtnBGR:
     volume_color_1 = (92,107,61)
     volume_color_2 = (89,89,128)
 
+class TemplateCandle:
+    candle_top = np.array([
+        [0,0,0],
+        [0,255,0]
+    ],dtype=np.uint8)
 
+    candle_bottom = np.array([
+        [0,255,0],
+        [0,0,0]
+    ],dtype=np.uint8)
+
+    volume_top = np.array([
+        [0,0,0,0],
+        [0,255,255,0]
+    ],dtype=np.uint8)
 

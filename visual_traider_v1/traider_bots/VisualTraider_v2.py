@@ -51,12 +51,13 @@ class VisualTraider_v2():
         x,y = color_search(chart,ColorsBtnBGR.cur_price_1,reverse=True)
         if y > 0:
             x,y2 = color_search(chart,ColorsBtnBGR.cur_price_1,reverse=False)
-            return (y+y2)//2
+            return (x,(y+y2)//2)
         x,y = color_search(chart,ColorsBtnBGR.cur_price_2,reverse=True)
         if y > 0:
             x,y2 = color_search(chart,ColorsBtnBGR.cur_price_2,reverse=False)
-            return (y+y2)//2
-
+            return (x,(y+y2)//2)
+        return None,None
+    
     def _check_position(self,img) -> int:
         x,y = color_search(img,ColorsBtnBGR.best_bid,self.position_region)
         if x >= 0:
