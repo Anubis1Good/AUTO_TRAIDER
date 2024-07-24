@@ -10,7 +10,12 @@ import sys
 import keyboard
 # sleep(5)
 # pag.screenshot('Screen.png')
-print(10+int(None))
+# print(10+int(None))
+a = np.array([[1,2],[3,4]])
+b = a[:,1:]
+b += 10
+b = np.hstack([a[:,:1],b])
+print(b)
 # img = cv2.imread('./mask.png')
 # img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 # print(img.tolist())

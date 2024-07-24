@@ -1,10 +1,7 @@
 import cv2
 import numpy as np
 from traider_bots.VisualTraider_v2 import VisualTraider_v2
-from utils.chart_utils.general_v2 import get_candle_mask, get_volume_mask, get_statistic_volume, get_cords_on_mask, get_corners, get_divide_chart, get_xy
-from utils.test_utils.test_draws_funcs import draw_trendlines_v2
-from utils.config import TemplateCandle
-from utils.chart_utils.dtype import HalfBar
+from utils.chart_utils.indicators import get_SMA, get_bollinger_bands
 class WorkBot(VisualTraider_v2):
     def __init__(self, cluster: tuple, dealfeed: tuple, glass: tuple, day: tuple, hour: tuple, minute: tuple, position: tuple, name: str, mode: int = 0) -> None:
         super().__init__(cluster, dealfeed, glass, day, hour, minute, position, name, mode)
@@ -25,13 +22,35 @@ class WorkBot(VisualTraider_v2):
             (0,200,100),
             (200,0,100)
         )
-        
-        for i in range(len(half_bars)):
-            hpt,lpt,vpt = half_bars[i].to_img_cords(change_cords) 
-            cv2.circle(img,vpt,1,(0,200,0))
-            cv2.line(img,hpt,lpt,colors[i%3],1)
-
         mean_volume = self._get_mean(volume_cords)
+        vpts = []
+        mpts = []
+        # lpts = []
+        # hpts = []
+        for i in range(len(half_bars)):
+            hpt,lpt,vpt = half_bars[i].to_img_cords(change_cords)
+            mpt = change_cords(half_bars[i].mpt)
+            mpts.append(mpt)
+            vpts.append(vpt)
+            # lpts.append(lpt)
+            # hpts.append(hpt)
+            if half_bars[i].is_big_volume(mean_volume[1]): 
+                cv2.circle(img,vpt,1,(0,200,0))
+                cv2.line(img,hpt,lpt,colors[1],1)
+        period = 27
+        V_sma = get_SMA(np.array(vpts),period)
+        # m_sma = get_SMA(np.array(mpts),period)
+        m_sma,bbu,bbd = get_bollinger_bands(np.array(mpts))
+        # print(m_sma[0])
+        # print(bbu[0])
+        # l_sma = get_SMA(np.array(lpts),period)
+        # h_sma = get_SMA(np.array(hpts),period)
+        cv2.polylines(img,[V_sma],False,(176,80,10),2)
+        cv2.polylines(img,[m_sma],False,(176,180,10),1)
+        cv2.polylines(img,[bbu],False,(176,80,90),2)
+        cv2.polylines(img,[bbd],False,(176,80,90),2)
+        # cv2.polylines(img,[l_sma],False,(176,180,10),2)
+        # cv2.polylines(img,[h_sma],False,(176,80,110),2)
         mean_volume = change_cords(mean_volume)
         cv2.circle(img,mean_volume,1,(150,200,70),3)
         points = self._get_points(half_bars)
