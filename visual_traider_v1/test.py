@@ -8,13 +8,19 @@ from time import time
 import cv2
 import sys
 import keyboard
-sleep(5)
-pag.screenshot('Screen.png')
-
-a = np.array([1,2,3])
-print(a)
-a[0] = 10
-print(a)
+# sleep(5)
+# pag.screenshot('Screen.png')
+print(10+int(None))
+# img = cv2.imread('./mask.png')
+# img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+# print(img.tolist())
+# template = np.array([
+#     [[0,0,0],[0,0,0],[0,0,0]],
+#     [[0,0,0],[255,255,255],[0,0,0]],
+#     [[0,0,0],[255,255,255],[0,0,0]]],dtype=np.uint8)
+# print(template)
+# cv2.imshow('template',template)
+# cv2.waitKey(0)
 # pdi.press("f")
 # keyboard.send('f')
 
