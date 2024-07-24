@@ -14,28 +14,50 @@ class WorkBot(VisualTraider_v2):
     def draw_all(self,img,region):
         change_cords = lambda p: self._change_coords(p,region)
         chart = self._get_chart(img,region)
-        candle_mask = get_candle_mask(chart)
-        volume_mask = get_volume_mask(chart)
-        res_top = cv2.matchTemplate(candle_mask,TemplateCandle.candle_top,cv2.TM_CCOEFF_NORMED)
-        # print(res.min())
-        res_top = np.argwhere(res_top >= 0.7)
-        res_top = res_top[res_top[:, 1].argsort()]
-        # print(res_top[:10])
-        res_bottom = cv2.matchTemplate(candle_mask,TemplateCandle.candle_bottom,cv2.TM_CCOEFF_NORMED)
-        res_bottom = np.argwhere(res_bottom >= 0.7)
-        res_vol = cv2.matchTemplate(volume_mask,TemplateCandle.volume_top,cv2.TM_CCOEFF_NORMED)
-        res_vol = np.argwhere(res_vol >= 0.7)
-        print(res_vol.shape)
-        cv2.imwrite('mask.png',candle_mask)
-        volume_cords = get_cords_on_mask(volume_mask)
-        candle_cords = get_cords_on_mask(candle_mask)
-        mean_volume,max_volume = get_statistic_volume(volume_cords)
-        # print(mean_volume,max_volume)
+        candle_mask = self._get_candle_mask(chart)
+        volume_mask = self._get_volume_mask(chart)
+        candle_cords = self._get_cords_on_mask(candle_mask)
+        volume_cords = self._get_cords_on_mask(volume_mask)
+
+        half_bars = self._get_half_bars(candle_mask,candle_cords,volume_cords)
+        colors = (
+            (100,200,0),
+            (0,200,100),
+            (200,0,100)
+        )
+        
+        for i in range(len(half_bars)):
+            hpt,lpt,vpt = half_bars[i].to_img_cords(change_cords) 
+            cv2.circle(img,vpt,1,(0,200,0))
+            cv2.line(img,hpt,lpt,colors[i%3],1)
+
+        mean_volume = self._get_mean(volume_cords)
         mean_volume = change_cords(mean_volume)
-        max_volume = change_cords(max_volume)
-        cv2.circle(img,mean_volume,1,(250,0,0),3)
-        cv2.circle(img,max_volume,1,(200,100,0),3)
-        candle_corners = get_corners(candle_mask)
+        cv2.circle(img,mean_volume,1,(150,200,70),3)
+        points = self._get_points(half_bars)
+        for i in range(points.shape[0]):
+            points[i] = change_cords(points[i])
+        x,y = self._get_xy(points)
+        trend,top_trend,bottom_trend = self._get_trend_lines(x,y)
+        cv2.polylines(img,[trend],False,(255,255,255),2)
+        cv2.polylines(img,[top_trend],False,(255,255,255),2)
+        cv2.polylines(img,[bottom_trend],False,(255,255,255),2)
+        # max_volume,min_volume = self._get_limit(volume_cords)
+        # min_volume = change_cords(min_volume)
+        # max_volume = change_cords(max_volume)
+        # cv2.circle(img,min_volume,1,(250,0,0),3)
+        # cv2.circle(img,max_volume,1,(200,100,0),3)
+        # candle_mask = get_candle_mask(chart)
+        # volume_mask = get_volume_mask(chart)
+        # res_top = cv2.matchTemplate(candle_mask,TemplateCandle.candle_top,cv2.TM_CCOEFF_NORMED)
+        # res_top = np.argwhere(res_top >= 0.9)
+        # res_top = res_top[res_top[:, 1].argsort()]
+
+        # volume_cords = get_cords_on_mask(volume_mask)
+        # candle_cords = get_cords_on_mask(candle_mask)
+
+        # mean_volume,max_volume = get_statistic_volume(volume_cords)
+        # candle_corners = get_corners(candle_mask)
         # print(candle_cords[:5])
         # print(volume_cords[:5])
         # print('-----')
@@ -64,33 +86,21 @@ class WorkBot(VisualTraider_v2):
         # print(candle_cords.shape)
         # candle_cords = candle_cords[candle_cords[:, 1].argsort()]
         # print(candle_cords[:10],'!')
-        half_bars:list[HalfBar] = []
-        for i in range(res_top.shape[0]):
-            res_top[i] = (res_top[i][0],res_top[i][1]+1)
-            point_b = candle_cords[np.where(candle_cords[:,1] == res_top[i][1])]
-            point_v = volume_cords[np.where(volume_cords[:,1] == res_top[i][1])]
-            y_b = point_b[:,0].max()
-            y_v = point_v[:,0].min()
-            half_bars.append(HalfBar(res_top[i][1],res_top[i][0],y_b,y_v))
+
+        # half_bars:list[HalfBar] = []
+        # for i in range(res_top.shape[0]):
+        #     res_top[i] = (res_top[i][0],res_top[i][1]+1)
+        #     point_b = candle_cords[np.where(candle_cords[:,1] == res_top[i][1])]
+        #     point_v = volume_cords[np.where(volume_cords[:,1] == res_top[i][1])]
+        #     y_b = point_b[:,0].max()
+        #     y_v = point_v[:,0].min()
+        #     half_bars.append(HalfBar(res_top[i][1],res_top[i][0],y_b,y_v))
 
         # hb = half_bars[-1]
-        colors = (
-            (200,200,0),
-            (0,200,200),
-            (200,0,200)
-        )
-        
-        for i in range(len(half_bars)):
-            hpt,lpt,vpt = half_bars[i].to_img_cords(change_cords) 
-            cv2.circle(img,vpt,1,(0,200,0))
-            cv2.line(img,hpt,lpt,colors[i%3],1)
         # break
         
 
-        cp = self._get_current_price(chart)
-        print(cp)
-        cp = change_cords(cp)
-        cv2.circle(img,cp,1,(100,80,125),5)
+
 
         # print(half_bars)
         # for i in range(res_bottom.shape[0]):

@@ -11,8 +11,10 @@ class HalfBar:
     def __repr__(self) -> str:
         return f'HalfBar x: {self.x} y_high: {self.yh}'
     
+
     def to_img_cords(self,func):
         hpt = func(self.hpt)
         lpt = func(self.lpt)
         vpt = func(self.vpt)
         return hpt,lpt,vpt
+    

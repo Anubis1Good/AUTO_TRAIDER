@@ -1,5 +1,11 @@
-from utils.utils import color_search
+import cv2
+import numpy as np
+import numpy.typing as npt
+from scipy import stats
 from utils.config import ColorsBtnBGR
+from utils.chart_utils.dtype import HalfBar
+from utils.config import TemplateCandle
+
 class VisualTraider_v2():
     def __init__(
             self,
@@ -26,6 +32,7 @@ class VisualTraider_v2():
     def __repr__(self) -> str:
         return f'{self.traider_name} - {self.name}'
     
+    # work function
     def _test(self,img):
         print(self,'the _test method is not implemented')
 
@@ -41,6 +48,36 @@ class VisualTraider_v2():
             self._traide(img)
             self._test(img)
 
+    # terminal_function
+    def _check_position(self,img) -> int:
+        x,y = self._color_search(img,ColorsBtnBGR.best_bid,self.position_region)
+        if x >= 0:
+            return 1
+        x,y = self._color_search(img,ColorsBtnBGR.best_ask,self.position_region)
+        if x >= 0:
+            return -1
+        return 0
+    
+    def _check_req(self,img) ->tuple | bool:
+        x,y = self._color_search(img,ColorsBtnBGR.color_x_shadow,self.glass_region)
+        if x>0:
+            return x,y
+        else:
+            x,y = self._color_search(img,ColorsBtnBGR.color_x,self.glass_region)
+            if x > 0:
+                return x,y
+            else:
+                x,y = self._color_search(img,ColorsBtnBGR.color_x_bb,self.glass_region)
+                return x,y
+    
+    # trade_function
+    def _send_open(self):
+        pass
+
+    def _send_close(self):
+        pass
+
+    # chart_function
     def _get_chart(self,img,region):
         chart = img[
         region[1]:region[3],
@@ -48,40 +85,120 @@ class VisualTraider_v2():
         return chart
     
     def _get_current_price(self,chart):
-        x,y = color_search(chart,ColorsBtnBGR.cur_price_1,reverse=True)
+        x,y = self._color_search(chart,ColorsBtnBGR.cur_price_1,reverse=True)
         if y > 0:
-            x,y2 = color_search(chart,ColorsBtnBGR.cur_price_1,reverse=False)
+            x,y2 = self._color_search(chart,ColorsBtnBGR.cur_price_1,reverse=False)
             return (x,(y+y2)//2)
-        x,y = color_search(chart,ColorsBtnBGR.cur_price_2,reverse=True)
+        x,y = self._color_search(chart,ColorsBtnBGR.cur_price_2,reverse=True)
         if y > 0:
-            x,y2 = color_search(chart,ColorsBtnBGR.cur_price_2,reverse=False)
+            x,y2 = self._color_search(chart,ColorsBtnBGR.cur_price_2,reverse=False)
             return (x,(y+y2)//2)
-        return None,None
+        return None,None    
     
-    def _check_position(self,img) -> int:
-        x,y = color_search(img,ColorsBtnBGR.best_bid,self.position_region)
-        if x >= 0:
-            return 1
-        x,y = color_search(img,ColorsBtnBGR.best_ask,self.position_region)
-        if x >= 0:
-            return -1
-        return 0
+    def _get_mask(self,chart:npt.ArrayLike,color) -> npt.ArrayLike:
+        mask = cv2.inRange(chart,color,color)
+        return mask
     
-    def _check_req(self,img) ->tuple | bool:
-        x,y = color_search(img,ColorsBtnBGR.color_x_shadow,self.glass_region)
-        if x>0:
-            return x,y
-        else:
-            x,y = color_search(img,ColorsBtnBGR.color_x,self.glass_region)
-            if x > 0:
-                return x,y
-            else:
-                x,y = color_search(img,ColorsBtnBGR.color_x_bb,self.glass_region)
-                return x,y
+    def _get_candle_mask(self,chart:npt.ArrayLike) -> npt.ArrayLike:
+        mask1 = self._get_mask(chart,ColorsBtnBGR.candle_color_1)
+        mask2 = self._get_mask(chart,ColorsBtnBGR.candle_color_2)
+        mask = cv2.add(mask1,mask2)
+        kernel = np.ones((2, 1), np.uint8) 
+        mask = cv2.erode(mask,kernel)
+        return mask
+
+    def _get_volume_mask(self,chart:npt.ArrayLike) -> npt.ArrayLike:
+        mask1 = self._get_mask(chart,ColorsBtnBGR.volume_color_1)
+        mask2 = self._get_mask(chart,ColorsBtnBGR.volume_color_2)
+        mask = cv2.add(mask1,mask2)
+        return mask
     
+    def _get_cords_on_mask(self,mask:npt.ArrayLike) -> npt.NDArray:
+        cords = np.argwhere(mask == 255)
+        return cords
+    
+    def _get_half_bars(
+            self,
+            candle_mask: npt.ArrayLike,
+            candle_cords: npt.NDArray, 
+            volume_cords: npt.NDArray
+            ) -> list[HalfBar]: 
+        res_top = cv2.matchTemplate(candle_mask,TemplateCandle.candle_top,cv2.TM_CCOEFF_NORMED)
+        res_top = np.argwhere(res_top >= 0.9)
+        res_top = res_top[res_top[:, 1].argsort()]
+        half_bars:list[HalfBar] = []
+        for i in range(res_top.shape[0]):
+            res_top[i] = (res_top[i][0],res_top[i][1]+1)
+            point_b = candle_cords[np.where(candle_cords[:,1] == res_top[i][1])]
+            point_v = volume_cords[np.where(volume_cords[:,1] == res_top[i][1])]
+            y_b = point_b[:,0].max()
+            y_v = point_v[:,0].min()
+            half_bars.append(HalfBar(res_top[i][1],res_top[i][0],y_b,y_v))
+        return half_bars
+    
+    def _get_mean(self,cords:npt.NDArray):
+        mean_val = (10,int(np.mean(cords,axis=0)[0]))
+        return mean_val
+    
+    def _get_limit(self,cords:npt.NDArray):
+        max_val = (10,np.min(cords[:,:1]))
+        min_val = (10,np.max(cords[:,:1]))
+        return max_val,min_val
+    
+    def _get_xy(self,points:npt.NDArray) -> npt.NDArray:
+        x = points[:,0]
+        y = points[:,1]
+        return x,y
+    
+    def _get_points(self,half_bars:list[HalfBar]) -> npt.NDArray:
+        points = []
+        for hb in half_bars:
+            points.append(hb.hpt)
+            points.append(hb.lpt)
+        return np.array(points)
+
+    def _get_trend_lines(self,x,y):
+        std_y = np.std(y)
+        slope,intercept = self._get_linear_regress(x,y)
+        middle_line = list(map(lambda x:self._get_points_linear_reg(x,slope,intercept,0), x))
+        top_line = list(map(lambda x:self._get_points_linear_reg(x,slope,intercept,std_y), x))
+        bottom_line = list(map(lambda x:self._get_points_linear_reg(x,slope,intercept,-std_y), x))
+        trend = np.column_stack([x, middle_line])
+        top_trend = np.column_stack([x, top_line])
+        bottom_trend = np.column_stack([x, bottom_line])
+        return trend,top_trend,bottom_trend
+
+    def get_last_point_trend(self,x,y):
+        trend,top_trend,bottom_trend = self._get_trend_lines(x,y)
+        return trend[-1],top_trend[-1],bottom_trend[-1]
+    
+        # help function
     def _change_coords(self,point,region:tuple) -> tuple:
         point = list(point)
         point[0] += region[0]
         point[1] += region[1]
         return tuple(point)
+    
+    def _color_search(self,img:npt.ArrayLike,color:tuple[int],region:tuple[int]=(None,None,None,None),reverse:bool=False):
+        try:
+            result = np.argwhere(
+                (img[region[1]:region[3],region[0]:region[2],0] == color[0])& 
+                (img[region[1]:region[3],region[0]:region[2],1] == color[1])& 
+                (img[region[1]:region[3],region[0]:region[2],2] == color[2])
+            )
+            y = -1 if reverse else 0
+            if region[0]:
+                return result[y,1]+region[0], result[y,0]+region[1]
+            return result[y,1],result[y,0]
+
+        except:
+            return -1,-1
+    
+    # ml function
+    def _get_linear_regress(self,x,y):
+        slope, intercept, r, p, std_err = stats.linregress(x, y)
+        return round(slope,4),intercept
+
+    def _get_points_linear_reg(self,x,slope,intercept,offset=0):
+        return int(slope * x + intercept+offset)
 
