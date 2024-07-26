@@ -1,6 +1,7 @@
 # test function
+import os
 import json
-from datetime import datetime
+from time import time
 import cv2
 
 
@@ -9,6 +10,7 @@ def get_save_test():
     with open('test.json') as f:
         saves = json.load(f)
     return saves
+
 def send_save_test(saves):
     with open('test.json','w') as f:
         json.dump(saves,f)
@@ -16,7 +18,10 @@ def send_save_test(saves):
 def save_img(image,name,now,draw):
     image = image.copy()
     image = draw(image)
-    img_name = './test_images/'+ name + now[-6:] +'.png'
+    save_dir= './test_images/'
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+    img_name = save_dir + name + now +'.png'
     cv2.imwrite(img_name,image)
     return img_name
 
@@ -26,7 +31,7 @@ def test_open(image,name,pos,traider,draw):
     for i in range(saves_length-1,-1,-1):
         if saves[i]['name'] == name and not saves[i]['close'] and saves[i]['traider'] == traider:
             return 0
-    now = str(datetime.now())
+    now = str(time())
     image_name = save_img(image,name,now,draw)
     saves.append({
         "name":name,
@@ -43,7 +48,7 @@ def test_open(image,name,pos,traider,draw):
 def test_close(image,name,pos,traider,draw):
     saves = get_save_test()
     saves_length = len(saves)
-    now = str(datetime.now())
+    now = str(time())
     for i in range(saves_length-1,-1,-1):
         if saves[i]['name'] == name and not saves[i]['close'] and saves[i]['pos'] == pos and saves[i]['traider'] == traider:
             img_name = save_img(image,name,now,draw)

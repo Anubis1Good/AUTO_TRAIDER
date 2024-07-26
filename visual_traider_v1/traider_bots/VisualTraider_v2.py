@@ -5,6 +5,7 @@ from scipy import stats
 from utils.config import ColorsBtnBGR
 from utils.chart_utils.dtype import HalfBar
 from utils.config import TemplateCandle
+from utils.test_utils.test_traide import test_open,test_close
 
 class VisualTraider_v2():
     def __init__(
@@ -69,12 +70,26 @@ class VisualTraider_v2():
             else:
                 x,y = self._color_search(img,ColorsBtnBGR.color_x_bb,self.glass_region)
                 return x,y
+            
+    def _get_keys(self,img,region) -> dict:
+        pass
     
     # trade_function
-    def _send_open(self):
+    def _send_open(self,direction):
         pass
 
-    def _send_close(self):
+    def _send_close(self,direction):
+        pass
+
+    # test trade_function
+
+    def _test_send_open(self,img,direction,draw):
+        test_open(img,self.name,direction,self.traider_name,draw)
+
+    def _test_send_close(self,img,direction,draw):
+        test_close(img,self.name,direction,self.traider_name,draw)
+
+    def _draw(self,img,keys,region):
         pass
 
     # chart_function
@@ -161,16 +176,12 @@ class VisualTraider_v2():
         std_y = np.std(y)
         slope,intercept = self._get_linear_regress(x,y)
         middle_line = list(map(lambda x:self._get_points_linear_reg(x,slope,intercept,0), x))
-        top_line = list(map(lambda x:self._get_points_linear_reg(x,slope,intercept,std_y), x))
-        bottom_line = list(map(lambda x:self._get_points_linear_reg(x,slope,intercept,-std_y), x))
+        top_line = list(map(lambda x:self._get_points_linear_reg(x,slope,intercept,-std_y), x))
+        bottom_line = list(map(lambda x:self._get_points_linear_reg(x,slope,intercept,std_y), x))
         trend = np.column_stack([x, middle_line])
         top_trend = np.column_stack([x, top_line])
         bottom_trend = np.column_stack([x, bottom_line])
-        return trend,top_trend,bottom_trend
-
-    def get_last_point_trend(self,x,y):
-        trend,top_trend,bottom_trend = self._get_trend_lines(x,y)
-        return trend[-1],top_trend[-1],bottom_trend[-1]
+        return trend,top_trend,bottom_trend,slope
     
         # help function
     def _change_coords(self,point,region:tuple) -> tuple:
