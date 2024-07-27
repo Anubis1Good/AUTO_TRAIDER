@@ -33,7 +33,8 @@ class PT1(VisualTraider_v2):
             'm_sma':m_sma,
             'bbu':bbu,
             'bbd':bbd,
-            'slope':slope
+            'slope':slope,
+            'stop':(trend[-1][1]-top_trend[-1][1])//2
         }
         return keys
 
@@ -67,15 +68,18 @@ class PT1(VisualTraider_v2):
             return -1
         return 0
     
+    def _check_price_in_trend(self,keys):
+        return keys['top_trend'][-1][1] < keys['cur_price'][1] < keys['bottom_trend'][-1][1]
+    
     def _test(self, img):
         h_keys = self._get_keys(img,self.hour_chart_region)
         m_keys = self._get_keys(img,self.minute_chart_region)
         draw_func = lambda img:self._all_draw(img,m_keys,h_keys)
         # open
-        if self._check_over_limit(h_keys) == 1 or h_keys['slope'] < 0:
+        if self._check_price_in_trend(h_keys) and h_keys['slope'] < 0:
             if self._check_over_limit(m_keys) == 1:
                 self._test_send_open(img,'long',draw_func)
-        if self._check_over_limit(h_keys) == -1 or h_keys['slope'] > 0:
+        if self._check_price_in_trend(h_keys) and h_keys['slope'] > 0:
             if self._check_over_limit(m_keys) == -1:
                 self._test_send_open(img,'short',draw_func)
         
@@ -86,9 +90,12 @@ class PT1(VisualTraider_v2):
         if m_keys['cur_price'][1] < m_keys['m_sma'][-1][1]:
             self._test_send_close(img,'long',draw_func)
 
-        # if m_keys['cur_price'][1] > m_keys['bbd'][-1][1]:
+        # stop
+        # if h_keys['top_trend'][-1][1] - h_keys['stop'] > h_keys['cur_price'][1]:
         #     self._test_send_close(img,'short',draw_func)
-        # if m_keys['cur_price'][1] < m_keys['bbu'][-1][1]:
-        #     self._test_send_close(img,'long',draw_func)
+        # if h_keys['bottom_trend'][-1][1] + h_keys['stop'] < h_keys['cur_price'][1]:
+        #     self._test_send_close(img,'long',draw_func)  
+
+
         
 

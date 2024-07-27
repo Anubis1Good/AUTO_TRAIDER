@@ -1,4 +1,4 @@
-
+import json
 # for VisualTraider before v2
 def configurtion_traiders(Traider,filename):
     traiders = []
@@ -19,6 +19,21 @@ def configuration_traiders_v2(filename:str):
             field = tuple(map(int,line.split(',')))
             fields.append(field)
     return fields
+
+def reset_test_json():
+    saves = [
+        {
+        "name": "moex",
+        "open": "2024-06-14 16:05:29.360793",
+        "close": "2024-06-14 16:08:51.910451",
+        "open_image": "./test_images/none.png",
+        "close_img": "./test_images/none.png",
+        "pos": "long",
+        "traider": "VisualTraider"
+        }
+    ]
+    with open('test.json','w') as f:
+        json.dump(saves,f)
     
 if __name__ == '__main__':
     print(configuration_traiders_v2('./config_dev.txt'))

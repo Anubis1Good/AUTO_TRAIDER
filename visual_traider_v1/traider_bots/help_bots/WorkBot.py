@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 from traider_bots.VisualTraider_v2 import VisualTraider_v2
 from utils.chart_utils.indicators import get_SMA, get_bollinger_bands
+from utils.config import ColorsBtnBGR
 class WorkBot(VisualTraider_v2):
     def __init__(self, cluster: tuple, dealfeed: tuple, glass: tuple, day: tuple, hour: tuple, minute: tuple, position: tuple, name: str, mode: int = 0) -> None:
         super().__init__(cluster, dealfeed, glass, day, hour, minute, position, name, mode)
@@ -140,8 +141,13 @@ class WorkBot(VisualTraider_v2):
         # draw_trendlines_v2(x,y,img)
         
     def _test(self, img):
-        self.draw_all(img,self.day_chart_region)
-        self.draw_all(img,self.hour_chart_region)
-        self.draw_all(img,self.minute_chart_region)
-        cv2.imwrite('test.png',img)
+        # self.draw_all(img,self.day_chart_region)
+        # self.draw_all(img,self.hour_chart_region)
+        # self.draw_all(img,self.minute_chart_region)
+        glass = self._get_chart(img,self.glass_region)
+        mask = self._get_mask(glass,ColorsBtnBGR.best_bid)
+        cv2.imshow('mask',mask)
+        cv2.waitKey(0)
+        cv2.imwrite('mask.png',mask)
+        # cv2.imwrite('test.png',img)
 

@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 import numpy.typing as npt
+import pyautogui as pag
+import pydirectinput as pdi
 from scipy import stats
 from utils.config import ColorsBtnBGR
 from utils.chart_utils.dtype import HalfBar
@@ -76,10 +78,35 @@ class VisualTraider_v2():
     
     # trade_function
     def _send_open(self,direction):
-        pass
+        pag.moveTo(self.glass_region[0]+10,self.glass_region[1]+10)
+        pdi.press('f')
+        if direction == 'long':
+            button = 'a'
+        elif direction == 'short':
+            button = 's'
+        else:
+            button = 'f'
+        pdi.press(button)
 
-    def _send_close(self,direction):
-        pass
+    def _send_close(self,img,direction):
+        if direction == 'long':
+            x,y = self._color_search(img, ColorsBtnBGR.best_ask,self.glass_region,reverse=True)
+            x -= 50
+            y -= 5
+            button = 'right'
+        elif direction == 'short':
+            x,y = self._color_search(img, ColorsBtnBGR.best_bid,self.glass_region,reverse=False)
+            x += 10
+            y += 5
+            button = 'left'
+        else:
+            return None
+        pag.moveTo(x,y)
+        pdi.press('f')
+        pdi.keyDown('altleft')
+        pag.click(x, y,button=button)
+        pdi.keyUp('altleft')
+
 
     # test trade_function
 
