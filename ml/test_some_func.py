@@ -1,12 +1,20 @@
-import numpy as np
+import pandas as pd 
 
-# x = np.array([[1,2],[23,423]])
 
-# print(x[:,1:])
 
-# print(['a']*3)
-b = (10,22,23)
-a = (b,)
+df = pd.read_csv('./Data/TQBR.ABIO_T1.txt',sep='\t')
+# print(df.head())
+df.drop(['datetime','open','close'],axis=1,inplace=True)
 
-for idx in range(len(a)):
-    print(idx)
+
+def xy_generator(df):
+    for step in range(df.shape[0]-10):
+        X = df.iloc[step:step+10]
+        Y = df.iloc[step+10]
+        yield X,Y
+    return
+gen = xy_generator(df)
+print(next(gen))
+print(next(gen))
+print(next(gen))
+
