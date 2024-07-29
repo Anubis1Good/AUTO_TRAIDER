@@ -107,7 +107,9 @@ class VisualTraider_v2():
         pag.click(x, y,button=button)
         pdi.keyUp('altleft')
 
-
+    def _reset_req(self):
+        pag.moveTo(self.glass_region[0]+10,self.glass_region[1]+10)
+        pdi.press('f')
     # test trade_function
 
     def _test_send_open(self,img,direction,draw):
