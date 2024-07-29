@@ -43,8 +43,11 @@ while True:
             print("\nyou pressed Esc, so exiting...")
             sys.exit(0)
         # sys.exit(0)
-        pag.moveTo(traider.glass_region[0]+10,traider.glass_region[1]+10)
-        sleep(2)
+        try:
+            pag.moveTo(traider.glass_region[0]+10,traider.glass_region[1]+10)
+        except Exception as err:
+            print(err)
+        # sleep(1)
         # i += 1
         keyboard.send('tab') 
     # pag.press('space')
