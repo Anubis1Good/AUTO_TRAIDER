@@ -7,15 +7,20 @@ from settings import configuration_traiders_v2
 from stock_groups import stock_groups
 from utils.test_utils.windows import draw_borders
 from traider_bots.help_bots.ResearchBot import ResearchBot
-
+from traider_bots.PT1 import PT1
 
 
 
 param_bots = configuration_traiders_v2('config.txt')
-traiders = []
+test_traiders = []
+work_traiders = []
 for stock in stock_groups:
     traider = ResearchBot(*param_bots,name=stock)
-    traiders.append(traider)
+    test_traiders.append(traider)
+    traider = PT1(*param_bots,name=stock)
+    traider.mode = 2
+    work_traiders.append(traider)
+
 
 # print(traider)
 # pag.screenshot('Screen.png')
@@ -25,14 +30,15 @@ for stock in stock_groups:
 # sleep(3)
 i = 0
 while True:
-    for traider in traiders:
+    for i in range(len(test_traiders)):
         # print(i)
         sleep(2)
         keyboard.send('shift')
         pag.screenshot('Screen.png')
         img = cv2.imread('Screen.png')
 
-        traider.run(img)
+        work_traiders[i].run(img)
+        test_traiders[i].run(img)
         if keyboard.is_pressed('Esc'):
             print("\nyou pressed Esc, so exiting...")
             sys.exit(0)
