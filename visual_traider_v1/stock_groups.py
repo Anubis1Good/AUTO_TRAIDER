@@ -1,10 +1,10 @@
 stock_groups = [
-    'MXI',
+    'CNY',
     'SBER',
     'GAZP',
     'LKOH',
     'ROSN',
-    'TATN',
+    'ABIO',
     'NVTK',
     'RUAL',
     'GMKN',
@@ -16,7 +16,7 @@ stock_groups = [
     'SELG',
     'SOFL',
     'FEES',
-    'ABIO',
+    'AFLT',
     'BSPB',
     'MLTR'
 ]
