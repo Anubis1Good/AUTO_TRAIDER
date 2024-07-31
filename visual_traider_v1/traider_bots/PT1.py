@@ -105,10 +105,12 @@ class PT1(VisualTraider_v2):
             if self._check_price_in_trend(h_keys) and h_keys['slope'] < 0:
                 if self._check_over_limit(m_keys) == 1:
                     self._send_open('long')
+                    return
             if self._check_price_in_trend(h_keys) and h_keys['slope'] > 0:
                 if self._check_over_limit(m_keys) == -1:
                     self._send_open('short')
-
+                    return
+            self._reset_req()
         # stop
         # if h_keys['top_trend'][-1][1] - h_keys['stop'] > h_keys['cur_price'][1]:
         #     self._test_send_close(img,'short',draw_func)

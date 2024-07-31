@@ -43,13 +43,16 @@ class VisualTraider_v2():
         print(self,'the _traide method is not implemented')
     
     def run(self,img):
-        if self.mode == 0:
-            self._test(img)
-        elif self.mode == 1:
-            self._traide(img)
-        elif self.mode == 2:
-            self._traide(img)
-            self._test(img)
+        try:
+            if self.mode == 0:
+                self._test(img)
+            elif self.mode == 1:
+                self._traide(img)
+            elif self.mode == 2:
+                self._traide(img)
+                self._test(img)
+        except Exception as err:
+            print(err)
 
     # terminal_function
     def _check_position(self,img) -> int:
@@ -107,7 +110,9 @@ class VisualTraider_v2():
         pag.click(x, y,button=button)
         pdi.keyUp('altleft')
 
-
+    def _reset_req(self):
+        pag.moveTo(self.glass_region[0]+10,self.glass_region[1]+10)
+        pdi.press('f')
     # test trade_function
 
     def _test_send_open(self,img,direction,draw):

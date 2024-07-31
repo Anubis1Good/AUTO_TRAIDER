@@ -58,8 +58,10 @@ class ResearchBot(VisualTraider_v2):
         cv2.polylines(img,[bottom_trend],False,(255,255,255),2)
         
     def _test(self, img):
-        self.draw_all(img,self.day_chart_region)
-        self.draw_all(img,self.hour_chart_region)
-        self.draw_all(img,self.minute_chart_region)
-        name = f'{self.save_dir}{self.name}_{int(time())}.png'
+        name = f'{self.save_dir_raw}{self.name}_{int(time())}.png'
         cv2.imwrite(name,img)
+        # self.draw_all(img,self.day_chart_region)
+        # self.draw_all(img,self.hour_chart_region)
+        # self.draw_all(img,self.minute_chart_region)
+        # name = f'{self.save_dir}{self.name}_{int(time())}.png'
+        # cv2.imwrite(name,img)
