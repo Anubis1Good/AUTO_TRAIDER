@@ -1,6 +1,7 @@
 import numpy as np
 import numpy.typing as npt
 from utils.ML_utils.LR_utils import get_linear_regress,get_points_linear_reg
+from utils.chart_utils.dtype import HalfBar
 
 def get_SMA(points:npt.NDArray,step) -> npt.NDArray:
     moving_averages = []
@@ -15,7 +16,7 @@ def get_SMA(points:npt.NDArray,step) -> npt.NDArray:
         i += 1
     return np.array(moving_averages)
 
-def get_bollinger_bands(points:npt.NDArray) -> tuple[npt.NDArray]:
+def get_bollinger_bands(points:npt.NDArray,k:int=2) -> tuple[npt.NDArray]:
     sma20 = []
     bbu = []
     bbd = []
@@ -27,7 +28,7 @@ def get_bollinger_bands(points:npt.NDArray) -> tuple[npt.NDArray]:
         window_averagex = points[i-1][0]
         window_averagey = cum_sumy // step
         sma20.append([window_averagex,window_averagey])
-        std = int(np.std(slice))*2
+        std = int(np.std(slice)*k)
         bbu_y = window_averagey - std
         bbd_y = window_averagey + std
         bbu.append([window_averagex,bbu_y])
@@ -55,3 +56,28 @@ def get_trend_lines(x,y):
 def get_last_point_trend(x,y):
     trend,top_trend,bottom_trend = get_trend_lines(x,y)
     return trend[-1],top_trend[-1],bottom_trend[-1]
+
+def get_fractals(hpts,lpts,n=5):
+    maxs = []
+    mins = []
+    for i in range(n,len(hpts),n):
+        max_p = hpts[i][1]
+        min_p = lpts[i][1]
+        ph = hpts[i]
+        pl = lpts[i]
+        for j in range(i-n,i):
+
+            if max_p > hpts[j][1]:
+                max_p = hpts[j][1]
+                ph = hpts[j]
+            if min_p < lpts[j][1]:
+                min_p = lpts[j][1]
+                pl = lpts[j]
+        maxs.append(np.array(ph))
+        mins.append(np.array(pl))
+
+    return np.array(maxs),np.array(mins)
+
+
+
+        

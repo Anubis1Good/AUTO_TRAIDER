@@ -8,6 +8,9 @@ class HalfBar:
         self.lpt = (self.x,self.yl)
         self.mpt = (self.x,(self.yh + self.yl)//2)
         self.vpt = (self.x,self.yv)
+        self.spred = yl - yh
+        self.vsai = (self.spred * 10000 - self.yv)//10000
+        self.vsaipt = (self.x,self.vsai)
     
     def __repr__(self) -> str:
         return f'HalfBar x: {self.x} y_high: {self.yh}'

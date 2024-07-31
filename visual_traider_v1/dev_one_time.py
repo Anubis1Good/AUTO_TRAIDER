@@ -4,7 +4,7 @@ from settings import configuration_traiders_v2
 from traider_bots.help_bots.WorkBot import WorkBot
 param_bots = configuration_traiders_v2('config.txt')
 traider = WorkBot(*param_bots,name='MLTR')
-online = False
+online = True
 if online:
     param_bots = configuration_traiders_v2('config_dev.txt')
     traider = WorkBot(*param_bots,name='MLTR')
