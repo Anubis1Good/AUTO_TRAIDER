@@ -4,6 +4,7 @@ from stock_groups import stock_groups
 from traider_bots.PT1 import PT1
 from settings import configuration_traiders_v2, reset_test_json
 
+
 param_bots = configuration_traiders_v2('config.txt')
 date_stock = '26.07.24'
 img_path = './test_data/'

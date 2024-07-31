@@ -176,7 +176,7 @@ class VisualTraider_v2():
             y_b = point_b[:,0].max()
             y_v = point_v[:,0].min()
             half_bars.append(HalfBar(res_top[i][1],res_top[i][0],y_b,y_v))
-        return half_bars
+        return np.array(half_bars)
     
     def _get_mean(self,cords:npt.NDArray):
         mean_val = (10,int(np.mean(cords,axis=0)[0]))

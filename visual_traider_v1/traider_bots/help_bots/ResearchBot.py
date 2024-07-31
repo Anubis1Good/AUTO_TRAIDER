@@ -52,7 +52,7 @@ class ResearchBot(VisualTraider_v2):
         for i in range(points.shape[0]):
             points[i] = change_cords(points[i])
         x,y = self._get_xy(points)
-        trend,top_trend,bottom_trend = self._get_trend_lines(x,y)
+        trend,top_trend,bottom_trend,slope = self._get_trend_lines(x,y)
         cv2.polylines(img,[trend],False,(255,255,255),2)
         cv2.polylines(img,[top_trend],False,(255,255,255),2)
         cv2.polylines(img,[bottom_trend],False,(255,255,255),2)
