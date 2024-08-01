@@ -1,18 +1,19 @@
 import pyautogui as pag
 import cv2
 from settings import configuration_traiders_v2
-from traider_bots.help_bots.WorkBot import WorkBot
+# from traider_bots.help_bots.WorkBot import WorkBot as Trader
+from traider_bots.ST1 import ST1 as Trader
 param_bots = configuration_traiders_v2('config.txt')
-traider = WorkBot(*param_bots,name='MLTR')
+traider = Trader(*param_bots,name='MLTR')
 online = True
 if online:
     param_bots = configuration_traiders_v2('config_dev.txt')
-    traider = WorkBot(*param_bots,name='MLTR')
+    traider = Trader(*param_bots,name='MLTR')
     pag.screenshot('Screen.png')
     img = cv2.imread('Screen.png')
 else:
     param_bots = configuration_traiders_v2('config.txt')
-    traider = WorkBot(*param_bots,name='MLTR')
+    traider = Trader(*param_bots,name='MLTR')
     img = cv2.imread('./test_data/24.07.24/images/SBER_1721808621.png')
     
 traider.run(img)
