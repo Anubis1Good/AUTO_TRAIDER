@@ -18,7 +18,7 @@ for stock in stock_groups:
     traider = ResearchBot(*param_bots,name=stock)
     test_traiders.append(traider)
     traider = PT1(*param_bots,name=stock)
-    traider.mode = 2
+    traider.mode = 1
     work_traiders.append(traider)
 
 

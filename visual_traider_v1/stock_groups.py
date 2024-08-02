@@ -1,10 +1,10 @@
 stock_groups = [
-    'CNY',
+    'MXI',
     'SBER',
     'GAZP',
     'LKOH',
     'ROSN',
-    'ABIO',
+    'MOEX',
     'NVTK',
     'RUAL',
     'GMKN',
@@ -12,11 +12,11 @@ stock_groups = [
     'MAGN',
     'CHMF',
     'ALRS',
-    'POLY',
+    'HYDR',
     'SELG',
     'SOFL',
     'FEES',
-    'AFLT',
-    'BSPB',
+    'AFKS',
+    'SIBN',
     'MLTR'
 ]
