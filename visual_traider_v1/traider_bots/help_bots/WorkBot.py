@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 from traider_bots.VisualTraider_v2 import VisualTraider_v2
-from utils.chart_utils.indicators import get_SMA, get_bollinger_bands,get_fractals
+from utils.chart_utils.indicators import get_SMA, get_bollinger_bands,get_fractals, get_context
 from utils.config import ColorsBtnBGR
 class WorkBot(VisualTraider_v2):
     def __init__(self, cluster: tuple, dealfeed: tuple, glass: tuple, day: tuple, hour: tuple, minute: tuple, position: tuple, name: str, mode: int = 0) -> None:
@@ -17,6 +17,7 @@ class WorkBot(VisualTraider_v2):
         candle_cords = self._get_cords_on_mask(candle_mask)
         volume_cords = self._get_cords_on_mask(volume_mask)
         half_bars = self._get_half_bars(candle_mask,candle_cords,volume_cords)
+        cur_price = self._get_current_price(chart)
         colors = (
             (100,200,0),
             (0,200,100),
@@ -38,13 +39,50 @@ class WorkBot(VisualTraider_v2):
             lpts.append(lpt)
             vsaipts.append(vsaipt)
 
+
+        max_hb,min_hb,local_hb,direction = get_context(half_bars)
+        hpth,_,d = max_hb.to_img_cords(change_cords)
+        _,lptl,d = min_hb.to_img_cords(change_cords)
+        hptm,lptm,_ = local_hb.to_img_cords(change_cords)
+
+        cv2.line(img,hpth,lptl,(0,200,80),2)
+        p1= hpth if direction == 'long' else lptl
+        p2 = lptm if direction == 'long' else hptm
+        cv2.line(img,p1,p2,(200,50,50),2)
         vsaipts = np.array(vsaipts)
         vsai_sma,vsai_bbu,vsai_bbd = get_bollinger_bands(vsaipts,1)
         cv2.polylines(img,[vsaipts],False,(0,240,20),1)
-        cv2.polylines(img,[vsai_sma],False,(200,40,20),1)
+        # cv2.polylines(img,[vsai_sma],False,(200,40,20),1)
         cv2.polylines(img,[vsai_bbd],False,(00,40,200),1)
-        cv2.polylines(img,[vsai_bbu],False,(200,40,20),1)
-        cv2.line(img,hpts[-2],lpts[-2],(0,250,0),2)
+        # cv2.polylines(img,[vsai_bbu],False,(200,40,20),1)
+        cur_history_hb_i = 0
+        for i in range(len(half_bars)-2,0,-1):
+            if half_bars[i].yh < cur_price[1] < half_bars[i].yl:
+                cur_history_hb_i = i
+                vsai_history = vsaipts[cur_history_hb_i]
+                vsai_bbu_history = vsai_bbd[cur_history_hb_i-19]
+                cv2.circle(img,vsai_history,1,(240,0,0),2)
+                cv2.circle(img,vsai_bbu_history,1,(240,0,0),2)
+                hpt,lpt,vpt = half_bars[i].to_img_cords(change_cords)
+                color = (0,200,101) if vsai_history[1] > vsai_bbu_history[1] else (100,100,200)
+                cv2.line(img,hpt,lpt,color,2)
+                break
+        # max_hb,min_hb,local_hb
+        delta_global = min_hb.yl - max_hb.yh
+        if direction == 'long':
+            delta_local = local_hb.yl - max_hb.yh
+            delta_cur_price = cur_price[1] - max_hb.yh
+            
+        else:
+            delta_local = min_hb.yl - local_hb.yh
+            delta_cur_price = min_hb.yl - cur_price[1]
+            
+        print(delta_global)
+        print(delta_local)
+        print(delta_cur_price)
+        print(delta_local/delta_global)
+        print(delta_cur_price/delta_local)
+        # cv2.line(img,hpts[-2],lpts[-2],(0,250,0),2)
         #     if half_bars[i].is_big_volume(mean_volume[1]): 
         #         cv2.circle(img,vpt,1,(0,200,0))
         #         cv2.line(img,hpt,lpt,colors[1],1)

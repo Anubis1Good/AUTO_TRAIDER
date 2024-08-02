@@ -78,6 +78,45 @@ def get_fractals(hpts,lpts,n=5):
 
     return np.array(maxs),np.array(mins)
 
+def get_context(half_bars):
+    max_hb_i,min_hb_i = 0,0
+    max_hb,min_hb = half_bars[0],half_bars[0]
+    local_hb,direction = None,None
+    for i in range(len(half_bars)):
+        if half_bars[i].yh < max_hb.yh:
+            max_hb = half_bars[i]
+            max_hb_i = i
+        if half_bars[i].yl > min_hb.yl:
+            min_hb = half_bars[i]
+            min_hb_i = i
+    if max_hb_i > min_hb_i:
+        direction = 'long'
+        local_hb = max_hb
+        if max_hb_i < len(half_bars)-1:
+            for i in range(max_hb_i,len(half_bars)):
+                if half_bars[i].yl > local_hb.yl:
+                    local_hb = half_bars[i]       
+    else:
+        direction = 'short'
+        local_hb = min_hb
+        if min_hb_i < len(half_bars)-1:
+            for i in range(min_hb_i,len(half_bars)):
+                if half_bars[i].yh < local_hb.yh:
+                    local_hb = half_bars[i]
+    return max_hb,min_hb,local_hb,direction
 
+def get_zona(half_bars,cur_price,vsaipts,vsai_bbd):
+    cur_history_hb_i = 0
+    zona = False
+    m_pt_zona = None
+    for i in range(len(half_bars)-2,0,-1):
+        if half_bars[i].yh < cur_price[1] < half_bars[i].yl:
+            cur_history_hb_i = i
+            vsai_history = vsaipts[cur_history_hb_i]
+            vsai_bbu_history = vsai_bbd[cur_history_hb_i-19]
+            zona = vsai_history[1] > vsai_bbu_history[1]
+            m_pt_zona = half_bars[cur_history_hb_i].ym
+            break
+    return zona,m_pt_zona
 
         

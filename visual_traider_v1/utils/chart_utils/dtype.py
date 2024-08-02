@@ -4,9 +4,10 @@ class HalfBar:
         self.yh = yh
         self.yl = yl
         self.yv = yv
+        self.ym = (self.yh + self.yl)//2
         self.hpt = (self.x,self.yh)
         self.lpt = (self.x,self.yl)
-        self.mpt = (self.x,(self.yh + self.yl)//2)
+        self.mpt = (self.x,self.ym)
         self.vpt = (self.x,self.yv)
         self.spred = yl - yh
         self.vsai = (self.spred * 10000 - self.yv)//10000
