@@ -123,13 +123,11 @@ class ST1(VisualTraider_v2):
         pos = self._check_position(img)
         m_keys = self._get_keys(img,self.minute_chart_region)
         wave = self._get_wave(m_keys)
-        # close long
         if wave:
             if wave == 'long':
                 if pos == -1:
                     self.close_short = True
-                    self._send_open('long')
-                    self._send_close(img,'short')
+                    self._reverse_pos(img,'long')
                 if pos == 0:
                     self._send_open('long')
             if wave == 'close_long':
@@ -138,8 +136,7 @@ class ST1(VisualTraider_v2):
             if wave == 'short':
                 if pos == 1:
                     self.close_long = True
-                    self._send_open('short')
-                    self._send_close(img,'long')
+                    self._reverse_pos(img,'short')
                 if pos == 0:
                     self._send_open('short')
             if wave == 'close_short':
