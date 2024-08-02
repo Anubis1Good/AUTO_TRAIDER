@@ -103,20 +103,39 @@ def get_context(half_bars):
             for i in range(min_hb_i,len(half_bars)):
                 if half_bars[i].yh < local_hb.yh:
                     local_hb = half_bars[i]
-    return max_hb,min_hb,local_hb,direction
+    return max_hb,min_hb,local_hb,direction,max_hb_i,min_hb_i
 
-def get_zona(half_bars,cur_price,vsaipts,vsai_bbd):
+def get_zona(half_bars,cur_price,vpts,v_sma):
     cur_history_hb_i = 0
     zona = False
     m_pt_zona = None
     for i in range(len(half_bars)-2,0,-1):
         if half_bars[i].yh < cur_price[1] < half_bars[i].yl:
             cur_history_hb_i = i
-            vsai_history = vsaipts[cur_history_hb_i]
-            vsai_bbu_history = vsai_bbd[cur_history_hb_i-19]
-            zona = vsai_history[1] > vsai_bbu_history[1]
+            v_history = vpts[cur_history_hb_i]
+            v_sma_history = v_sma[cur_history_hb_i-19]
+            zona = v_history[1] < v_sma_history[1]
             m_pt_zona = half_bars[cur_history_hb_i].ym
             break
     return zona,m_pt_zona
 
+def get_last_pick(half_bars,top_trend,bottom_trend):
+    last_pick = 0
+    for i in half_bars:
+        pts_t = top_trend[np.argwhere(top_trend[:,0] == i.x)].flatten()
+        pts_b = bottom_trend[np.argwhere(bottom_trend[:,0] == i.x)].flatten()
+        if len(pts_t) > 0:
+            if i.yh < pts_t[-1]:
+                last_pick = 1
+        if len(pts_b) > 0:
+            if i.yl > pts_b[-1]:
+                last_pick = -1  
+    return last_pick
         
+def get_dynamics(points,n=10):
+    deltas = 0
+    for i in range(len(points)-2,len(points)-n,-1):
+        delta = points[i+1][1] - points[i][1]
+        deltas += delta
+    return deltas
+    # return deltas//n

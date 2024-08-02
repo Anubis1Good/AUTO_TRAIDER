@@ -38,7 +38,7 @@ class WorkBot(VisualTraider_v2):
             hpts.append(hpt)
             lpts.append(lpt)
             vsaipts.append(vsaipt)
-
+        
 
         max_hb,min_hb,local_hb,direction = get_context(half_bars)
         hpth,_,d = max_hb.to_img_cords(change_cords)
