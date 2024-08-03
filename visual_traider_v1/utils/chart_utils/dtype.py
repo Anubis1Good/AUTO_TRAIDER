@@ -1,3 +1,4 @@
+import numpy as np
 class HalfBar:
     def __init__(self,x,yh,yl,yv) -> None:
         self.x = x
@@ -10,8 +11,12 @@ class HalfBar:
         self.mpt = (self.x,self.ym)
         self.vpt = (self.x,self.yv)
         self.spred = yl - yh
+        buff = self.spred//4
+        self.pred_yh = self.yh + buff
+        self.pred_yl = self.yl - buff
         self.vsai = (self.spred * 10000 - self.yv)//10000
         self.vsaipt = (self.x,self.vsai)
+        self.draw_line = np.array([self.hpt,self.lpt])
     
     def __repr__(self) -> str:
         return f'HalfBar x: {self.x} y_high: {self.yh}'

@@ -1,11 +1,13 @@
+import os
+from random import choice
 import pyautogui as pag
 import cv2
 from settings import configuration_traiders_v2
-# from traider_bots.help_bots.WorkBot import WorkBot as Trader
-from traider_bots.ST1 import ST1 as Trader
+from traider_bots.help_bots.WorkBot import WorkBot as Trader
+# from traider_bots.ST1 import ST1 as Trader
 param_bots = configuration_traiders_v2('config.txt')
 traider = Trader(*param_bots,name='MLTR')
-online = True
+online = False
 if online:
     param_bots = configuration_traiders_v2('config_dev.txt')
     traider = Trader(*param_bots,name='MLTR')
@@ -14,11 +16,16 @@ if online:
 else:
     param_bots = configuration_traiders_v2('config.txt')
     traider = Trader(*param_bots,name='MLTR')
-    img = cv2.imread('./test_data/24.07.24/images/SBER_1721808621.png')
+    list_folder = os.listdir('./test_data/')
+    folder = choice(list_folder)
+    list_imgs = os.listdir('./test_data/'+ folder + '/')
+    rand_img = choice(list_imgs)
+    print('./test_data/'+ folder + '/' + rand_img)
+    img = cv2.imread('./test_data/'+ folder + '/' + rand_img)
     
 traider.run(img)
 cv2.imshow('work',img)
-cv2.moveWindow('work',-20,-20)
+cv2.moveWindow('work',-10,-10)
 cv2.waitKey(0)
 cv2.imwrite('test.png',img)
 print('done')

@@ -1,12 +1,12 @@
 import os
 import cv2
 from stock_groups import stock_groups
-from traider_bots.ST1 import ST1 as Trader
+from traider_bots.PST1 import PST1 as Trader
 from settings import configuration_traiders_v2, reset_test_json
 
 
 param_bots = configuration_traiders_v2('config.txt')
-date_stock = '01.08.24'
+date_stock = '26.07.24'
 img_path = './test_data/'
 
 full_path = img_path + date_stock + '/'
