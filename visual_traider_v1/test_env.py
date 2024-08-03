@@ -1,7 +1,7 @@
 import os
 import cv2
 from stock_groups import stock_groups
-from traider_bots.PST1 import PST1 as Trader
+from traider_bots.ST2 import ST2 as Trader
 from settings import configuration_traiders_v2, reset_test_json
 
 

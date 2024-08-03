@@ -14,6 +14,8 @@ class HalfBar:
         buff = self.spred//4
         self.pred_yh = self.yh + buff
         self.pred_yl = self.yl - buff
+        self.pred_hp = (self.x,self.pred_yh)
+        self.pred_lp = (self.x,self.pred_yl)
         self.vsai = (self.spred * 10000 - self.yv)//10000
         self.vsaipt = (self.x,self.vsai)
         self.draw_line = np.array([self.hpt,self.lpt])

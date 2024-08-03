@@ -107,17 +107,17 @@ def get_context(half_bars):
 
 def get_zona(half_bars,cur_price,vpts,v_sma):
     cur_history_hb_i = 0
-    zona = False
+    z = False
     m_pt_zona = None
     for i in range(len(half_bars)-2,0,-1):
         if half_bars[i].yh < cur_price[1] < half_bars[i].yl:
             cur_history_hb_i = i
             v_history = vpts[cur_history_hb_i]
             v_sma_history = v_sma[cur_history_hb_i-19]
-            zona = v_history[1] < v_sma_history[1]
+            z = v_history[1] < v_sma_history[1]
             m_pt_zona = half_bars[cur_history_hb_i].ym
             break
-    return zona,m_pt_zona
+    return z,m_pt_zona
 
 def get_last_pick(half_bars,top_trend,bottom_trend):
     last_pick = 0
@@ -139,3 +139,26 @@ def get_dynamics(points,n=10):
         deltas += delta
     return deltas
     # return deltas//n
+
+def check_zona(zona,half_bars):
+    is_zona = False
+    for z in zona:
+        if z[0][1] < half_bars[-1].yh < z[1][1]:
+            is_zona = True
+            break
+        if z[0][1] < half_bars[-1].yl < z[1][1]:
+            is_zona = True
+            break
+        if z[0][1] < half_bars[-1].ym < z[1][1]:
+            is_zona = True
+            break
+        if z[0][1] < half_bars[-2].yh < z[1][1]:
+            is_zona = True
+            break
+        if z[0][1] < half_bars[-2].yl < z[1][1]:
+            is_zona = True
+            break
+        if z[0][1] < half_bars[-2].ym < z[1][1]:
+            is_zona = True
+            break
+    return is_zona

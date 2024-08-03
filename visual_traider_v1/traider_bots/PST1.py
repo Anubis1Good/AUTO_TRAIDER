@@ -1,5 +1,6 @@
 from traider_bots.VisualTraider_v2 import VisualTraider_v2
 from utils.chart_utils.ProSveT import ProSveT
+from utils.chart_utils.indicators import check_zona
 class PST1(VisualTraider_v2):
     def __init__(self, cluster: tuple, dealfeed: tuple, glass: tuple, day: tuple, hour: tuple, minute: tuple, position: tuple, name: str, mode: int = 0) -> None:
         super().__init__(cluster, dealfeed, glass, day, hour, minute, position, name, mode)
@@ -11,27 +12,21 @@ class PST1(VisualTraider_v2):
         candle_cords = self._get_cords_on_mask(candle_mask)
         volume_cords = self._get_cords_on_mask(volume_mask)
         half_bars = self._get_half_bars(candle_mask,candle_cords,volume_cords)
-        prosvet = ProSveT(half_bars)
-        prosvet.draw_all(chart)
-        ices = prosvet.ices
-        creeks = prosvet.creeks
-        buffer = abs(ices[-2][1] - creeks[-2][1]) // 10
+        pst = ProSveT(half_bars)
+        pst.draw_all(chart)
+        sell_zona = check_zona(pst.sell_zona,half_bars)
+        buy_zona = check_zona(pst.buy_zona,half_bars)
         cur_price = self._get_current_price(chart)
         return {
-            'ices':ices,
-            'creeks':creeks,
-            'buffer':buffer,
-            'cur_price':cur_price
+            'cur_price':cur_price,
+            'sell_zona':sell_zona,
+            'buy_zona':buy_zona,
         }    
     
     def _get_direction(self,keys):
-        last_creek = keys['creeks'][-2][1]
-        last_ice = keys['ices'][-2][1]
-        cur_price = keys['cur_price'][1]
-        buffer = keys['buffer']
-        if abs(cur_price - last_ice) < buffer:
+        if keys['buy_zona']:
             return 'long'
-        if abs(cur_price - last_creek) < buffer:
+        if keys['sell_zona']:
             return 'short'
         
     def _test(self, img):
