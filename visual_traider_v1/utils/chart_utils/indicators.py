@@ -152,13 +152,13 @@ def check_zona(zona,half_bars):
         if z[0][1] < half_bars[-1].ym < z[1][1]:
             is_zona = True
             break
-        if z[0][1] < half_bars[-2].yh < z[1][1]:
-            is_zona = True
-            break
-        if z[0][1] < half_bars[-2].yl < z[1][1]:
-            is_zona = True
-            break
-        if z[0][1] < half_bars[-2].ym < z[1][1]:
-            is_zona = True
-            break
+        # if z[0][1] < half_bars[-2].yh < z[1][1]:
+        #     is_zona = True
+        #     break
+        # if z[0][1] < half_bars[-2].yl < z[1][1]:
+        #     is_zona = True
+        #     break
+        # if z[0][1] < half_bars[-2].ym < z[1][1]:
+        #     is_zona = True
+        #     break
     return is_zona

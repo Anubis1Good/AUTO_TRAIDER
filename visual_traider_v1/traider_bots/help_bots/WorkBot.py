@@ -4,6 +4,7 @@ from traider_bots.VisualTraider_v2 import VisualTraider_v2
 from utils.chart_utils.indicators import get_SMA, get_bollinger_bands,get_fractals, get_context
 from utils.config import ColorsBtnBGR
 from  utils.chart_utils.ProSveT import ProSveT
+from  utils.chart_utils.VSA import VSA
 class WorkBot(VisualTraider_v2):
     def __init__(self, cluster: tuple, dealfeed: tuple, glass: tuple, day: tuple, hour: tuple, minute: tuple, position: tuple, name: str, mode: int = 0) -> None:
         super().__init__(cluster, dealfeed, glass, day, hour, minute, position, name, mode)
@@ -20,7 +21,9 @@ class WorkBot(VisualTraider_v2):
         half_bars = self._get_half_bars(candle_mask,candle_cords,volume_cords)
         cur_price = self._get_current_price(chart)
         pst = ProSveT(half_bars)
-        pst.draw_all(chart)
+        # pst.draw_all(chart)
+        vsa = VSA(half_bars)
+        vsa.draw_all(chart)
 
         # img[region[1]:region[3],region[0]:region[1],:] = chart
 

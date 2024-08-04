@@ -73,8 +73,8 @@ class ST2(VisualTraider_v2):
         h_keys = self._get_keys(img,self.hour_chart_region)
         m_keys = self._get_keys(img,self.minute_chart_region)
         wave = self._get_wave(m_keys)
-        self.i+=1
-        cv2.imwrite('./test_images/'+self.name+str(self.i)+'.png',img)
+        # self.i+=1
+        # cv2.imwrite('./test_images/'+self.name+str(self.i)+'.png',img)
         if wave == 'long':
             self._test_send_close(img,'short')
             self._test_send_open(img,'long') 
