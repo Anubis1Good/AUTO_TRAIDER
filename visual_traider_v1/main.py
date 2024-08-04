@@ -7,7 +7,7 @@ from settings import configuration_traiders_v2
 from stock_groups import stock_groups
 from utils.test_utils.windows import draw_borders
 from traider_bots.help_bots.ResearchBot import ResearchBot
-from traider_bots.ST1 import ST1
+from traider_bots.ST3 import ST3
 
 
 
@@ -17,7 +17,7 @@ work_traiders = []
 for stock in stock_groups:
     traider = ResearchBot(*param_bots,name=stock)
     test_traiders.append(traider)
-    traider = ST1(*param_bots,name=stock)
+    traider = ST3(*param_bots,name=stock)
     traider.mode = 2
     work_traiders.append(traider)
 

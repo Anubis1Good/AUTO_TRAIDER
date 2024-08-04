@@ -22,9 +22,16 @@ class WorkBot(VisualTraider_v2):
         cur_price = self._get_current_price(chart)
         pst = ProSveT(half_bars)
         # pst.draw_all(chart)
-        vsa = VSA(half_bars)
-        vsa.draw_all(chart)
-
+        # vsa = VSA(half_bars)
+        # vsa.draw_all(chart)
+        sma20,bbu,bbd = get_bollinger_bands(np.array(pst.mpts))
+        sma40,bbu_b,bbd_b = get_bollinger_bands(np.array(pst.mpts),step=60)
+        cv2.polylines(chart,[sma20],False,(200,0,0),1)
+        cv2.polylines(chart,[bbu],False,(200,200,0),1)
+        cv2.polylines(chart,[bbd],False,(200,0,200),1)
+        cv2.polylines(chart,[sma40],False,(100,0,0),2)
+        cv2.polylines(chart,[bbu_b],False,(100,200,0),2)
+        cv2.polylines(chart,[bbd_b],False,(100,0,200),2)
         # img[region[1]:region[3],region[0]:region[1],:] = chart
 
 

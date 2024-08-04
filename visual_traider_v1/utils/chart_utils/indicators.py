@@ -16,11 +16,10 @@ def get_SMA(points:npt.NDArray,step) -> npt.NDArray:
         i += 1
     return np.array(moving_averages)
 
-def get_bollinger_bands(points:npt.NDArray,k:int=2) -> tuple[npt.NDArray]:
+def get_bollinger_bands(points:npt.NDArray,k:int=2,step=20) -> tuple[npt.NDArray]:
     sma20 = []
     bbu = []
     bbd = []
-    step = 20
     i = step 
     while i <= len(points):
         slice = points[i-step:i,1]

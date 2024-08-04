@@ -32,6 +32,9 @@ class HalfBar:
         vpt = func(self.vpt)
         return hpt,lpt,vpt
     
+    def y_in_bar(self,y):
+        return self.yh < y < self.yl
+    
 class FullBar(HalfBar):
     def __init__(self, x, yh, yl, yv, yo ,yc,direction) -> None:
         super().__init__(x, yh, yl, yv)
