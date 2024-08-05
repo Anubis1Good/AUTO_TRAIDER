@@ -28,7 +28,7 @@ class VSA:
             cv2.line(img,fb.hpt,fb.lpt,color,1)
             cv2.circle(img,(fb.x-1,fb.yo),1,color,1)
             cv2.circle(img,(fb.x+1,fb.yc),1,color,1)
-            cv2.circle(img,fb.vsaipt,1,(200,0,0),1)
+            cv2.circle(img,fb.vsaipt,1,(200,100,0),1)
             # print(fb.vsai)
     
     def _get_direction_bar(self,prev_hb,next_hb):

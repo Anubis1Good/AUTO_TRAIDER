@@ -85,27 +85,31 @@ class ST3(VisualTraider_v2):
         if keys['zona']:
             if keys['dynamics_sm'] > 1:
                 if keys['cur_price'][1] < keys['bbd_lr'][-1][1]:
-                    if keys['dynamics_lr'] > 1 and keys['dynamics_lr_all'] > -0.4:
+                    if keys['dynamics_lr'] > 0.5 and keys['dynamics_lr_all'] > -0.3:
                         return 'short'
                     else:
                         return 'close_long'
-                if lock == -1:
+                if lock <= -1:
                     return 'close_short'
-            if lock == -1:
+            if lock <= -1:
                 return 'close_short'
             if keys['dynamics_sm'] < -1:
                 if keys['cur_price'][1] > keys['bbu_lr'][-1][1]:
-                    if keys['dynamics_lr'] < -1 and keys['dynamics_lr_all'] < 0.4:
+                    if keys['dynamics_lr'] < -0.5 and keys['dynamics_lr_all'] < 0.3:
                         return 'long'
                     else:
                         return 'close_short'
-                if lock == 1:
+                if lock >= 1:
                     return 'close_long'
-            if lock == 1:
+            if lock >= 1:
                 return 'close_long'
-        if lock_lr == -1 and  keys['dynamics_lr'] > 0.4:
+            if lock_lr < 0 and keys['dynamics_lr'] > 0:
+                return 'close_long'
+            if lock_lr > 0 and keys['dynamics_lr'] < 0:
+                return 'close_short'
+        if lock_lr < 0 and keys['dynamics_lr'] > 0:
             return 'close_long'
-        if lock_lr == 1 and keys['dynamics_lr'] < -0.4:
+        if lock_lr > 0 and keys['dynamics_lr'] < 0:
             return 'close_short'
             # else:
             #     if keys['cur_price'][1] < keys['sma_lr'][-1][1]:
@@ -131,18 +135,18 @@ class ST3(VisualTraider_v2):
     def _test(self, img):
         m_keys = self._get_keys(img,self.minute_chart_region)
         wave = self._get_wave(m_keys)
-        # self.i+=1
-        # cv2.imwrite('./test_images/'+self.name+str(self.i)+'.png',img)
-        if wave == 'long':
-            self._test_send_close(img,'short')
-            self._test_send_open(img,'long') 
-        if wave == 'close_long':
-            self._test_send_close(img,'long')
-        if wave == 'short':
-            self._test_send_close(img,'long')
-            self._test_send_open(img,'short')
-        if wave == 'close_short':
-            self._test_send_close(img,'short')
+        self.i+=1
+        cv2.imwrite('./test_images/'+self.name+str(self.i)+'.png',img)
+        # if wave == 'long':
+        #     self._test_send_close(img,'short')
+        #     self._test_send_open(img,'long') 
+        # if wave == 'close_long':
+        #     self._test_send_close(img,'long')
+        # if wave == 'short':
+        #     self._test_send_close(img,'long')
+        #     self._test_send_open(img,'short')
+        # if wave == 'close_short':
+        #     self._test_send_close(img,'short')
 
     def _traide(self, img):
         pos = self._check_position(img)

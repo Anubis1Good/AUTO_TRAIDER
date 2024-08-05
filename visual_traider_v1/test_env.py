@@ -1,20 +1,20 @@
 import os
 import cv2
 from stock_groups import stock_groups
-from traider_bots.ST3 import ST3a as Trader
+from traider_bots.ST3 import ST3 as Trader
 from traider_bots.help_bots.ResearchBot import ResearchBot
 from settings import configuration_traiders_v2, reset_test_json
 
 
 param_bots = configuration_traiders_v2('config.txt')
-date_stock = '01.08.24'
+date_stock = '05.08.24'
 img_path = './test_data/'
 
 full_path = img_path + date_stock + '/'
 
 imgs = os.listdir(full_path)
 reset_test_json()
-
+stock_groups = ['MOEX']
 for ticker in stock_groups:
     traider = Trader(*param_bots,name=ticker)
     test_traider = ResearchBot(*param_bots,name=ticker)

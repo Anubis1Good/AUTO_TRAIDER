@@ -4,7 +4,7 @@ import pyautogui as pag
 import cv2
 from settings import configuration_traiders_v2
 from traider_bots.help_bots.WorkBot import WorkBot as Trader
-# from traider_bots.ST1 import ST1 as Trader
+from traider_bots.PT2 import PT2 as Trader
 param_bots = configuration_traiders_v2('config.txt')
 traider = Trader(*param_bots,name='MLTR')
 online = False

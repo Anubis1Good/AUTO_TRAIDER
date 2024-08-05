@@ -9,19 +9,23 @@ class ProSveT:
         self.stop_clear = stop_clear
         self.mpts = []
         self.vpts = []
+        self.vsaipts = []
         self.spreds = []
         for i in range(len(half_bars)):
             mpt = half_bars[i].mpt
             vpt = half_bars[i].vpt
+            vsaipt = half_bars[i].vsaipt
             spred = half_bars[i].spred
             self.mpts.append(mpt)
             self.vpts.append(vpt)
             self.spreds.append(spred)
+            self.vsaipts.append(vsaipt)
         self.vpts = np.array(self.vpts)
+        self.vsaipts = np.array(self.vsaipts)
         self.mpts = np.array(self.mpts)
         self.spreds = np.array(self.spreds)
         self.mean_spred = np.mean(self.spreds)
-        self.v_sma20,self.v_bbu,_ = get_bollinger_bands(self.vpts,1)
+        self.vs_sma20,self.vs_bbu,_ = get_bollinger_bands(self.vsaipts,1)
         self.sell_zona,self.buy_zona = [],[]
         self.dynamics = []
         creeks = {}
@@ -38,10 +42,6 @@ class ProSveT:
         ices = self.clear_exline(ices,'bottom')
         creeks = self.filter_exline(creeks,'top',self.mean_spred)
         ices = self.filter_exline(ices,'top',self.mean_spred)
-        # while len(creeks) > smoth_coef:
-        #     creeks = self.smooth_exline(creeks,'top')
-        # while len(ices) > smoth_coef:
-        #     ices = self.smooth_exline(ices,'bottom')
         for creek in creeks:
             point = self.half_bars[creek].mpt if self.half_bars[creek].yl - self.half_bars[creek].ym < self.mean_spred else self.half_bars[creek].pred_hp
             self.sell_zona.append((self.half_bars[creek].hpt,point))
@@ -61,9 +61,9 @@ class ProSveT:
 
             
     def draw_all(self,img):
-        cv2.polylines(img,[self.vpts],False,(242,78,168),1)
-        cv2.polylines(img,[self.v_sma20],False,(217,142,127),1)
-        cv2.polylines(img,[self.v_bbu],False,(177,217,141),1)
+        cv2.polylines(img,[self.vsaipts],False,(242,78,168),1)
+        cv2.polylines(img,[self.vs_sma20],False,(217,142,127),1)
+        cv2.polylines(img,[self.vs_bbu],False,(177,217,141),1)
         cv2.polylines(img,[self.raw_creeks],False,(0,0,200),1)
         cv2.polylines(img,[self.raw_ices],False,(0,200,0),1)
         cv2.polylines(img,[self.creeks],False,(0,0,200),2)
