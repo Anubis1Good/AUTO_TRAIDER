@@ -6,17 +6,17 @@ stock_groups = [
     'ROSN',
     'MOEX',
     'NVTK',
-    'RUAL',
+    'CNY',
     'GMKN',
     'NLMK',
     'MAGN',
     'CHMF',
     'ALRS',
-    'HYDR',
+    'VTBR',
     'SELG',
     'SOFL',
     'FEES',
     'AFKS',
     'SIBN',
-    'MLTR'
+    'MTLR'
 ]

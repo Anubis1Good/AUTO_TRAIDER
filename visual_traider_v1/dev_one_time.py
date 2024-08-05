@@ -23,7 +23,7 @@ else:
     print('./test_data/'+ folder + '/' + rand_img)
     img = cv2.imread('./test_data/'+ folder + '/' + rand_img)
     
-traider.run(img)
+img = traider.run(img)
 cv2.imshow('work',img)
 cv2.moveWindow('work',-10,-10)
 cv2.waitKey(0)

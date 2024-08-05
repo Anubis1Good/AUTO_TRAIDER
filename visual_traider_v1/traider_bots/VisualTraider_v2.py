@@ -54,6 +54,7 @@ class VisualTraider_v2():
                 self._test(copy_img)
         except Exception as err:
             print(err)
+        return copy_img
 
     # terminal_function
     def _check_position(self,img) -> int:

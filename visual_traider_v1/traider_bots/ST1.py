@@ -155,3 +155,22 @@ class ST1(VisualTraider_v2):
         else:
             self._reset_req()
 
+
+class ST1a(ST1):
+    def _get_wave(self,keys):
+        lock = self._check_lock(keys)
+        if keys['zona']:
+            if keys['dynamics'] < -10:
+                if keys['cur_price'][1] > keys['sma20'][-1][1]:
+                    return 'long'
+                if lock == 1:
+                    return 'close_long'
+            if keys['dynamics'] > 10:
+                if keys['cur_price'][1] < keys['sma20'][-1][1]:
+                    return 'short'
+                if lock == -1:
+                    return 'close_short'
+        if keys['cur_price'][1] > keys['sma20'][-1][1] and keys['dynamics'] < -5:
+            return 'close_short'
+        if keys['cur_price'][1] < keys['sma20'][-1][1] and keys['dynamics'] > 5:
+            return 'close_long'

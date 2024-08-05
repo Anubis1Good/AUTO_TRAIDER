@@ -32,6 +32,13 @@ class WorkBot(VisualTraider_v2):
         cv2.polylines(chart,[sma40],False,(100,0,0),2)
         cv2.polylines(chart,[bbu_b],False,(100,200,0),2)
         cv2.polylines(chart,[bbd_b],False,(100,0,200),2)
+        buffer = chart.shape[0]//4
+        end = chart.shape[1]-10
+        top_line = 0 + buffer
+        bottom_line = chart.shape[0] - buffer
+        cv2.line(chart,(0,top_line),(end,top_line),(100,50,200),2)
+        cv2.line(chart,(0,bottom_line),(end,bottom_line),(100,250,20),2)
+        print(chart.shape)
         # img[region[1]:region[3],region[0]:region[1],:] = chart
 
 

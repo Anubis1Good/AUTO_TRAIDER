@@ -36,6 +36,12 @@ class ST3(VisualTraider_v2):
         dynamics_lr = round(get_dynamics(sma_lr,20)/20,2)
         dynamics_lr_all = round(get_dynamics(sma_lr,len(sma_lr)-1)/(len(sma_lr)-1),2)
         last_pick = self._get_last_pick(half_bars,bbu_sm,bbd_sm,20)
+        # new_experimental
+        buffer = chart.shape[0]//4
+        end = chart.shape[1]-10
+        top_line = 0 + buffer
+        bottom_line = chart.shape[0] - buffer
+
         keys = {
             'cur_price':cur_price,
             'zona':zona,
@@ -50,7 +56,9 @@ class ST3(VisualTraider_v2):
             'dynamics_lr':dynamics_lr,
             'dynamics_lr_all':dynamics_lr_all,
             'last_hb':half_bars[-2],
-            'last_pick':last_pick
+            'last_pick':last_pick,
+            'top_line':top_line,
+            'bottom_line': bottom_line
         }
         lock = self._check_lock(keys)
         wave = self._get_wave(keys)
@@ -67,6 +75,8 @@ class ST3(VisualTraider_v2):
             cv2.putText(chart,"DLR: "+str(dynamics_lr),(0,70),cv2.FONT_HERSHEY_SIMPLEX,0.8,(255,255,255),2)
             cv2.putText(chart,"DLRa: "+str(dynamics_lr_all),(0,90),cv2.FONT_HERSHEY_SIMPLEX,0.8,(255,205,155),2)
             cv2.putText(chart,"Wave: "+str(wave),(0,110),cv2.FONT_HERSHEY_SIMPLEX,0.8,(155,205,155),2)
+            cv2.line(chart,(0,top_line),(end,top_line),(100,50,200),2)
+            cv2.line(chart,(0,bottom_line),(end,bottom_line),(100,250,20),2)
         return keys
        
     def _get_last_pick(self,half_bars,bbu,bbd,step_sma):
@@ -85,27 +95,32 @@ class ST3(VisualTraider_v2):
         if keys['zona']:
             if keys['dynamics_sm'] > 1:
                 if keys['cur_price'][1] < keys['bbd_lr'][-1][1]:
-                    if keys['dynamics_lr'] > 1 and keys['dynamics_lr_all'] > -0.4:
+                    if keys['dynamics_lr'] > 1 and keys['dynamics_lr_all'] > 1:
                         return 'short'
                     else:
                         return 'close_long'
-                if lock == -1:
+                if lock == -1 and keys['top_line'] < keys['cur_price'][1]:
                     return 'close_short'
-            if lock == -1:
+            if lock == -1 and keys['top_line'] < keys['cur_price'][1]:
                 return 'close_short'
             if keys['dynamics_sm'] < -1:
                 if keys['cur_price'][1] > keys['bbu_lr'][-1][1]:
-                    if keys['dynamics_lr'] < -1 and keys['dynamics_lr_all'] < 0.4:
+                    if keys['dynamics_lr'] < -1 and keys['dynamics_lr_all'] < -1:
                         return 'long'
                     else:
                         return 'close_short'
-                if lock == 1:
+                if lock == 1 and keys['bottom_line'] > keys['cur_price'][1]:
                     return 'close_long'
-            if lock == 1:
+            if lock == 1 and keys['bottom_line'] > keys['cur_price'][1]:
                 return 'close_long'
-        if lock_lr == -1 and  keys['dynamics_lr'] > 0.4:
+        if 1 > keys['dynamics_lr_all'] > -1:
+            if keys['bbd_lr'][-1][1] < keys['cur_price'][1] > keys['bbd_sm'][-1][1] and keys['bottom_line'] < keys['cur_price'][1]:
+                return 'long'
+            if keys['bbu_lr'][-1][1] > keys['cur_price'][1] < keys['bbu_sm'][-1][1] and keys['top_line'] > keys['cur_price'][1]:
+                return 'short'
+        if lock_lr == -1 and  keys['dynamics_lr'] > 0.4 and keys['bottom_line'] > keys['cur_price'][1]:
             return 'close_long'
-        if lock_lr == 1 and keys['dynamics_lr'] < -0.4:
+        if lock_lr == 1 and keys['dynamics_lr'] < -0.4 and keys['top_line'] < keys['cur_price'][1]:
             return 'close_short'
             # else:
             #     if keys['cur_price'][1] < keys['sma_lr'][-1][1]:
@@ -119,12 +134,8 @@ class ST3(VisualTraider_v2):
     def _check_lock(self,keys,bb:str='sm'):
         if keys['cur_price'][1] >= keys['bbd_'+bb][-1][1] <= keys['last_hb'].yl:
             return -1
-        if keys['cur_price'][1] >= keys['bbd_'+bb][-1][1] < keys['last_hb'].yh:
-            return -2
         if keys['cur_price'][1] <= keys['bbu_'+bb][-1][1] >= keys['last_hb'].yh:
             return 1
-        if keys['cur_price'][1] <= keys['bbu_'+bb][-1][1] > keys['last_hb'].yl:
-            return 2
         return 0 
         
 
@@ -184,39 +195,3 @@ class ST3(VisualTraider_v2):
 
 # TODO
 # Подумать над решением проблемы '30.07.24d', когда были сильные движения в разные стороны
-
-class ST3a(ST3):
-    def _get_wave(self,keys):
-        lock = self._check_lock(keys)
-        lock_lr = self._check_lock(keys,'lr')
-        if keys['zona']:
-            if keys['dynamics_sm'] < -1:
-                if keys['dynamics_lr_all'] <-1:
-                    if keys['cur_price'][1] > keys['bbu_lr'][-1][1]:
-                        return 'long'
-                if keys['cur_price'][1] > keys['sma_lr'][-1][1]:
-                    return 'long'                    
-                if lock >= 1:
-                    return 'close_long'
-            if keys['dynamics_sm'] > 1:
-                if keys['dynamics_lr_all'] > 1:
-                    if keys['cur_price'][1] < keys['bbd_lr'][-1][1]:
-                        return 'short'
-                if keys['cur_price'][1] < keys['sma_lr'][-1][1]:
-                    return 'short'
-                if lock <= -1:
-                    return 'close_short'
-        if keys['dynamics_lr_all'] <-1:
-            if keys['cur_price'][1] > keys['bbu_lr'][-1][1] and keys['dynamics_sm'] < -1:
-                return 'close_short'
-        if keys['dynamics_lr_all'] > 1:       
-            if keys['cur_price'][1] < keys['bbd_lr'][-1][1] and keys['dynamics_sm'] > 1:
-                return 'close_long'
-        if keys['cur_price'][1] > keys['sma_lr'][-1][1] and keys['dynamics_sm'] < -1:
-            return 'close_short' 
-        if keys['cur_price'][1] < keys['sma_lr'][-1][1] and keys['dynamics_sm'] > 1:
-            return 'close_long'       
-        if lock < -1:
-            return 'close_short'
-        if lock > 1:
-            return 'close_long'
