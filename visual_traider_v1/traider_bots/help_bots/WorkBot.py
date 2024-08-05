@@ -25,7 +25,7 @@ class WorkBot(VisualTraider_v2):
         # vsa = VSA(half_bars)
         # vsa.draw_all(chart)
         sma20,bbu,bbd = get_bollinger_bands(np.array(pst.mpts))
-        sma40,bbu_b,bbd_b = get_bollinger_bands(np.array(pst.mpts),step=60)
+        sma40,bbu_b,bbd_b = get_bollinger_bands(np.array(pst.mpts),k=1.8,step=120)
         cv2.polylines(chart,[sma20],False,(200,0,0),1)
         cv2.polylines(chart,[bbu],False,(200,200,0),1)
         cv2.polylines(chart,[bbd],False,(200,0,200),1)

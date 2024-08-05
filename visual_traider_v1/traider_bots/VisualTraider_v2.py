@@ -43,14 +43,15 @@ class VisualTraider_v2():
         print(self,'the _traide method is not implemented')
     
     def run(self,img):
+        copy_img = img.copy()
         try:
             if self.mode == 0:
-                self._test(img)
+                self._test(copy_img)
             elif self.mode == 1:
-                self._traide(img)
+                self._traide(copy_img)
             elif self.mode == 2:
-                self._traide(img)
-                self._test(img)
+                self._traide(copy_img)
+                self._test(copy_img)
         except Exception as err:
             print(err)
 
