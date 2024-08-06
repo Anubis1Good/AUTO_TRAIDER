@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import numpy.typing as npt
 from traider_bots.VisualTraider_v2 import VisualTraider_v2
-from utils.chart_utils.indicators import get_bollinger_bands, get_dynamics
+from utils.chart_utils.indicators import get_bollinger_bands, get_dynamics, check_zona
 from utils.chart_utils.ProSveT import ProSveT
 
 
@@ -31,6 +31,8 @@ class PT2(VisualTraider_v2):
         is_big_vsai = half_bars[-1].vsai < pst.vs_bbu[-1][1]
         over_bbu = half_bars[-1].yl < bbu_sm[-1][1]
         over_bbd = half_bars[-1].yh > bbd_sm[-1][1]
+        sell_zona = check_zona(pst.sell_zona,half_bars)
+        buy_zona = check_zona(pst.buy_zona,half_bars)
         class Keys: 
             def __init__(self):             
                 self.cur_price = cur_price[1]
@@ -47,14 +49,13 @@ class PT2(VisualTraider_v2):
                 self.is_big_vsai = is_big_vsai
                 self.over_bbd = over_bbd
                 self.over_bbu = over_bbu
+                self.sell_zona = sell_zona
+                self.buy_zona = buy_zona
         # TODO
-        keys = Keys()
-        if keys.dynamics_lr_50 > 1:
-            pass
-        if keys.dynamics_lr_50 < 1:
-            pass
-        else:
-            pass
+        # keys = Keys()
+
+
+            
         if self.mode != 1:
             cv2.polylines(chart,[sma_sm],False,(200,0,0),1)
             cv2.polylines(chart,[bbu_sm],False,(200,200,0),1)
@@ -84,14 +85,95 @@ class PT2(VisualTraider_v2):
 
     
     def _get_action(self,keys):
-        pass
+        # short_context
+        if keys.dynamics_lr_50 > 0.5:
+            if keys.dynamics_sm > 1 and keys.cur_price < keys.bbd_lr:
+                return 'short'
+            if keys.bbd_attached and keys.is_big_vsai:
+                return 'close_short'
+            if not keys.bbd_attached and self.bbd_attached:
+                return 'close_short'
+            if keys.over_bbd:
+                return 'close_short'
+        # long_context
+        elif keys.dynamics_lr_50 < -0.5:
+            if keys.dynamics_sm < -1 and keys.cur_price > keys.bbu_lr:
+                return 'long'
+            if keys.bbu_attached and keys.is_big_vsai:
+                return 'close_long'
+            if not keys.bbu_attached and self.bbu_attached:
+                return 'close_long'
+            if keys.over_bbu:
+                return 'close_long'
+        # range_context
+        else:
+            if keys.over_bbu:
+                return 'short'
+            if keys.over_bbd:
+                return 'long'
+            if keys.sell_zona and keys.cur_price < keys.bbu_lr:
+                return 'short'
+            if keys.buy_zona and keys.cur_price > keys.bbd_lr:
+                return 'long'
+            if keys.cur_price > keys.sma_lr:
+                return 'close_short'
+            if keys.cur_price < keys.sma_lr:
+                return 'close_long'
     
     def _test(self, img):
         m_keys = self._get_keys(img,self.minute_chart_region)
-        return super()._test(img)
+        action = self._get_action(m_keys)
+        if action == 'long':
+            self._test_send_close(img,'short')
+            self._test_send_open(img,'long') 
+        if action == 'close_long':
+            self._test_send_close(img,'long')
+        if action == 'short':
+            self._test_send_close(img,'long')
+            self._test_send_open(img,'short')
+        if action == 'close_short':
+            self._test_send_close(img,'short')
+        self.bbd_attached = m_keys.bbd_attached
+        self.bbu_attached = m_keys.bbu_attached
     
     def _traide(self, img):
-        return super()._traide(img)
-    
+        pos = self._check_position(img)
+        m_keys = self._get_keys(img,self.minute_chart_region)
+        action = self._get_action(m_keys)
+        if action:
+            if action == 'long':
+                if pos == -1:
+                    self.close_short = True
+                    self._reverse_pos(img,'long')
+                if pos == 0:
+                    self._send_open('long')
+            if action == 'close_long':
+                if pos == 1:
+                    self.close_long = True
+                    self._send_close(img,'long')
+            if action == 'short':
+                if pos == 1:
+                    self.close_long = True
+                    self._reverse_pos(img,'short')
+                if pos == 0:
+                    self._send_open('short')
+            if action == 'close_short':
+                if pos == -1:
+                    self.close_short = True
+                    self._send_close(img,'short')
+        elif self.close_long:
+            if pos == 1:
+                self._send_close(img,'long')
+            else:
+                self.close_long = False
+        elif self.close_short:
+            if pos == -1:
+                self._send_close(img,'short')
+            else:
+                self.close_long = False
+        else:
+            self._reset_req()
+        self.bbd_attached = m_keys.bbd_attached
+        self.bbu_attached = m_keys.bbu_attached
 
     

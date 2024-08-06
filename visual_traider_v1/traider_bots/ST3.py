@@ -103,13 +103,13 @@ class ST3(VisualTraider_v2):
                     return 'close_long'
             if lock >= 1:
                 return 'close_long'
-            if lock_lr < 0 and keys['dynamics_lr'] > 0:
+            if lock_lr < 0 and lock < 0 and keys['dynamics_lr'] > 0:
                 return 'close_long'
-            if lock_lr > 0 and keys['dynamics_lr'] < 0:
+            if lock_lr > 0 and lock > 0 and keys['dynamics_lr'] < 0:
                 return 'close_short'
-        if lock_lr < 0 and keys['dynamics_lr'] > 0:
+        if lock_lr < 0 and lock < 0 and keys['dynamics_lr'] > 0:
             return 'close_long'
-        if lock_lr > 0 and keys['dynamics_lr'] < 0:
+        if lock_lr > 0 and lock > 0 and keys['dynamics_lr'] < 0:
             return 'close_short'
             # else:
             #     if keys['cur_price'][1] < keys['sma_lr'][-1][1]:
