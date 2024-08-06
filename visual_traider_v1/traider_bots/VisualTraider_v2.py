@@ -83,7 +83,7 @@ class VisualTraider_v2():
     
     # trade_function
     def _send_open(self,direction):
-        pag.moveTo(self.glass_region[0]+10,self.glass_region[1]+10)
+        pag.moveTo(self.glass_region[0]+11,self.glass_region[1]+11)
         pdi.press('f')
         if direction == 'long':
             button = 'a'
@@ -96,11 +96,15 @@ class VisualTraider_v2():
     def _send_close(self,img,direction):
         if direction == 'long':
             x,y = self._color_search(img, ColorsBtnBGR.best_ask,self.glass_region,reverse=True)
+            if x < 0:
+                x,y = self._color_search(img, ColorsBtnBGR.ask,self.glass_region,reverse=True)
             x -= 50
             y -= 5
             button = 'right'
         elif direction == 'short':
             x,y = self._color_search(img, ColorsBtnBGR.best_bid,self.glass_region,reverse=False)
+            if x < 0:
+                x,y = self._color_search(img, ColorsBtnBGR.bid,self.glass_region,reverse=False)
             x += 10
             y += 5
             button = 'left'
@@ -116,12 +120,16 @@ class VisualTraider_v2():
         if direction == 'long':
             button = 'a'
             x,y = self._color_search(img, ColorsBtnBGR.best_bid,self.glass_region,reverse=False)
+            if x < 0:
+                x,y = self._color_search(img, ColorsBtnBGR.bid,self.glass_region,reverse=False)
             x += 10
             y += 5
             button_m = 'left'
         elif direction == 'short':
             button = 's'
             x,y = self._color_search(img, ColorsBtnBGR.best_ask,self.glass_region,reverse=True)
+            if x < 0:
+                x,y = self._color_search(img, ColorsBtnBGR.ask,self.glass_region,reverse=True)
             x -= 50
             y -= 5
             button_m = 'right'
@@ -136,7 +144,7 @@ class VisualTraider_v2():
         pdi.keyUp('altleft')
 
     def _reset_req(self):
-        pag.moveTo(self.glass_region[0]+10,self.glass_region[1]+10)
+        pag.moveTo(self.glass_region[0]+11,self.glass_region[1]+11)
         pdi.press('f')
     # test trade_function
 

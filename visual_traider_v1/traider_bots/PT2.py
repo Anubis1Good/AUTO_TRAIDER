@@ -9,8 +9,11 @@ from utils.chart_utils.ProSveT import ProSveT
 class PT2(VisualTraider_v2):
     def __init__(self, cluster: tuple, dealfeed: tuple, glass: tuple, day: tuple, hour: tuple, minute: tuple, position: tuple, name: str, mode: int = 0) -> None:
         super().__init__(cluster, dealfeed, glass, day, hour, minute, position, name, mode)
+        self.traider_name = 'PT2'
         self.bbu_attached = False
         self.bbd_attached = False
+        self.close_long = False
+        self.close_short = False
 
     def _get_keys(self, img, region) -> dict:
         chart = self._get_chart(img,region)
@@ -33,6 +36,8 @@ class PT2(VisualTraider_v2):
         over_bbd = half_bars[-1].yh > bbd_sm[-1][1]
         sell_zona = check_zona(pst.sell_zona,half_bars)
         buy_zona = check_zona(pst.buy_zona,half_bars)
+        # TODO 
+        # 1. Расстояние между зонами, между bb
         class Keys: 
             def __init__(self):             
                 self.cur_price = cur_price[1]
@@ -51,9 +56,6 @@ class PT2(VisualTraider_v2):
                 self.over_bbu = over_bbu
                 self.sell_zona = sell_zona
                 self.buy_zona = buy_zona
-        # TODO
-        # keys = Keys()
-
 
             
         if self.mode != 1:
@@ -86,9 +88,15 @@ class PT2(VisualTraider_v2):
     
     def _get_action(self,keys):
         # short_context
-        if keys.dynamics_lr_50 > 0.5:
-            if keys.dynamics_sm > 1 and keys.cur_price < keys.bbd_lr:
-                return 'short'
+        if keys.dynamics_lr_50 > 0.3:
+            if keys.dynamics_sm > 1:
+                if keys.dynamics_lr > 0.5 or keys.dynamics_sm > 2:
+                    if keys.cur_price < keys.bbd_lr:
+                        return 'short'
+                if keys.sell_zona and keys.cur_price < keys.sma_lr:
+                    return 'short'
+            if keys.dynamics_sm < -2 and keys.cur_price > keys.bbu_lr:
+                return 'close_short'
             if keys.bbd_attached and keys.is_big_vsai:
                 return 'close_short'
             if not keys.bbd_attached and self.bbd_attached:
@@ -96,9 +104,15 @@ class PT2(VisualTraider_v2):
             if keys.over_bbd:
                 return 'close_short'
         # long_context
-        elif keys.dynamics_lr_50 < -0.5:
-            if keys.dynamics_sm < -1 and keys.cur_price > keys.bbu_lr:
-                return 'long'
+        elif keys.dynamics_lr_50 < -0.3:
+            if keys.dynamics_sm < -1:
+                if keys.dynamics_lr < -1 or keys.dynamics_sm < -2:
+                    if keys.cur_price > keys.bbu_lr:
+                        return 'long'
+                if keys.buy_zona and keys.cur_price > keys.sma_lr:
+                    return 'long'
+            if keys.dynamics_sm > 2 and keys.cur_price < keys.bbd_lr:
+                return 'close_long'
             if keys.bbu_attached and keys.is_big_vsai:
                 return 'close_long'
             if not keys.bbu_attached and self.bbu_attached:
