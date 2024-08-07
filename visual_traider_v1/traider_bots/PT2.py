@@ -89,12 +89,6 @@ class PT2(VisualTraider_v2):
     def _get_action(self,keys):
         # short_context
         if keys.dynamics_lr_50 > 0.3:
-            if keys.dynamics_sm > 1:
-                if keys.dynamics_lr > 0.5 or keys.dynamics_sm > 2:
-                    if keys.cur_price < keys.bbd_lr:
-                        return 'short'
-            if keys.sell_zona and keys.cur_price < keys.sma_lr and keys.dynamics_lr > 0.5:
-                return 'short'
             if keys.dynamics_sm < -2 and keys.cur_price > keys.bbu_lr and keys.dynamics_lr < -0.3:
                 return 'close_short'
             if keys.bbd_attached and keys.is_big_vsai:
@@ -103,14 +97,14 @@ class PT2(VisualTraider_v2):
                 return 'close_short'
             if keys.over_bbd:
                 return 'close_short'
+            if keys.dynamics_sm > 1:
+                if keys.dynamics_lr > 0.5 or keys.dynamics_sm > 2:
+                    if keys.cur_price < keys.bbd_lr:
+                        return 'short'
+            if keys.sell_zona and keys.cur_price < keys.sma_lr and keys.dynamics_lr > 0.5:
+                return 'short'
         # long_context
         elif keys.dynamics_lr_50 < -0.3:
-            if keys.dynamics_sm < -1:
-                if keys.dynamics_lr < -0.5 or keys.dynamics_sm < -2:
-                    if keys.cur_price > keys.bbu_lr:
-                        return 'long'
-            if keys.buy_zona and keys.cur_price > keys.sma_lr and keys.dynamics_lr < -0.5:
-                return 'long'
             if keys.dynamics_sm > 2 and keys.cur_price < keys.bbd_lr and keys.dynamics_lr > 0.3:
                 return 'close_long'
             if keys.bbu_attached and keys.is_big_vsai:
@@ -119,8 +113,18 @@ class PT2(VisualTraider_v2):
                 return 'close_long'
             if keys.over_bbu:
                 return 'close_long'
+            if keys.dynamics_sm < -1:
+                if keys.dynamics_lr < -0.5 or keys.dynamics_sm < -2:
+                    if keys.cur_price > keys.bbu_lr:
+                        return 'long'
+            if keys.buy_zona and keys.cur_price > keys.sma_lr and keys.dynamics_lr < -0.5:
+                return 'long'
         # range_context
         else:
+            if keys.cur_price > keys.sma_lr:
+                return 'close_short'
+            if keys.cur_price < keys.sma_lr:
+                return 'close_long'
             if keys.over_bbu:
                 return 'short'
             if keys.over_bbd:
@@ -129,10 +133,6 @@ class PT2(VisualTraider_v2):
                 return 'short'
             if keys.buy_zona and keys.cur_price > keys.bbd_lr:
                 return 'long'
-            if keys.cur_price > keys.sma_lr:
-                return 'close_short'
-            if keys.cur_price < keys.sma_lr:
-                return 'close_long'
     
     def _test(self, img):
         m_keys = self._get_keys(img,self.minute_chart_region)
