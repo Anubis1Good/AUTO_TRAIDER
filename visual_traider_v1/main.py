@@ -2,6 +2,7 @@ import pyautogui as pag
 import cv2
 import keyboard
 import sys
+import traceback
 from time import sleep
 from settings import configuration_traiders_v2
 from stock_groups import stock_groups
@@ -46,7 +47,7 @@ while True:
         try:
             pag.moveTo(traider.glass_region[0]+10,traider.glass_region[1]+10)
         except Exception as err:
-            print(err)
+            traceback.print_exc()
         # sleep(1)
         # i += 1
         keyboard.send('tab') 

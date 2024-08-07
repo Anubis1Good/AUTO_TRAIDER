@@ -1,3 +1,4 @@
+import traceback
 import cv2
 import numpy as np
 import numpy.typing as npt
@@ -53,7 +54,7 @@ class VisualTraider_v2():
                 self._traide(copy_img)
                 self._test(copy_img)
         except Exception as err:
-            print(err)
+            traceback.print_exc()
         return copy_img
 
     # terminal_function
@@ -267,7 +268,8 @@ class VisualTraider_v2():
                 return result[y,1]+region[0], result[y,0]+region[1]
             return result[y,1],result[y,0]
 
-        except:
+        except Exception:
+            traceback.print_exc()
             return -1,-1
     
     # ml function
