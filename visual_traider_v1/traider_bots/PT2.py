@@ -27,7 +27,7 @@ class PT2(VisualTraider_v2):
         sma_sm,bbu_sm,bbd_sm = get_bollinger_bands(np.array(pst.mpts))
         sma_lr,bbu_lr,bbd_lr = get_bollinger_bands(np.array(pst.mpts),k=1,step=40)
         dynamics_sm = round(get_dynamics(sma_sm)/10,2)
-        dynamics_lr = round(get_dynamics(sma_lr,20)/20,2)
+        dynamics_lr = round(get_dynamics(sma_lr)/10,2)
         dynamics_lr_50 = round(get_dynamics(sma_lr,len(sma_lr)//2)/(len(sma_lr)//2),2)
         bbu_attached = half_bars[-2].y_in_bar(bbu_sm[-1][1]) or half_bars[-1].y_in_bar(bbu_sm[-1][1])
         bbd_attached = half_bars[-2].y_in_bar(bbd_sm[-1][1]) or half_bars[-1].y_in_bar(bbd_sm[-1][1]) 
@@ -82,6 +82,8 @@ class PT2(VisualTraider_v2):
             cv2.putText(chart,"bbuAt: "+str(bbu_attached),(0,110),cv2.FONT_HERSHEY_SIMPLEX,0.8,(255,205,155),2)
             cv2.putText(chart,"bbdAt: "+str(bbd_attached),(0,130),cv2.FONT_HERSHEY_SIMPLEX,0.8,(255,205,155),2)
             cv2.putText(chart,"VSAI: "+str(is_big_vsai),(0,150),cv2.FONT_HERSHEY_SIMPLEX,0.8,(255,205,155),2)
+            cv2.putText(chart,"SUA: "+str(self.bbu_attached),(0,165),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,205,155),2)
+            cv2.putText(chart,"SDA: "+str(self.bbd_attached),(0,180),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,205,155),2)
             # cv2.putText(chart,"Wave: "+str(wave),(0,110),cv2.FONT_HERSHEY_SIMPLEX,0.8,(155,205,155),2)
         return Keys()
 
@@ -89,36 +91,76 @@ class PT2(VisualTraider_v2):
     def _get_action(self,keys):
         # short_context
         if keys.dynamics_lr_50 > 0.3:
-            if keys.dynamics_sm < -2 and keys.cur_price > keys.bbu_lr and keys.dynamics_lr < -0.3:
-                return 'close_short'
             if keys.bbd_attached and keys.is_big_vsai:
                 return 'close_short'
-            if not keys.bbd_attached and self.bbd_attached:
+            if not keys.bbd_attached and self.bbd_attached and keys.cur_price > keys.bbd_lr:
                 return 'close_short'
             if keys.over_bbd:
                 return 'close_short'
-            if keys.dynamics_sm > 1:
-                if keys.dynamics_lr > 0.5 or keys.dynamics_sm > 2:
+            if keys.dynamics_sm >= 1:
+                if keys.dynamics_lr > 0.5:
                     if keys.cur_price < keys.bbd_lr:
                         return 'short'
-            if keys.sell_zona and keys.cur_price < keys.sma_lr and keys.dynamics_lr > 0.5:
-                return 'short'
+                if -0.5 < keys.dynamics_lr <= 0.5:
+                    if keys.cur_price < keys.sma_lr:
+                        return 'short'
+                if keys.dynamics_lr < 0:
+                    if keys.cur_price > keys.bbd_lr:
+                        return 'close_short'
+            if 0 < keys.dynamics_sm < 1:
+                if 1 > keys.dynamics_lr > 0:  
+                    if keys.sell_zona and keys.cur_price < keys.sma_lr:
+                        return 'short'
+                    if keys.cur_price > keys.bbd_lr:
+                        return 'close_short'
+                if keys.dynamics_lr <= 0:  
+                    if keys.sell_zona and keys.cur_price < keys.bbu_lr:
+                        return 'short'
+                    if keys.cur_price > keys.sma_lr:
+                        return 'close_short'
+            if keys.dynamics_sm < 0:
+                if 1 > keys.dynamics_lr > -0.5: 
+                    if keys.cur_price > keys.bbd_lr:
+                        return 'close_short'
+                if keys.dynamics_lr <= -0.5:
+                    if keys.cur_price > keys.bbu_lr:
+                        return 'close_short'
         # long_context
         elif keys.dynamics_lr_50 < -0.3:
-            if keys.dynamics_sm > 2 and keys.cur_price < keys.bbd_lr and keys.dynamics_lr > 0.3:
-                return 'close_long'
             if keys.bbu_attached and keys.is_big_vsai:
                 return 'close_long'
-            if not keys.bbu_attached and self.bbu_attached:
+            if not keys.bbu_attached and self.bbu_attached and keys.cur_price < keys.bbu_lr:
                 return 'close_long'
             if keys.over_bbu:
                 return 'close_long'
-            if keys.dynamics_sm < -1:
-                if keys.dynamics_lr < -0.5 or keys.dynamics_sm < -2:
+            if keys.dynamics_sm <= -1: 
+                if keys.dynamics_lr < -0.5:
                     if keys.cur_price > keys.bbu_lr:
                         return 'long'
-            if keys.buy_zona and keys.cur_price > keys.sma_lr and keys.dynamics_lr < -0.5:
-                return 'long'
+                if 0.5 > keys.dynamics_lr > -0.5:
+                    if keys.cur_price > keys.sma_lr:
+                        return 'long'
+                if keys.dynamics_lr > 0:
+                    if keys.cur_price < keys.bbu_lr:
+                        return 'close_long'
+            if -1 < keys.dynamics_sm < 0:
+                if -1 < keys.dynamics_lr < 0: 
+                    if keys.buy_zona and keys.cur_price > keys.sma_lr:
+                        return 'long'
+                    if keys.cur_price < keys.bbu_lr:
+                        return 'close_long'
+                if keys.dynamics_lr >= 0:
+                    if keys.buy_zona and keys.cur_price > keys.bbd_lr:
+                        return 'long'
+                    if keys.cur_price < keys.sma_lr:
+                        return 'close_long'
+            if keys.dynamics_sm > 0:
+                if -1 < keys.dynamics_lr < 0.5: 
+                    if keys.cur_price < keys.bbu_lr:
+                        return 'close_long'
+                if keys.dynamics_lr >= 0.5:   
+                    if keys.cur_price < keys.bbd_lr:
+                        return 'close_long'
         # range_context
         else:
             if keys.cur_price > keys.sma_lr:

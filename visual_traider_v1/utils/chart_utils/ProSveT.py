@@ -116,16 +116,17 @@ class ProSveT:
     def filter_exline(self,points:dict,type_clear:str,spred:int=10):
         keys = list(points.keys())
         new_points = {}
-        new_points[keys[0]] = points[keys[0]]
-        if type_clear == 'top':
-            for i in range(1,len(keys)):
-                if abs(points[keys[i]][1] - points[keys[i-1]][1]) > spred:
-                    new_points[keys[i]] = points[keys[i]]
-        elif type_clear == 'bottom':
-            for i in range(1,len(keys)):
-                if abs(points[keys[i-1]][1] - points[keys[i]][1]) > spred:
-                    new_points[keys[i-1]] = points[keys[i-1]]
-        new_points[keys[-1]] = points[keys[-1]]
+        if len(keys) > 0:
+            new_points[keys[0]] = points[keys[0]]
+            if type_clear == 'top':
+                for i in range(1,len(keys)):
+                    if abs(points[keys[i]][1] - points[keys[i-1]][1]) > spred:
+                        new_points[keys[i]] = points[keys[i]]
+            elif type_clear == 'bottom':
+                for i in range(1,len(keys)):
+                    if abs(points[keys[i-1]][1] - points[keys[i]][1]) > spred:
+                        new_points[keys[i-1]] = points[keys[i-1]]
+            new_points[keys[-1]] = points[keys[-1]]
         return new_points
 
     

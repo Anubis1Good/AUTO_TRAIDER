@@ -269,7 +269,7 @@ class VisualTraider_v2():
             return result[y,1],result[y,0]
 
         except Exception:
-            traceback.print_exc()
+            # traceback.print_exc()
             return -1,-1
     
     # ml function

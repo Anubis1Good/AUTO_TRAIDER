@@ -37,7 +37,7 @@ class VSA:
         elif prev_hb.yh <= next_hb.yh and prev_hb.yl < next_hb.yl:
             direction = -1
         else:
-            if abs(prev_hb.yh - next_hb.yh) < abs(prev_hb.yl - next_hb.yl):
+            if abs(prev_hb.yh - next_hb.yh) > abs(prev_hb.yl - next_hb.yl):
                 direction = 1
             else: 
                 direction = -1

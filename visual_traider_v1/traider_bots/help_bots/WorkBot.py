@@ -21,9 +21,9 @@ class WorkBot(VisualTraider_v2):
         half_bars = self._get_half_bars(candle_mask,candle_cords,volume_cords)
         cur_price = self._get_current_price(chart)
         pst = ProSveT(half_bars)
-        pst.draw_all(chart)
+        # pst.draw_all(chart)
         vsa = VSA(half_bars)
-        # vsa.draw_all(chart)
+        vsa.draw_all(chart)
         print(half_bars[0].vsaipt)
         sma20,bbu,bbd = get_bollinger_bands(np.array(pst.mpts))
         sma40,bbu_b,bbd_b = get_bollinger_bands(np.array(pst.mpts),k=1.8,step=120)
@@ -37,8 +37,8 @@ class WorkBot(VisualTraider_v2):
         end = chart.shape[1]-10
         top_line = 0 + buffer
         bottom_line = chart.shape[0] - buffer
-        cv2.line(chart,(0,top_line),(end,top_line),(100,50,200),2)
-        cv2.line(chart,(0,bottom_line),(end,bottom_line),(100,250,20),2)
+        # cv2.line(chart,(0,top_line),(end,top_line),(100,50,200),2)
+        # cv2.line(chart,(0,bottom_line),(end,bottom_line),(100,250,20),2)
         print(chart.shape)
         # img[region[1]:region[3],region[0]:region[1],:] = chart
 
