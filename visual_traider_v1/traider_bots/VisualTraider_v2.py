@@ -150,10 +150,10 @@ class VisualTraider_v2():
     # test trade_function
 
     def _test_send_open(self,img,direction,draw=lambda img:img):
-        test_open(img,self.name,direction,self.traider_name,draw)
+        return test_open(img,self.name,direction,self.traider_name,draw)
 
     def _test_send_close(self,img,direction,draw=lambda img:img):
-        test_close(img,self.name,direction,self.traider_name,draw)
+        return test_close(img,self.name,direction,self.traider_name,draw)
 
     def _draw(self,img,keys,region):
         pass

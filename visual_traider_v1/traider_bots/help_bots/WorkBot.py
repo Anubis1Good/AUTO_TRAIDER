@@ -23,10 +23,30 @@ class WorkBot(VisualTraider_v2):
         pst = ProSveT(half_bars)
         # pst.draw_all(chart)
         vsa = VSA(half_bars)
-        vsa.draw_all(chart)
-        print(half_bars[0].vsaipt)
+        # vsa.draw_all(chart)
+        short_bar1,short_bar2,long_bar1,long_bar2,rotate_short,rotate_long = vsa.get_important_bars_y(cur_price[1])
+        cur_bar,_ = vsa.get_context_y(cur_price[1])
         sma20,bbu,bbd = get_bollinger_bands(np.array(pst.mpts))
         sma40,bbu_b,bbd_b = get_bollinger_bands(np.array(pst.mpts),k=1.8,step=120)
+        print(vsa.context)
+        print(vsa.formation)
+        if short_bar1:
+            cv2.line(chart,vsa.full_bars[short_bar1].hpt,vsa.full_bars[short_bar1].lpt,(200,0,250))
+        if short_bar2:
+            cv2.polylines(chart,[vsa.full_bars[short_bar2].draw_line],False,(200,0,250),2)
+        if long_bar1:
+            cv2.polylines(chart,[vsa.full_bars[long_bar1].draw_line],False,(50,250,150))
+        if long_bar2:
+            cv2.polylines(chart,[vsa.full_bars[long_bar2].draw_line],False,(50,250,150),2)
+        if cur_bar:
+            cv2.polylines(chart,[cur_bar.draw_line],False,(10,250,250),2)
+        if rotate_long:
+            cv2.circle(chart,vsa.full_bars[rotate_long].lpt,1,(0,200,0))
+        if rotate_short:
+            cv2.circle(chart,vsa.full_bars[rotate_short].hpt,1,(200,100,200))
+        cv2.line(chart,vsa.full_bars[vsa.max_bar].hpt, (vsa.full_bars[-1].x,vsa.full_bars[vsa.max_bar].yh),(30,119,93))
+        cv2.line(chart,vsa.full_bars[vsa.min_bar].lpt, (vsa.full_bars[-1].x,vsa.full_bars[vsa.min_bar].yl),(130,19,193))
+        vsa.draw_context(chart)
         # cv2.polylines(chart,[sma20],False,(200,0,0),1)
         # cv2.polylines(chart,[bbu],False,(200,200,0),1)
         # cv2.polylines(chart,[bbd],False,(200,0,200),1)
@@ -39,7 +59,7 @@ class WorkBot(VisualTraider_v2):
         bottom_line = chart.shape[0] - buffer
         # cv2.line(chart,(0,top_line),(end,top_line),(100,50,200),2)
         # cv2.line(chart,(0,bottom_line),(end,bottom_line),(100,250,20),2)
-        print(chart.shape)
+        # print(chart.shape)
         # img[region[1]:region[3],region[0]:region[1],:] = chart
 
 

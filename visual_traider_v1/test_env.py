@@ -1,13 +1,13 @@
 import os
 import cv2
 from stock_groups import stock_groups
-from traider_bots.PT2 import PT2 as Trader
+from traider_bots.OGT1 import OGT1 as Trader
 from traider_bots.help_bots.ResearchBot import ResearchBot
 from settings import configuration_traiders_v2, reset_test_json
 
 
 param_bots = configuration_traiders_v2('config.txt')
-date_stock = '02.08.24'
+date_stock = '07.08.24'
 img_path = './test_data/'
 
 full_path = img_path + date_stock + '/'

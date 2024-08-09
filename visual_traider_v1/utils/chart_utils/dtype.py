@@ -36,11 +36,15 @@ class HalfBar:
         return self.yh < y < self.yl
     
 class FullBar(HalfBar):
-    def __init__(self, x, yh, yl, yv, yo ,yc,direction) -> None:
+    def __init__(self, x, yh, yl, yv, yo ,yc,direction,top_rotate,bottom_rotate) -> None:
         super().__init__(x, yh, yl, yv)
         self.yo = yo
         self.yc = yc
         self.direction = direction
+        self.top_rotate = top_rotate 
+        self.bottom_rotate = bottom_rotate
+        self.over_vsai = False
+        self.over_v_sma = False
 
 
 

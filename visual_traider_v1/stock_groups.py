@@ -1,5 +1,5 @@
 stock_groups = [
-    'MXI',
+    'SBERP',
     'SBER',
     'GAZP',
     'LKOH',
