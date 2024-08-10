@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
 import numpy.typing as npt
+import pytesseract as tsrct
 from utils.config import ColorsBtnBGR
-
 
 def get_candle_mask(image:npt.ArrayLike) -> npt.ArrayLike:
     mask1 = cv2.inRange(image,ColorsBtnBGR.candle_color_1,ColorsBtnBGR.candle_color_1)
@@ -59,3 +59,20 @@ def get_xy(corners:npt.NDArray) -> npt.NDArray:
     x = corners[:,0]
     y = corners[:,1]
     return x,y
+
+def get_cur_price(self,chart):
+    mask1 = self._get_mask(chart,ColorsBtnBGR.cur_price_1)
+    mask1 = self._get_cords_on_mask(mask1)
+    mask2 = self._get_mask(chart,ColorsBtnBGR.cur_price_2)
+    mask2 = self._get_cords_on_mask(mask2)
+    if mask1.shape[0] > 0:
+        mask = mask1
+    if mask2.shape[0] > 0:
+        mask = mask2
+    region_price = (mask[0][1],mask[0][0],mask[-1][1],mask[-1][0])
+    price_chart = self._get_chart(chart,region_price)
+    pc_copy = price_chart.copy()
+    pc_copy = cv2.resize(pc_copy,None,fx=9,fy=9)
+    tsrct.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+    res = tsrct.image_to_string(pc_copy, config='outputbase digits')
+    return res

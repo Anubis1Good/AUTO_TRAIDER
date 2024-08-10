@@ -72,6 +72,8 @@ class VSA:
             if fb.over_vsai:
                 cv2.line(img,fb.vsaipt,(fb.x,self.min_volume),(140,70,160),1)
             # print(fb.vsai)
+        self.draw_context(img)
+        cv2.putText(img,"Formation: " +str(self.formation),(0,20),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,255,255),2)
     
     def _get_direction_bar(self,prev_hb,next_hb):
         if prev_hb.yh > next_hb.yh and prev_hb.yl >= next_hb.yl:

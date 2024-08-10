@@ -25,3 +25,8 @@ def draw_trendlines_v2(x,y,image):
     cv2.polylines(image,[trend],False,(255,255,255),2)
     cv2.polylines(image,[top_trend],False,(255,255,255),2)
     cv2.polylines(image,[bottom_trend],False,(255,255,255),2)
+
+def draw_bollinger(chart,ma,ups,downs,color=(200,0,0),thickness=1):
+    cv2.polylines(chart,[ma],False,color,thickness)
+    cv2.polylines(chart,[ups],False,color,thickness)
+    cv2.polylines(chart,[downs],False,color,thickness)

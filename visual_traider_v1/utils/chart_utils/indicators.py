@@ -161,3 +161,66 @@ def check_zona(zona,half_bars):
         #     is_zona = True
         #     break
     return is_zona
+
+# strange_result
+def get_rsi(half_bars:list[HalfBar],period=14):
+    ups,downs = [],[]
+    for i in range(len(half_bars)-period,len(half_bars)):
+        if half_bars[i].yh > half_bars[i-1].yh:
+            ups.append(half_bars[i].spred)
+        else:
+            downs.append(half_bars[i].spred)
+    ups = np.array(ups)
+    downs = np.array(downs)
+    # print(np.exp(ups))
+    rs =  np.average(ups) / np.average(downs) 
+    rsi = 100 - 100 / (1 + rs)
+    return rsi
+    # RSI = 100 – 100 / (1 + RS),
+    # RS = EMAn(Up) / EMAn(Down)
+
+def get_spred_channel(half_bars:list[HalfBar],period=14):
+    ma = []
+    ups,downs = [],[]
+    ups2,downs2 = [],[]
+    # cum_sumx = np.cumsum(points[:,0])
+    i = period 
+    while i <= len(half_bars):
+        slice = half_bars[i-period:i]
+        slice_ym = []
+        slice_spreds = []
+        for hb in slice:
+            slice_ym.append(hb.ym)
+            slice_spreds.append(hb.spred)
+        cum_sumy_ma = np.sum(np.array(slice_ym))
+        cum_sumy_spred = np.sum(np.array(slice_spreds))
+        xs = half_bars[i-1].x
+        ma_y = cum_sumy_ma // period
+        spreds = cum_sumy_spred // period
+    
+        ma.append([xs,ma_y])
+        ups.append([xs,ma_y - spreds])
+        downs.append([xs,ma_y + spreds])
+        ups2.append([xs,ma_y - spreds*2])
+        downs2.append([xs,ma_y + spreds*2])
+        i += 1
+    return np.array(ma),np.array(ups),np.array(downs),np.array(ups2),np.array(downs2)
+
+
+
+def get_bb_points(ups,downs,step=10):
+    creeks = []
+    ices = []
+    for i in range(step,len(ups)-(step+1)):
+        ups_prev = ups[i-step:i]
+        ups_next = ups[i+1:i+step]
+        downs_prev = downs[i-step:i]
+        downs_next = downs[i+1:i+step]
+        if all([ups[i][1] <= y[1] for y in ups_prev]) and all([ups[i][1] <= y[1] for y in ups_next]):
+            creeks.append(ups[i])
+        if all([downs[i][1] >= y[1] for y in downs_prev]) and all([downs[i][1]>= y[1] for y in downs_next]):
+            ices.append(downs[i])
+    creeks = np.array(creeks)
+    ices = np.array(ices)
+    return creeks,ices
+
