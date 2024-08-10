@@ -2,8 +2,9 @@ import cv2
 import numpy as np
 import numpy.typing as npt
 from traider_bots.VisualTraider_v2 import VisualTraider_v2
-from utils.chart_utils.indicators import get_bollinger_bands, get_dynamics, check_zona,get_bb_points
+from utils.chart_utils.indicators import get_bollinger_bands, get_dynamics, check_zona,get_bb_points,get_SMA
 from utils.chart_utils.ProSveT import ProSveT
+from utils.chart_utils.dtype import HalfBar
 from dataclasses import dataclass
 
 @dataclass
@@ -26,6 +27,8 @@ class Keys:
     buy_zona:bool
     creek:int
     ice:int
+    stop_long:int
+    stop_short:int
 
 class PT3(VisualTraider_v2):
     def __init__(self, cluster: tuple, dealfeed: tuple, glass: tuple, day: tuple, hour: tuple, minute: tuple, position: tuple, name: str, mode: int = 0) -> None:
@@ -58,6 +61,11 @@ class PT3(VisualTraider_v2):
         sell_zona = check_zona(pst.sell_zona,half_bars)
         buy_zona = check_zona(pst.buy_zona,half_bars)
         creeks,ices = get_bb_points(bbu_sm,bbd_sm,5)
+
+        volatility = list(map(lambda x: x.spred_pt,pst.half_bars))
+        volatility = get_SMA(np.array(volatility),14)
+        stop_long = (half_bars[-2].x,half_bars[-2].ym+volatility[-1][1])
+        stop_short = (half_bars[-2].x,half_bars[-2].ym-volatility[-1][1])
         # TODO 
         # 1. Расстояние между зонами, между bb
       
@@ -79,10 +87,15 @@ class PT3(VisualTraider_v2):
             sell_zona,
             buy_zona,
             creeks[-1][1],
-            ices[-1][1]
+            ices[-1][1],
+            stop_long[1],
+            stop_short[1]
             )
             
         if self.mode != 1:
+            cv2.circle(chart,stop_long,1,(0,200,0),2)
+            cv2.circle(chart,stop_short,1,(200,200,0),2)
+            cv2.polylines(chart,[volatility],False,(200,200,0),1)
             cv2.polylines(chart,[sma_sm],False,(200,0,0),1)
             cv2.polylines(chart,[bbu_sm],False,(200,200,0),1)
             cv2.polylines(chart,[bbd_sm],False,(200,0,200),1)
@@ -115,12 +128,51 @@ class PT3(VisualTraider_v2):
 
     
     def _get_action(self,keys:Keys):
-        # short_context
-        
+        if keys.dynamics_lr_50 > 0.3:
+            if keys.cur_price < keys.stop_short:
+                return 'close_short'
+            if keys.bbd_attached and keys.is_big_vsai:
+                return 'close_short'
+            if not keys.bbd_attached and self.bbd_attached:
+                return 'close_short'
+            if keys.over_bbd:
+                return 'close_short'
+            if keys.dynamics_sm > 1:
+                if keys.dynamics_lr > 0.5 or keys.dynamics_sm > 2:
+                    if keys.cur_price < keys.bbd_lr:
+                        return 'short'
+            if keys.sell_zona and keys.cur_price < keys.sma_lr and keys.dynamics_lr > 0.5:
+                return 'short'
         # long_context
-        
+        elif keys.dynamics_lr_50 < -0.3:
+            if keys.cur_price > keys.stop_long:
+                return 'close_long'
+            if keys.bbu_attached and keys.is_big_vsai:
+                return 'close_long'
+            if not keys.bbu_attached and self.bbu_attached:
+                return 'close_long'
+            if keys.over_bbu:
+                return 'close_long'
+            if keys.dynamics_sm < -1:
+                if keys.dynamics_lr < -0.5 or keys.dynamics_sm < -2:
+                    if keys.cur_price > keys.bbu_lr:
+                        return 'long'
+            if keys.buy_zona and keys.cur_price > keys.sma_lr and keys.dynamics_lr < -0.5:
+                return 'long'
         # range_context
-        pass
+        else:
+            if keys.cur_price > keys.sma_lr:
+                return 'close_short'
+            if keys.cur_price < keys.sma_lr:
+                return 'close_long'
+            if keys.over_bbu:
+                return 'short'
+            if keys.over_bbd:
+                return 'long'
+            if keys.sell_zona and keys.cur_price < keys.bbu_lr:
+                return 'short'
+            if keys.buy_zona and keys.cur_price > keys.bbd_lr:
+                return 'long'
     
     def _test(self, img):
         m_keys = self._get_keys(img,self.minute_chart_region)

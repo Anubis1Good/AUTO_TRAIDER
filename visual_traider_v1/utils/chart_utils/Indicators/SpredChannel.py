@@ -7,6 +7,7 @@ class SpredChannel:
         ma = []
         ups1,downs1 = [],[]
         ups2,downs2 = [],[]
+        ups3,downs3 = [],[]
         i = period 
         while i <= len(half_bars):
             slice = half_bars[i-period:i]
@@ -25,6 +26,8 @@ class SpredChannel:
             downs1.append([xs,ma_y + spreds])
             ups2.append([xs,ma_y - spreds*2])
             downs2.append([xs,ma_y + spreds*2])
+            ups3.append([xs,ma_y - spreds*3])
+            downs3.append([xs,ma_y + spreds*3])
             i += 1
         
         self.ma = np.array(ma)
@@ -32,6 +35,8 @@ class SpredChannel:
         self.downs1 = np.array(downs1)
         self.ups2 = np.array(ups2)
         self.downs2 = np.array(downs2)
+        self.ups3 = np.array(ups3)
+        self.downs3 = np.array(downs3)
         self.dynamics10 = get_dynamics(self.ma)
         self.dynamics50 = get_dynamics(self.ma,50)
         self.dynamics_all = get_dynamics(self.ma,len(self.ma)-1)
@@ -42,6 +47,8 @@ class SpredChannel:
         cv2.polylines(chart,[self.downs1],False,color_down,thickness)
         cv2.polylines(chart,[self.ups2],False,color_up,thickness)
         cv2.polylines(chart,[self.downs2],False,color_down,thickness)
+        cv2.polylines(chart,[self.ups3],False,color_up,thickness)
+        cv2.polylines(chart,[self.downs3],False,color_down,thickness)
         cv2.putText(chart,"D10: " +str(self.dynamics10),(0,30),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,255,255),2)
         cv2.putText(chart,"D_ALL: " +str(self.dynamics_all),(0,45),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,255,255),2)
         cv2.putText(chart,"D50: " +str(self.dynamics50),(0,60),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,255,255),2)

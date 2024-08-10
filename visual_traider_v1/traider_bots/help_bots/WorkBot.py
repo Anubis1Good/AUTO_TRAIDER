@@ -24,20 +24,40 @@ class WorkBot(VisualTraider_v2):
         half_bars = self._get_half_bars(candle_mask,candle_cords,volume_cords)
         cur_price = self._get_current_price(chart)
         mpts = list(map(lambda x: x.mpt,half_bars))
-        # spcl = SpredChannel(half_bars)
+        spcl = SpredChannel(half_bars)
         # spcl.draw_all(chart)
         # print(spcl.dynamics10)
         # print(spcl.dynamics_all)
-        # ma,ups,downs = get_bollinger_bands(np.array(mpts))
-        # draw_bollinger(chart,ma,ups,downs)
+        ma,ups,downs = get_bollinger_bands(np.array(mpts),1)
+        draw_bollinger(chart,ma,ups,downs,thickness=2)
         # ups_p,downs_p = get_bb_points(ups,downs,3)
         # cv2.polylines(chart,[ups_p],False,(200,200,0),2)
         # cv2.polylines(chart,[downs_p],False,(200,200,200),2)
-        # pst = ProSveT(half_bars)
+        pst = ProSveT(half_bars)
         # pst.draw_all(chart)
-        vsa = VSA(half_bars)
+        # try:
+        #     zona = pst.sell_zona[-1]
+        #     cv2.rectangle(chart,zona[0],(pst.half_bars[-1].x,zona[1][1]),(139,11,259),3)
+        #     zona = pst.buy_zona[-1]
+        #     cv2.rectangle(chart,zona[0],(pst.half_bars[-1].x,zona[1][1]),(71,259,225),3)
+        # except:
+        #     pass
+        # self.get_trends(chart,half_bars,(100,100,255))
+        # self.get_trends(chart,half_bars[len(half_bars) - len(half_bars)//4:],(0,200,0))
 
-        vsa.draw_all(chart)
+
+
+    def get_trends(self,chart,half_bars,color=(200,0,0)):
+        points = self._get_points(half_bars)
+        x,y = self._get_xy(points)
+        trend,top_trend,bottom_trend,slope = self._get_trend_lines(x,y)
+        cv2.polylines(chart,[trend],False,color)
+        cv2.polylines(chart,[top_trend],False,color)
+        cv2.polylines(chart,[bottom_trend],False,color)
+
+        # vsa = VSA(half_bars)
+
+        # vsa.draw_all(chart)
 
 
 

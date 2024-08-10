@@ -11,6 +11,7 @@ class HalfBar:
         self.mpt = (self.x,self.ym)
         self.vpt = (self.x,self.yv)
         self.spred = yl - yh
+        self.spred_pt = (self.x,self.spred)
         buff = self.spred//4
         self.pred_yh = self.yh + buff
         self.pred_yl = self.yl - buff

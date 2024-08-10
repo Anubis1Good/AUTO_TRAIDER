@@ -3,24 +3,27 @@ import numpy as np
 import numpy.typing as npt
 from traider_bots.VisualTraider_v2 import VisualTraider_v2
 from utils.chart_utils.Indicators.SpredChannel import SpredChannel
-from utils.chart_utils.indicators import get_SMA
+from utils.chart_utils.indicators import get_SMA,get_bollinger_bands
+from utils.test_utils.test_draws_funcs import draw_bollinger
 from utils.chart_utils.dtype import HalfBar
 from dataclasses import dataclass
 
 @dataclass
 class Keys:
-    cur_price:tuple
-    spcl:SpredChannel
-    last_hb:HalfBar
+    cur_price:int
     stop_long:int
     stop_short:int
+    bbu:int
+    bbd:int
+    last_hb:HalfBar
 
-class ST5(VisualTraider_v2):
+class ST7(VisualTraider_v2):
     def __init__(self, cluster: tuple, dealfeed: tuple, glass: tuple, day: tuple, hour: tuple, minute: tuple, position: tuple, name: str, mode: int = 0) -> None:
         super().__init__(cluster, dealfeed, glass, day, hour, minute, position, name, mode)
-        self.traider_name = 'ST5'
+        self.traider_name = 'ST7'
         self.close_long = False
         self.close_short = False
+        
 
     def _get_keys(self, img, region) -> Keys:
         chart = self._get_chart(img,region)
@@ -30,79 +33,33 @@ class ST5(VisualTraider_v2):
         volume_cords = self._get_cords_on_mask(volume_mask)
         half_bars = self._get_half_bars(candle_mask,candle_cords,volume_cords)
         cur_price = self._get_current_price(chart)
-        last_hb = half_bars[-1]
-        spcl = SpredChannel(half_bars)
-
         volatility = list(map(lambda x: x.spred_pt,half_bars))
         volatility = get_SMA(np.array(volatility),14)
-        stop_long = (half_bars[-2].x,half_bars[-2].ym+volatility[-1][1])
-        stop_short = (half_bars[-2].x,half_bars[-2].ym-volatility[-1][1])
+        stop_long = (half_bars[-1].x,half_bars[-2].ym+volatility[-1][1])
+        stop_short = (half_bars[-1].x,half_bars[-2].ym-volatility[-1][1])
+        sma_sm,bbu_sm,bbd_sm = get_bollinger_bands(np.array(list(map(lambda x: x.mpt,half_bars))))
+        last_hb = half_bars[-1]
 
-        keys = Keys(cur_price,spcl,last_hb,stop_long[1],stop_short[1])
+        keys = Keys(cur_price[1],stop_long[1],stop_short[1],bbu_sm[-1][1],bbd_sm[-1][1],last_hb)
         if self.mode != 1:
-            spcl.draw_all(chart)
             cv2.circle(chart,stop_long,1,(0,200,0),2)
             cv2.circle(chart,stop_short,1,(200,200,0),2)
+            draw_bollinger(chart,sma_sm,bbu_sm,bbd_sm)
         return keys
 
     def _get_action(self,keys:Keys):
-        cur_price = keys.cur_price[1]
-        dynamics10 = keys.spcl.dynamics10
-        dynamics50 = keys.spcl.dynamics50
-        ma = keys.spcl.ma[-1][1]
-        downs1 = keys.spcl.downs1[-1][1]
-        ups1 = keys.spcl.ups1[-1][1]
-        downs2 = keys.spcl.downs2[-1][1]
-        ups2 = keys.spcl.ups2[-1][1]
-        downs3 = keys.spcl.downs3[-1][1]
-        ups3 = keys.spcl.ups3[-1][1]
-        # if cur_price > downs2:
-        #     return 'long'
-        # if cur_price < ups2:
-        #     return 'short'
-        # if cur_price < downs1:
-        #     return 'close_long'
-        # if cur_price > ups1:
-        #     return 'close_short'
-        if dynamics10 > 20:
-            if cur_price < keys.stop_short:
-                return 'close_short'
-            if cur_price < downs2:
-                return 'short'
-            if cur_price > downs3:
-                return 'close_short'
-            # return 'close_long'
-        elif dynamics10 >= 10:
-            if cur_price < keys.stop_short:
-                return 'close_short'
-            if cur_price < ma:
-                return 'short'
-            if cur_price > downs1:
-                return 'close_short'
-            # return 'close_long'
-        elif 10 > dynamics10 > -10:
-            if cur_price < keys.stop_short:
-                return 'close_short'
-            if cur_price > keys.stop_long:
-                return 'close_long'
-            if cur_price > downs3:
-                return 'long'
-            if cur_price < ups3:
-                return 'short'
-        elif dynamics10 < -20:
-            if cur_price > keys.stop_long:
-                return 'close_long'
-            if cur_price > ups2:
-                return 'long'
-            if cur_price < ups3:
-                return 'close_long'
-        else:
-            if cur_price > keys.stop_long:
-                return 'close_long'
-            if cur_price > ma:
-                return 'long'
-            if cur_price < ups1:
-                return 'close_long'
+        cur_price = keys.cur_price
+        stop_long = keys.stop_long
+        stop_short = keys.stop_short
+        if cur_price > stop_long:
+            return 'close_all'
+        if cur_price < stop_short:
+            return 'close_all'
+        if keys.last_hb.yh < keys.bbu:
+            return 'long'
+        if keys.last_hb.yl > keys.bbd:
+            return 'short'
+
     
     def _test(self, img):
         m_keys = self._get_keys(img,self.minute_chart_region)

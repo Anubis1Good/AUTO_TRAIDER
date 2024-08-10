@@ -54,11 +54,14 @@ class ProSveT:
             pass
         try:
             self.buy_zona.pop()
+            if self.buy_zona[-1][0][1] - self.sell_zona[-1][1][1] < self.mean_spred*2:
+                self.sell_zona.pop()
+                self.buy_zona.pop()
         except:
             pass
         self.creeks = np.array(list(creeks.values()))
         self.ices = np.array(list(ices.values()))
-
+        
             
     def draw_all(self,img):
         cv2.polylines(img,[self.vsaipts],False,(242,78,168),1)
