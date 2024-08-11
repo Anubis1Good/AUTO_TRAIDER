@@ -8,17 +8,21 @@ from settings import configuration_traiders_v2
 from stock_groups import stock_groups
 from utils.test_utils.windows import draw_borders
 from traider_bots.help_bots.ResearchBot import ResearchBot
-from traider_bots.PT2 import PT2 as Traider1
+from traider_bots.PST1 import PST1 as Traider1
+from traider_bots.ST8 import ST8 as Traider2
 
 
 
 param_bots = configuration_traiders_v2('config.txt')
 test_traiders = []
 work_traiders = []
-for stock in stock_groups:
-    traider = ResearchBot(*param_bots,name=stock)
+for i in range(len(stock_groups)):
+    traider = ResearchBot(*param_bots,name=stock_groups[i])
     test_traiders.append(traider)
-    traider = Traider1(*param_bots,name=stock)
+    if i %2 == 0:
+        traider = Traider1(*param_bots,name=stock_groups[i])
+    else:
+        traider = Traider2(*param_bots,name=stock_groups[i])
     traider.mode = 2
     work_traiders.append(traider)
 
