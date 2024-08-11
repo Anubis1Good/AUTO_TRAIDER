@@ -1,4 +1,6 @@
 import json
+import os
+import shutil
 # for VisualTraider before v2
 def configurtion_traiders(Traider,filename):
     traiders = []
@@ -34,6 +36,13 @@ def reset_test_json():
     ]
     with open('test.json','w') as f:
         json.dump(saves,f)
+
+def clear_test_images():
+    shutil.rmtree('./test_images') 
+    os.mkdir('./test_images')
+def clear_logs():
+    shutil.rmtree('./logs') 
+    os.mkdir('./logs')
     
 if __name__ == '__main__':
     print(configuration_traiders_v2('./config_dev.txt'))

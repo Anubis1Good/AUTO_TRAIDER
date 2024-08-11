@@ -139,27 +139,30 @@ def get_dynamics(points,n=10):
     return deltas
     # return deltas//n
 
-def check_zona(zona,half_bars):
+def check_zona(zona,half_bars,cur_price=None,method=None):
     is_zona = False
+    if not cur_price:
+        cur_price =  half_bars[-1].ym
+    cz = None
     for z in zona:
         if z[0][1] < half_bars[-1].yh < z[1][1]:
             is_zona = True
+            cz = z
             break
         if z[0][1] < half_bars[-1].yl < z[1][1]:
             is_zona = True
+            cz = z
             break
         if z[0][1] < half_bars[-1].ym < z[1][1]:
             is_zona = True
+            cz = z
             break
-        # if z[0][1] < half_bars[-2].yh < z[1][1]:
-        #     is_zona = True
-        #     break
-        # if z[0][1] < half_bars[-2].yl < z[1][1]:
-        #     is_zona = True
-        #     break
-        # if z[0][1] < half_bars[-2].ym < z[1][1]:
-        #     is_zona = True
-        #     break
+    if method == 'long' and cz:
+        if cur_price > cz[1][1]:
+            is_zona = False
+    if method == 'short' and cz:
+        if cur_price < cz[0][1]:
+            is_zona = False
     return is_zona
 
 # strange_result

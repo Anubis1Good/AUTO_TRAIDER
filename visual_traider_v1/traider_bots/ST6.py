@@ -3,7 +3,7 @@ import numpy as np
 import numpy.typing as npt
 from traider_bots.VisualTraider_v2 import VisualTraider_v2
 from utils.chart_utils.Indicators.SpredChannel import SpredChannel
-from utils.chart_utils.indicators import get_SMA
+from utils.chart_utils.indicators import get_SMA, get_fractals
 from utils.chart_utils.dtype import HalfBar
 from dataclasses import dataclass
 
@@ -16,6 +16,7 @@ class Keys:
     enter_short:int
     mean_spred:float
     volatility:int
+    last_hb:HalfBar
 
 class ST6(VisualTraider_v2):
     def __init__(self, cluster: tuple, dealfeed: tuple, glass: tuple, day: tuple, hour: tuple, minute: tuple, position: tuple, name: str, mode: int = 0) -> None:
@@ -34,18 +35,27 @@ class ST6(VisualTraider_v2):
         cur_price = self._get_current_price(chart)
         volatility = list(map(lambda x: x.spred_pt,half_bars))
         volatility = get_SMA(np.array(volatility),14)
-        enter_short = (half_bars[-2].x,half_bars[-2].ym+volatility[-1][1])
-        enter_long = (half_bars[-2].x,half_bars[-2].ym-volatility[-1][1])
-        stop_long = (half_bars[-2].x,half_bars[-2].ym+volatility[-1][1]*2)
-        stop_short = (half_bars[-2].x,half_bars[-2].ym-volatility[-1][1]*2)
+        hpts = np.array(list(map(lambda x: x.hpt,half_bars)))
+        lpts = np.array(list(map(lambda x: x.lpt,half_bars)))
+        max_hb,min_hb = get_fractals(hpts,lpts)
+        enter_short = (half_bars[-1].x,max_hb[-1][1]-volatility[-1][1]*2)
+        enter_long = (half_bars[-1].x,min_hb[-1][1]+volatility[-1][1]*2)
+        stop_long = (half_bars[-1].x,min_hb[-1][1]+volatility[-1][1])
+        stop_short = (half_bars[-1].x,max_hb[-1][1]-volatility[-1][1])
         spreds = np.array(list(map(lambda x: x.spred,half_bars)))
         mean_spred = np.average(spreds)
-        keys = Keys(cur_price[1],stop_long[1],stop_short[1],enter_short[1],enter_long[1],mean_spred,volatility[-1][1])
+        last_hb = half_bars[-2]
+        keys = Keys(cur_price[1],stop_long[1],stop_short[1],enter_long[1],enter_short[1],mean_spred,volatility[-1][1],last_hb)
         if self.mode != 1:
             cv2.circle(chart,stop_long,1,(0,200,0),2)
             cv2.circle(chart,stop_short,1,(200,200,0),2)
-            cv2.circle(chart,enter_short,1,(200,0,200),1)
-            cv2.circle(chart,enter_long,1,(0,100,100),1)
+            cv2.circle(chart,enter_short,1,(200,0,200),2)
+            cv2.circle(chart,enter_long,1,(0,100,100),2)
+            cv2.polylines(chart,[max_hb],False,(200,200,0))
+            cv2.polylines(chart,[min_hb],False,(200,200,200))
+            cv2.putText(chart,"CP: " +str(cur_price[1]),(0,20),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,255,255),2)
+            cv2.putText(chart,"ES: " +str(enter_short[1]),(0,40),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,255,255),2)
+            cv2.putText(chart,"EL: " +str(enter_long[1]),(0,60),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,255,255),2)
         return keys
 
     def _get_action(self,keys:Keys):
@@ -53,15 +63,21 @@ class ST6(VisualTraider_v2):
         stop_long = keys.stop_long
         stop_short = keys.stop_short
         # if keys.volatility > keys.mean_spred:
-        if cur_price > stop_long:
-            return 'close_long'
-        if cur_price < stop_short:
-            return 'close_short'
         if cur_price > keys.enter_long:
+            # print(cur_price,keys.enter_long)
             return 'long'
         if cur_price < keys.enter_short:
             return 'short'
-    
+        # if cur_price < stop_long:
+        #     return 'close_long'
+        # if cur_price > stop_short:
+        #     return 'close_short'
+        if cur_price < keys.last_hb.ym:
+            return 'close_long'
+        if cur_price > keys.last_hb.ym:
+            return 'close_short'
+
+
     def _test(self, img):
         m_keys = self._get_keys(img,self.minute_chart_region)
         action = self._get_action(m_keys)
