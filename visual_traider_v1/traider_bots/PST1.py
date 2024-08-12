@@ -189,7 +189,46 @@ class PST1(VisualTraider_v2):
         
     
     def _traide(self, img):
-        return super()._traide(img)
+        pos = self._check_position(img)
+        m_keys = self._get_keys(img,self.minute_chart_region)
+        action = self._get_action(m_keys)
+        if pos == 0:
+            self.free_stop = True
+        if action:
+            if action == 'long':
+                if pos == -1:
+                    self.close_short = True
+                    self._reverse_pos(img,'long')
+                if pos == 0:
+                    self._send_open('long')
+            if action == 'close_long':
+                if pos == 1:
+                    self.close_long = True
+                    self._send_close(img,'long')
+            if action == 'short':
+                if pos == 1:
+                    self.close_long = True
+                    self._reverse_pos(img,'short')
+                if pos == 0:
+                    self._send_open('short')
+            if action == 'close_short':
+                if pos == -1:
+                    self.close_short = True
+                    self._send_close(img,'short')
+        elif self.close_long:
+            if pos == 1:
+                self._send_close(img,'long')
+            else:
+                self.close_long = False
+        elif self.close_short:
+            if pos == -1:
+                self._send_close(img,'short')
+            else:
+                self.close_long = False
+        else:
+            self._reset_req()
+        self.bbd_attached = m_keys.bbd_attached
+        self.bbu_attached = m_keys.bbu_attached
     
     def draw_research(self,img):
         m_keys = self._get_keys(img,self.minute_chart_region)

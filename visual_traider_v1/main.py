@@ -19,10 +19,10 @@ work_traiders = []
 for i in range(len(stock_groups)):
     traider = ResearchBot(*param_bots,name=stock_groups[i])
     test_traiders.append(traider)
-    if i %2 == 0:
-        traider = Traider1(*param_bots,name=stock_groups[i])
-    else:
-        traider = Traider2(*param_bots,name=stock_groups[i])
+    # if i %2 == 0:
+    traider = Traider1(*param_bots,name=stock_groups[i])
+    # else:
+    #     traider = Traider2(*param_bots,name=stock_groups[i])
     traider.mode = 2
     work_traiders.append(traider)
 
