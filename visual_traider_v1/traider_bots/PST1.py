@@ -39,7 +39,7 @@ class PST1(VisualTraider_v2):
         self.free_stop = True
         self.i = 0
     
-    def _get_keys(self, img, region) -> dict:
+    def _get_keys(self, img, region) -> Keys:
         chart = self._get_chart(img,region)
         candle_mask = self._get_candle_mask(chart)
         volume_mask = self._get_volume_mask(chart)
@@ -76,6 +76,8 @@ class PST1(VisualTraider_v2):
         if not self.free_stop:
             stop_long = stop_long if stop_long[1] < self.stop_long else (half_bars[-1].x,self.stop_long)
             stop_short = stop_short if stop_short[1] > self.stop_short else (half_bars[-1].x,self.stop_short)
+        self.stop_long = stop_long[1]
+        self.stop_short = stop_short[1]
         keys = Keys(
             cur_price[1],
             bbd_sm[-1][1],
@@ -114,8 +116,9 @@ class PST1(VisualTraider_v2):
                 cv2.rectangle(chart,zona[0],(pst.half_bars[-1].x,zona[1][1]),(71,219,195),1)
             # cv2.polylines(chart,[v_sma],False,(230,100,100),1)
             # cv2.putText(chart,'Lock: '+str(lock),(0,20),cv2.FONT_HERSHEY_SIMPLEX,0.8,(20,255,255),3)
-            cv2.putText(chart,"Slope: " +str(slope),(0,25),cv2.FONT_HERSHEY_SIMPLEX,0.8,(255,255,255),2)
-            cv2.putText(chart,"Slope_sm: " +str(slope_sm),(0,50),cv2.FONT_HERSHEY_SIMPLEX,0.8,(255,255,255),2)
+            cv2.putText(chart,"Slope: " +str(slope),(0,25),cv2.FONT_HERSHEY_SIMPLEX,0.7,(255,255,255),2)
+            cv2.putText(chart,"Slope_sm: " +str(slope_sm),(0,50),cv2.FONT_HERSHEY_SIMPLEX,0.7,(255,255,255),2)
+            cv2.putText(chart,"FS: " +str(self.free_stop),(0,70),cv2.FONT_HERSHEY_SIMPLEX,0.7,(255,255,255),2)
             # cv2.putText(chart,"DLR: "+str(dynamics_lr),(0,70),cv2.FONT_HERSHEY_SIMPLEX,0.8,(255,255,255),2)
             # cv2.putText(chart,"DLRa: "+str(dynamics_lr_50),(0,90),cv2.FONT_HERSHEY_SIMPLEX,0.8,(255,205,155),2)
             cv2.putText(chart,"bbuAt: "+str(bbu_attached),(0,110),cv2.FONT_HERSHEY_SIMPLEX,0.8,(255,205,155),2)
@@ -248,3 +251,30 @@ class PST1(VisualTraider_v2):
         else:
             with open(file_name, 'a') as f:
                 f.write(log)
+
+class PST1a(PST1):
+    def __init__(self, cluster: tuple, dealfeed: tuple, glass: tuple, day: tuple, hour: tuple, minute: tuple, position: tuple, name: str, mode: int = 0) -> None:
+        super().__init__(cluster, dealfeed, glass, day, hour, minute, position, name, mode)
+        self.traider_name = 'PST1a'
+    def _test(self, img):
+        m_keys = self._get_keys(img,self.minute_chart_region)
+        # h_keys = self._get_keys(img,self.hour_chart_region)
+        action = self._get_action(m_keys)
+        res1,res2 = 0,0
+        if action == 'long':
+            res1 = self._test_send_close(img,'short')
+            res2 = self._test_send_open(img,'long') 
+        if action == 'close_long':
+            res1 = self._test_send_close(img,'long')
+        if action == 'short':
+            res1 = self._test_send_close(img,'long')
+            res2 = self._test_send_open(img,'short')
+        if action == 'close_short':
+            res1 = self._test_send_close(img,'short')
+        if res1 == 1 and res2 == 0:
+            self.free_stop = True
+        if res2 == 1:
+            self.free_stop = False
+        self.bbd_attached = m_keys.bbd_attached
+        self.bbu_attached = m_keys.bbu_attached
+        self.write_logs(m_keys,action)

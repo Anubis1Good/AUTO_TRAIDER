@@ -227,3 +227,11 @@ def get_bb_points(ups,downs,step=10):
     ices = np.array(ices)
     return creeks,ices
 
+
+def get_borders(region,divider=4):
+    heigth = region[3]-region[1]
+    width = region[2] - region[0]
+    buff = heigth // divider
+    top_line =np.array(((10,0+buff),(width-10,0+buff)))
+    bottom_line =np.array(((10,heigth-buff),(width-10,heigth-buff)))
+    return top_line,bottom_line

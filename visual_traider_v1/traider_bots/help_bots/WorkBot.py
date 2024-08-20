@@ -2,7 +2,8 @@ import cv2
 
 import numpy as np
 from traider_bots.VisualTraider_v2 import VisualTraider_v2
-from utils.chart_utils.indicators import get_SMA, get_bollinger_bands,get_fractals, get_context,get_rsi,get_spred_channel,get_bb_points
+from utils.chart_utils.indicators import get_SMA, get_bollinger_bands,get_fractals, get_context,get_rsi,get_spred_channel,get_bb_points,get_borders
+from utils.chart_utils.general_v2 import get_divide_chart
 from utils.config import ColorsBtnBGR
 from  utils.chart_utils.ProSveT import ProSveT
 from  utils.chart_utils.VSA import VSA
@@ -23,27 +24,20 @@ class WorkBot(VisualTraider_v2):
         volume_cords = self._get_cords_on_mask(volume_mask)
         half_bars = self._get_half_bars(candle_mask,candle_cords,volume_cords)
         cur_price = self._get_current_price(chart)
-        mpts = list(map(lambda x: x.mpt,half_bars))
-        spcl = SpredChannel(half_bars)
-        # spcl.draw_all(chart)
-        # print(spcl.dynamics10)
-        # print(spcl.dynamics_all)
-        ma,ups,downs = get_bollinger_bands(np.array(mpts),1)
-        draw_bollinger(chart,ma,ups,downs,thickness=2)
-        # ups_p,downs_p = get_bb_points(ups,downs,3)
-        # cv2.polylines(chart,[ups_p],False,(200,200,0),2)
-        # cv2.polylines(chart,[downs_p],False,(200,200,200),2)
-        pst = ProSveT(half_bars)
-        # pst.draw_all(chart)
-        # try:
-        #     zona = pst.sell_zona[-1]
-        #     cv2.rectangle(chart,zona[0],(pst.half_bars[-1].x,zona[1][1]),(139,11,259),3)
-        #     zona = pst.buy_zona[-1]
-        #     cv2.rectangle(chart,zona[0],(pst.half_bars[-1].x,zona[1][1]),(71,259,225),3)
-        # except:
-        #     pass
-        # self.get_trends(chart,half_bars,(100,100,255))
-        # self.get_trends(chart,half_bars[len(half_bars) - len(half_bars)//4:],(0,200,0))
+        mpts = np.array(list(map(lambda x: x.mpt,half_bars)))
+        ma,ups,downs=get_bollinger_bands(mpts,2,5)
+        draw_bollinger(chart,ma,ups,downs,(255,155,155))
+        # ma,ups,downs=get_bollinger_bands(mpts)
+        # draw_bollinger(chart,ma,ups,downs,(255,155,55),2)
+        # spcl = SpredChannel(half_bars)
+        # vsa = VSA(half_bars,10)
+        # # vsa.draw_all(chart)
+        # short_bar1,short_bar2,long_bar1,long_bar2,rotate_short,rotate_long = vsa.get_important_bars_y(cur_price[1])
+        # cur_bar,_ = vsa.get_context_y(cur_price[1])
+        # # cv2.polylines(chart,[cur_bar.draw_line],False,(0,255,0),2)
+        # cv2.polylines(chart,[vsa.full_bars[short_bar2].draw_line],False,(240,255,0),2)
+        # cv2.polylines(chart,[vsa.full_bars[long_bar2].draw_line],False,(0,255,250),2)
+
 
 
 

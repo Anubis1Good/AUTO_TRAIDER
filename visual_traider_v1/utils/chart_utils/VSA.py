@@ -5,7 +5,7 @@ from utils.chart_utils.indicators import get_bollinger_bands
 
 
 class VSA:
-    def __init__(self,half_bars: list[HalfBar]) -> None:
+    def __init__(self,half_bars: list[HalfBar],step_bb_vsai:int=20) -> None:
         self.full_bars:list[FullBar] = []
         volumes = []
         self.vsaipts = []
@@ -39,7 +39,7 @@ class VSA:
         self.mean_spred = np.mean(spreds)
         self.max_volume = np.min(np.array(volumes))
         self.min_volume = np.max(np.array(volumes))
-        self.vs_sma20,self.vs_bbu,_ = get_bollinger_bands(self.vsaipts,1)
+        self.vs_sma20,self.vs_bbu,_ = get_bollinger_bands(self.vsaipts,1,step_bb_vsai)
         for i in range(20,len(self.full_bars)):
             self.full_bars[i].over_v_sma = self.full_bars[i].vsaipt[1] < self.vs_sma20[i-20][1]
             self.full_bars[i].over_vsai = self.full_bars[i].vsaipt[1] < self.vs_bbu[i-20][1]
@@ -72,7 +72,7 @@ class VSA:
             if fb.over_vsai:
                 cv2.line(img,fb.vsaipt,(fb.x,self.min_volume),(140,70,160),1)
             # print(fb.vsai)
-        self.draw_context(img)
+        # self.draw_context(img)
         cv2.putText(img,"Formation: " +str(self.formation),(0,20),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,255,255),2)
     
     def _get_direction_bar(self,prev_hb,next_hb):
@@ -172,6 +172,26 @@ class VSA:
             j = -1
         return overlap,j
     
+    def check_retest(self,i,direction,i_overlap):
+        retest = False
+        j = 0
+        if type(i) == int:
+            fb_check = self.full_bars[i]
+            if type(i_overlap) == int:
+                for j in range(j+1,len(self.full_bars)):
+                    fb_cur = self.full_bars[j]
+                    if direction == 'top':
+                        if fb_check.ym > fb_cur.yh:
+                            retest = True
+                            break
+                    if direction == 'bottom':
+                        if fb_cur.yl > fb_check.ym:
+                            retest = True
+                            break
+        else:
+            j = -1
+        return retest,j
+    
     def get_important_bars_y(self,y):
         short_bar1,short_bar2,long_bar1,long_bar2,rotate_short,rotate_long = None,None,None,None,None,None
         done = 0
@@ -198,16 +218,18 @@ class VSA:
                     long_bar2 = i   
                     done += 1            
             if not rotate_long:
-                if fb.bottom_rotate and fb.yl > y:
+                if fb.bottom_rotate and fb.yl > y and i != len(self.full_bars)-1:
                     rotate_long = i
                     done += 1
             if not rotate_short:
-                if fb.top_rotate and fb.yh < y:
+                if fb.top_rotate and fb.yh < y and i < len(self.full_bars)-2:
                     rotate_short = i
                     done += 1
             if done == 6:
                 break
         return short_bar1,short_bar2,long_bar1,long_bar2,rotate_short,rotate_long
+    
+
     
     def _get_local_extremum(self,direction,start):
         local_point = None

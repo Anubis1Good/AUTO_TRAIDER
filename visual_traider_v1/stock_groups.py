@@ -15,7 +15,7 @@ stock_groups = [
     'VTBR',
     'SELG',
     'SOFL',
-    'FEES',
+    'MRKP',
     'AFKS',
     'SIBN',
     'MTLR'
