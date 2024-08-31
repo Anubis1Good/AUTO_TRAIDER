@@ -2,7 +2,7 @@ import cv2
 
 import numpy as np
 from traider_bots.VisualTraider_v2 import VisualTraider_v2
-from utils.chart_utils.indicators import get_SMA, get_bollinger_bands,get_fractals, get_context,get_rsi,get_spred_channel,get_bb_points,get_borders
+from utils.chart_utils.indicators import get_SMA, get_bollinger_bands,get_fractals, get_context,get_rsi,get_spred_channel,get_bb_points,get_borders,get_williams_fractals,get_linear_reg_clear
 from utils.chart_utils.general_v2 import get_divide_chart
 from utils.config import ColorsBtnBGR
 from  utils.chart_utils.ProSveT import ProSveT
@@ -24,19 +24,36 @@ class WorkBot(VisualTraider_v2):
         volume_cords = self._get_cords_on_mask(volume_mask)
         half_bars = self._get_half_bars(candle_mask,candle_cords,volume_cords)
         cur_price = self._get_current_price(chart)
-        mpts = np.array(list(map(lambda x: x.mpt,half_bars)))
-        ma,ups,downs=get_bollinger_bands(mpts,2,5)
-        draw_bollinger(chart,ma,ups,downs,(255,155,155))
-        # ma,ups,downs=get_bollinger_bands(mpts)
-        # draw_bollinger(chart,ma,ups,downs,(255,155,55),2)
-        # spcl = SpredChannel(half_bars)
-        # vsa = VSA(half_bars,10)
-        # # vsa.draw_all(chart)
-        # short_bar1,short_bar2,long_bar1,long_bar2,rotate_short,rotate_long = vsa.get_important_bars_y(cur_price[1])
-        # cur_bar,_ = vsa.get_context_y(cur_price[1])
-        # # cv2.polylines(chart,[cur_bar.draw_line],False,(0,255,0),2)
-        # cv2.polylines(chart,[vsa.full_bars[short_bar2].draw_line],False,(240,255,0),2)
-        # cv2.polylines(chart,[vsa.full_bars[long_bar2].draw_line],False,(0,255,250),2)
+        hpts = np.array(list(map(lambda x: x.hpt,half_bars)))
+        lpts = np.array(list(map(lambda x: x.lpt,half_bars)))
+
+        vpts = np.array(list(map(lambda x: x.vpt,half_bars)))
+
+        x,y = self._get_xy(hpts)
+        x1_pred = get_linear_reg_clear(x,y)
+        print(x1_pred)
+        cv2.circle(chart,x1_pred,1,(200,200,200))
+        x,y = self._get_xy(lpts)
+        x1_pred = get_linear_reg_clear(x,y)
+        print(x1_pred)
+        cv2.circle(chart,x1_pred,1,(100,250,200))
+        x,y = self._get_xy(hpts[-14:])
+        x1_pred = get_linear_reg_clear(x,y)
+        print(x1_pred)
+        cv2.circle(chart,x1_pred,1,(200,200,200),2)
+        x,y = self._get_xy(lpts[-14:])
+        x1_pred = get_linear_reg_clear(x,y)
+        print(x1_pred)
+        cv2.circle(chart,x1_pred,1,(100,250,200),2)
+
+        # x,y = self._get_xy(hpts[-50:])
+        # x1_pred = get_linear_reg_clear(x,y)
+        # print(x1_pred)
+        # cv2.circle(chart,x1_pred,1,(100,100,100),2)
+        # x,y = self._get_xy(lpts[-50:])
+        # x1_pred = get_linear_reg_clear(x,y)
+        # print(x1_pred)
+        # cv2.circle(chart,x1_pred,1,(50,150,100),2)
 
 
 

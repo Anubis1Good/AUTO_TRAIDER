@@ -56,6 +56,13 @@ def get_last_point_trend(x,y):
     trend,top_trend,bottom_trend = get_trend_lines(x,y)
     return trend[-1],top_trend[-1],bottom_trend[-1]
 
+def get_linear_reg_clear(x,y):
+    slope,intercept = get_linear_regress(x,y)
+    x1 = np.array([x[-1] + (x[-1] - x[-2])])
+    middle_line = list(map(lambda x:get_points_linear_reg(x,slope,intercept,0), x1))
+    trend = np.column_stack([x1, middle_line])
+    return trend[-1]
+
 def get_fractals(hpts,lpts,n=5):
     maxs = []
     mins = []
@@ -75,6 +82,20 @@ def get_fractals(hpts,lpts,n=5):
         maxs.append(np.array(ph))
         mins.append(np.array(pl))
 
+def get_williams_fractals(hpts:npt.NDArray,lpts:npt.NDArray,n=2):
+    maxs = []
+    mins = []
+    hpts = list(hpts.tolist())
+    lpts = list(lpts.tolist())
+    for i in range(n,len(hpts)-2):
+        slice_h = hpts[i-n:i]
+        slice_h += hpts[i+1:i+n+1]
+        slice_l = lpts[i-n:i]
+        slice_l += lpts[i+1:i+n]
+        if all([j[1] > hpts[i][1] for j in slice_h]):
+            maxs.append(np.array(hpts[i]))
+        if all([j[1] < lpts[i][1] for j in slice_l]):
+            mins.append(np.array(lpts[i]))
     return np.array(maxs),np.array(mins)
 
 def get_context(half_bars):
