@@ -1,7 +1,7 @@
 import os
 import cv2
 from stock_groups import stock_groups
-from traider_bots.ST11 import ST11 as Trader
+from traider_bots.ST12 import ST12 as Trader
 # from traider_bots.archive.ST5 import ST5 as Trader2
 # from traider_bots.OGT2 import OGT2 as Trader3
 # from traider_bots.ST8 import ST8 as Trader4

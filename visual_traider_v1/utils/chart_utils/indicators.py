@@ -82,7 +82,7 @@ def get_fractals(hpts,lpts,n=5):
         maxs.append(np.array(ph))
         mins.append(np.array(pl))
 
-def get_williams_fractals(hpts:npt.NDArray,lpts:npt.NDArray,n=2):
+def get_williams_fractals(hpts:npt.NDArray,lpts:npt.NDArray,n=2,is_qual=False):
     maxs = []
     mins = []
     hpts = list(hpts.tolist())
@@ -92,10 +92,16 @@ def get_williams_fractals(hpts:npt.NDArray,lpts:npt.NDArray,n=2):
         slice_h += hpts[i+1:i+n+1]
         slice_l = lpts[i-n:i]
         slice_l += lpts[i+1:i+n]
-        if all([j[1] > hpts[i][1] for j in slice_h]):
-            maxs.append(np.array(hpts[i]))
-        if all([j[1] < lpts[i][1] for j in slice_l]):
-            mins.append(np.array(lpts[i]))
+        if is_qual:
+            if all([j[1] >= hpts[i][1] for j in slice_h]):
+                maxs.append(np.array(hpts[i]))
+            if all([j[1] <= lpts[i][1] for j in slice_l]):
+                mins.append(np.array(lpts[i]))
+        else:
+            if all([j[1] > hpts[i][1] for j in slice_h]):
+                maxs.append(np.array(hpts[i]))
+            if all([j[1] < lpts[i][1] for j in slice_l]):
+                mins.append(np.array(lpts[i]))
     return np.array(maxs),np.array(mins)
 
 def get_context(half_bars):

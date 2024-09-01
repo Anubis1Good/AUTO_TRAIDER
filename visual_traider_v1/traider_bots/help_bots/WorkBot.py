@@ -29,31 +29,9 @@ class WorkBot(VisualTraider_v2):
 
         vpts = np.array(list(map(lambda x: x.vpt,half_bars)))
 
-        x,y = self._get_xy(hpts)
-        x1_pred = get_linear_reg_clear(x,y)
-        print(x1_pred)
-        cv2.circle(chart,x1_pred,1,(200,200,200))
-        x,y = self._get_xy(lpts)
-        x1_pred = get_linear_reg_clear(x,y)
-        print(x1_pred)
-        cv2.circle(chart,x1_pred,1,(100,250,200))
-        x,y = self._get_xy(hpts[-14:])
-        x1_pred = get_linear_reg_clear(x,y)
-        print(x1_pred)
-        cv2.circle(chart,x1_pred,1,(200,200,200),2)
-        x,y = self._get_xy(lpts[-14:])
-        x1_pred = get_linear_reg_clear(x,y)
-        print(x1_pred)
-        cv2.circle(chart,x1_pred,1,(100,250,200),2)
-
-        # x,y = self._get_xy(hpts[-50:])
-        # x1_pred = get_linear_reg_clear(x,y)
-        # print(x1_pred)
-        # cv2.circle(chart,x1_pred,1,(100,100,100),2)
-        # x,y = self._get_xy(lpts[-50:])
-        # x1_pred = get_linear_reg_clear(x,y)
-        # print(x1_pred)
-        # cv2.circle(chart,x1_pred,1,(50,150,100),2)
+        ups,downs = get_williams_fractals(hpts,lpts,6,True)
+        cv2.polylines(chart,[ups],False,(255,0,200),2)
+        cv2.polylines(chart,[downs],False,(55,200,250),2)
 
 
 
