@@ -87,7 +87,7 @@ def get_williams_fractals(hpts:npt.NDArray,lpts:npt.NDArray,n=2,is_qual=False):
     mins = []
     hpts = list(hpts.tolist())
     lpts = list(lpts.tolist())
-    for i in range(n,len(hpts)-2):
+    for i in range(n,len(hpts)-n):
         slice_h = hpts[i-n:i]
         slice_h += hpts[i+1:i+n+1]
         slice_l = lpts[i-n:i]

@@ -29,10 +29,10 @@ class WorkBot(VisualTraider_v2):
 
         vpts = np.array(list(map(lambda x: x.vpt,half_bars)))
 
-        ups,downs = get_williams_fractals(hpts,lpts,6,True)
+        ups,downs = get_williams_fractals(hpts,lpts,8,True)
         cv2.polylines(chart,[ups],False,(255,0,200),2)
         cv2.polylines(chart,[downs],False,(55,200,250),2)
-
+        print(chart.shape)
 
 
 

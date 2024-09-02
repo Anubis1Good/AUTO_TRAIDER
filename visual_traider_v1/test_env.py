@@ -1,7 +1,7 @@
 import os
 import cv2
 from stock_groups import stock_groups
-from traider_bots.ST12 import ST12 as Trader
+from traider_bots.ST13 import ST13 as Trader
 # from traider_bots.archive.ST5 import ST5 as Trader2
 # from traider_bots.OGT2 import OGT2 as Trader3
 # from traider_bots.ST8 import ST8 as Trader4
@@ -21,9 +21,9 @@ imgs = os.listdir(full_path)
 clear_test_images()
 clear_logs()
 reset_test_json()
-# stock_groups = ['MXI','CNY','LKOH','SBER','AFKS','SOFL','SELG']
+stock_groups = ['LKOH','SBER','AFKS','SOFL','SELG']
 # stock_groups = ['MXI']
-stock_groups = ['CNY']
+# stock_groups = ['CNY']
 for ticker in stock_groups:
     traider = Trader(*param_bots,name=ticker)
     # traider2 = Trader2(*param_bots,name=ticker)
