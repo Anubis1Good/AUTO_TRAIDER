@@ -41,7 +41,7 @@ while True:
         pag.screenshot('Screen.png')
         img = cv2.imread('Screen.png')
 
-        # work_traiders[i].run(img)
+        work_traiders[i].run(img)
         test_traiders[i].run(img)
         if keyboard.is_pressed('Esc'):
             print("\nyou pressed Esc, so exiting...")
