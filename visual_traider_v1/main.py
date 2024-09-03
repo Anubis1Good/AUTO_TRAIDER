@@ -8,8 +8,7 @@ from settings import configuration_traiders_v2
 from stock_groups import stock_groups
 from utils.test_utils.windows import draw_borders
 from traider_bots.help_bots.ResearchBot import ResearchBot
-from traider_bots.PST1 import PST1 as Traider1
-from traider_bots.ST8 import ST8 as Traider2
+from traider_bots.ST13 import ST13 as Traider1
 
 
 
@@ -42,7 +41,7 @@ while True:
         pag.screenshot('Screen.png')
         img = cv2.imread('Screen.png')
 
-        work_traiders[i].run(img)
+        # work_traiders[i].run(img)
         test_traiders[i].run(img)
         if keyboard.is_pressed('Esc'):
             print("\nyou pressed Esc, so exiting...")
