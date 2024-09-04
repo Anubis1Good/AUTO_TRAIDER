@@ -2,7 +2,7 @@ import cv2
 
 import numpy as np
 from traider_bots.VisualTraider_v2 import VisualTraider_v2
-from utils.chart_utils.indicators import get_SMA, get_bollinger_bands,get_fractals, get_context,get_rsi,get_spred_channel,get_bb_points,get_borders,get_williams_fractals,get_linear_reg_clear
+from utils.chart_utils.indicators import get_SMA, get_bollinger_bands,get_fractals, get_context,get_rsi,get_spred_channel,get_bb_points,get_borders,get_williams_fractals,get_linear_reg_clear,get_donchan_channel
 from utils.chart_utils.general_v2 import get_divide_chart
 from utils.config import ColorsBtnBGR
 from  utils.chart_utils.ProSveT import ProSveT
@@ -28,11 +28,14 @@ class WorkBot(VisualTraider_v2):
         lpts = np.array(list(map(lambda x: x.lpt,half_bars)))
 
         vpts = np.array(list(map(lambda x: x.vpt,half_bars)))
-
-        ups,downs = get_williams_fractals(hpts,lpts,8,True)
-        cv2.polylines(chart,[ups],False,(255,0,200),2)
-        cv2.polylines(chart,[downs],False,(55,200,250),2)
-        print(chart.shape)
+        # ups,downs = get_donchan_channel(half_bars)
+        top_line,bottom_line = get_borders(region,5)
+        # ups,downs = get_williams_fractals(hpts,lpts,8,True)
+        # cv2.polylines(chart,[ups],False,(255,0,200),2)
+        # cv2.polylines(chart,[downs],False,(55,200,250),2)
+        cv2.polylines(chart,[top_line],False,(255,0,200),2)
+        cv2.polylines(chart,[bottom_line],False,(55,200,250),2)
+        # print(chart.shape)
 
 
 
