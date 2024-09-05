@@ -8,8 +8,8 @@ from settings import configuration_traiders_v2
 from stock_groups import stock_groups
 from utils.test_utils.windows import draw_borders
 from traider_bots.help_bots.ResearchBot import ResearchBot
-from traider_bots.ST13 import ST13 as Traider1
-
+from traider_bots.Collector1 import Collector1 as Traider1
+from wrappers.GroupBotWrapper import GroupBotWrapper
 
 
 param_bots = configuration_traiders_v2('config.txt')
@@ -18,12 +18,24 @@ work_traiders = []
 for i in range(len(stock_groups)):
     traider = ResearchBot(*param_bots,name=stock_groups[i])
     test_traiders.append(traider)
+    gbw = GroupBotWrapper(
+    Traider1,
+    ['Stock1','Stock2','Stock3','Stock4'],
+    51,
+    1363,
+    529,
+    159,
+    474,
+    499,
+    701,
+    60,
+    1)
     # if i %2 == 0:
-    traider = Traider1(*param_bots,name=stock_groups[i])
+    # traider = Traider1(*param_bots,name=stock_groups[i])
     # else:
     #     traider = Traider2(*param_bots,name=stock_groups[i])
-    traider.mode = 2
-    work_traiders.append(traider)
+    # gbw.mode = 1
+    work_traiders.append(gbw)
 
 
 # print(traider)

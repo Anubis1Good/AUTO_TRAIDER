@@ -26,6 +26,20 @@ gbw = GroupBotWrapper(
     0)
 img = cv2.imread('./Screen.png')
 gbw.draw_borders(img)
+img = cv2.imread('Screenshot_6.png')
+gbw = GroupBotWrapper(
+    VisualTraider_v2,
+    ['Stock1','Stock2','Stock3','Stock4'],
+    51,
+    1363,
+    529,
+    159,
+    474,
+    499,
+    701,
+    60,
+    0)
+gbw.draw_borders(img)
 # print(10+int(None))
 # a = np.array([[1,2],[3,4]])
 # b = a[:,1:]
