@@ -26,14 +26,14 @@ gbw = GroupBotWrapper(
     0)
 img = cv2.imread('./Screen.png')
 gbw.draw_borders(img)
-img = cv2.imread('Screenshot_6.png')
+img = cv2.imread('Screenshot_7.png')
 gbw = GroupBotWrapper(
     VisualTraider_v2,
     ['Stock1','Stock2','Stock3','Stock4'],
     51,
-    1363,
+    1364,
     529,
-    159,
+    222,
     474,
     499,
     701,
