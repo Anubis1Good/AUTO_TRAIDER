@@ -52,19 +52,19 @@ class Collector1(VisualTraider_v2):
             return 'close_long'
 
     
-    def _test(self, img):
+    def _test(self, img,price):
         m_keys = self._get_keys(img,self.minute_chart_region)
         action = self._get_action(m_keys)
         if action == 'long':
-            self._test_send_close(img,'short')
-            self._test_send_open(img,'long') 
+            self._test_send_close(img,'short',price=price)
+            self._test_send_open(img,'long',price=price) 
         if action == 'close_long':
-            self._test_send_close(img,'long')
+            self._test_send_close(img,'long',price=price)
         if action == 'short':
-            self._test_send_close(img,'long')
-            self._test_send_open(img,'short')
+            self._test_send_close(img,'long',price=price)
+            self._test_send_open(img,'short',price=price)
         if action == 'close_short':
-            self._test_send_close(img,'short')
+            self._test_send_close(img,'short',price=price)
 
 
     def _traide(self, img):

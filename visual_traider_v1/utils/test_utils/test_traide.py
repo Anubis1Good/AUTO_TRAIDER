@@ -25,7 +25,7 @@ def save_img(image,name,now,draw):
     cv2.imwrite(img_name,image)
     return img_name
 
-def test_open(image,name,pos,traider,draw):
+def test_open(image,name,pos,traider,draw,price):
     saves = get_save_test()
     saves_length = len(saves)
     for i in range(saves_length-1,-1,-1):
@@ -40,12 +40,14 @@ def test_open(image,name,pos,traider,draw):
         "open_image":image_name,
         "close_img":"",
         "pos":pos,
-        "traider":traider
+        "traider":traider,
+        "open_price":price,
+        "close_price":price
     })
     send_save_test(saves)
     return 1
 
-def test_close(image,name,pos,traider,draw):
+def test_close(image,name,pos,traider,draw,price):
     saves = get_save_test()
     saves_length = len(saves)
     now = str(time())
@@ -54,6 +56,7 @@ def test_close(image,name,pos,traider,draw):
             img_name = save_img(image,name,now,draw)
             saves[i]['close'] = now
             saves[i]['close_img'] = img_name
+            saves[i]['close_price'] = price
             send_save_test(saves)
             return 1
     else:

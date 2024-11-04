@@ -7,7 +7,7 @@ from utils.chart_utils.indicators import get_bollinger_bands, get_zona, get_SMA,
 class ST3(VisualTraider_v2):
     def __init__(self, cluster: tuple, dealfeed: tuple, glass: tuple, day: tuple, hour: tuple, minute: tuple, position: tuple, name: str, mode: int = 0) -> None:
         super().__init__(cluster, dealfeed, glass, day, hour, minute, position, name, mode)
-        self.traider_name = 'ST1'
+        self.traider_name = 'ST3'
         self.i = 0
         self.close_long = False
         self.close_short = False
@@ -132,21 +132,21 @@ class ST3(VisualTraider_v2):
         return 0 
         
 
-    def _test(self, img):
+    def _test(self, img,price):
         m_keys = self._get_keys(img,self.minute_chart_region)
         wave = self._get_wave(m_keys)
         self.i+=1
-        cv2.imwrite('./test_images/'+self.name+str(self.i)+'.png',img)
-        # if wave == 'long':
-        #     self._test_send_close(img,'short')
-        #     self._test_send_open(img,'long') 
-        # if wave == 'close_long':
-        #     self._test_send_close(img,'long')
-        # if wave == 'short':
-        #     self._test_send_close(img,'long')
-        #     self._test_send_open(img,'short')
-        # if wave == 'close_short':
-        #     self._test_send_close(img,'short')
+        # cv2.imwrite('./test_images/'+self.name+str(self.i)+'.png',img)
+        if wave == 'long':
+            self._test_send_close(img,'short',price=price)
+            self._test_send_open(img,'long',price=price) 
+        if wave == 'close_long':
+            self._test_send_close(img,'long',price=price)
+        if wave == 'short':
+            self._test_send_close(img,'long',price=price)
+            self._test_send_open(img,'short',price=price)
+        if wave == 'close_short':
+            self._test_send_close(img,'short',price=price)
 
     def _traide(self, img):
         pos = self._check_position(img)

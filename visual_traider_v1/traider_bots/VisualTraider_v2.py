@@ -37,22 +37,22 @@ class VisualTraider_v2():
         return f'{self.traider_name} - {self.name}'
     
     # work function
-    def _test(self,img):
+    def _test(self,img,path_img):
         print(self,'the _test method is not implemented')
 
     def _traide(self,img):
         print(self,'the _traide method is not implemented')
     
-    def run(self,img):
+    def run(self,img,price=0.0):
         copy_img = img.copy()
         try:
             if self.mode == 0:
-                self._test(copy_img)
+                self._test(copy_img,price)
             elif self.mode == 1:
                 self._traide(copy_img)
             elif self.mode == 2:
                 self._traide(copy_img)
-                self._test(copy_img)
+                self._test(copy_img,price)
         except Exception as err:
             traceback.print_exc()
         return copy_img
@@ -149,11 +149,11 @@ class VisualTraider_v2():
         pdi.press('f')
     # test trade_function
 
-    def _test_send_open(self,img,direction,draw=lambda img:img):
-        return test_open(img,self.name,direction,self.traider_name,draw)
+    def _test_send_open(self,img,direction,draw=lambda img:img,price=0.0):
+        return test_open(img,self.name,direction,self.traider_name,draw,price)
 
-    def _test_send_close(self,img,direction,draw=lambda img:img):
-        return test_close(img,self.name,direction,self.traider_name,draw)
+    def _test_send_close(self,img,direction,draw=lambda img:img,price=0.0):
+        return test_close(img,self.name,direction,self.traider_name,draw,price)
 
     def _draw(self,img,keys,region):
         pass

@@ -6,7 +6,9 @@
       "open_image": "./test_images/none.png",
       "close_img": "./test_images/none.png",
       "pos": "long",
-      "traider": "VisualTraider"
+      "traider": "VisualTraider",
+      "open_price":0.0,
+      "close_price":0.0
     }
   ]
   

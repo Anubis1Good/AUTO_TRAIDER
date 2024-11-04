@@ -103,21 +103,21 @@ class ST1(VisualTraider_v2):
         return 0 
         
 
-    def _test(self, img):
+    def _test(self, img,price):
         h_keys = self._get_keys(img,self.hour_chart_region)
         m_keys = self._get_keys(img,self.minute_chart_region)
         draw_func = lambda img:self._all_draw(img,m_keys,h_keys)
         wave = self._get_wave(m_keys)
         if wave == 'long':
-            self._test_send_close(img,'short',draw_func)
-            self._test_send_open(img,'long',draw_func) 
+            self._test_send_close(img,'short',draw_func,price)
+            self._test_send_open(img,'long',draw_func,price) 
         if wave == 'close_long':
-            self._test_send_close(img,'long',draw_func)
+            self._test_send_close(img,'long',draw_func,price)
         if wave == 'short':
-            self._test_send_close(img,'long',draw_func)
-            self._test_send_open(img,'short',draw_func)
+            self._test_send_close(img,'long',draw_func,price)
+            self._test_send_open(img,'short',draw_func,price)
         if wave == 'close_short':
-            self._test_send_close(img,'short',draw_func)
+            self._test_send_close(img,'short',draw_func,price)
 
     def _traide(self, img):
         pos = self._check_position(img)

@@ -18,5 +18,11 @@ stock_groups = [
     'MRKP',
     'AFKS',
     'SIBN',
-    'MTLR'
+    'MTLR',
+    'ABIO',
+    'BSPB',
+    'FEES',
+    'HYDR',
+    'MXI',
+    'RUAL'
 ]

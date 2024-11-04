@@ -134,19 +134,19 @@ class PT2(VisualTraider_v2):
             if keys.buy_zona and keys.cur_price > keys.bbd_lr:
                 return 'long'
     
-    def _test(self, img):
+    def _test(self, img,price):
         m_keys = self._get_keys(img,self.minute_chart_region)
         action = self._get_action(m_keys)
         if action == 'long':
-            self._test_send_close(img,'short')
-            self._test_send_open(img,'long') 
+            self._test_send_close(img,'short',price=price)
+            self._test_send_open(img,'long',price=price) 
         if action == 'close_long':
-            self._test_send_close(img,'long')
+            self._test_send_close(img,'long',price=price)
         if action == 'short':
-            self._test_send_close(img,'long')
-            self._test_send_open(img,'short')
+            self._test_send_close(img,'long',price=price)
+            self._test_send_open(img,'short',price=price)
         if action == 'close_short':
-            self._test_send_close(img,'short')
+            self._test_send_close(img,'short',price=price)
         self.bbd_attached = m_keys.bbd_attached
         self.bbu_attached = m_keys.bbu_attached
     

@@ -11,35 +11,36 @@ import keyboard
 from wrappers.GroupBotWrapper import GroupBotWrapper
 from traider_bots.VisualTraider_v2 import VisualTraider_v2
 # sleep(5)
-pag.screenshot('Screen.png')
-gbw = GroupBotWrapper(
-    VisualTraider_v2,
-    ['SBER','GAZP','VTBR','LKOH'],
-    51,
-    1918,
-    766,
-    151,
-    709,
-    737,
-    1035,
-    143,
-    0)
-img = cv2.imread('./Screen.png')
-gbw.draw_borders(img)
-img = cv2.imread('Screenshot_7.png')
-gbw = GroupBotWrapper(
-    VisualTraider_v2,
-    ['Stock1','Stock2','Stock3','Stock4'],
-    51,
-    1364,
-    529,
-    222,
-    474,
-    499,
-    701,
-    60,
-    0)
-gbw.draw_borders(img)
+print(sys.argv)
+# pag.screenshot('Screen.png')
+# gbw = GroupBotWrapper(
+#     VisualTraider_v2,
+#     ['SBER','GAZP','VTBR','LKOH'],
+#     51,
+#     1918,
+#     766,
+#     151,
+#     709,
+#     737,
+#     1035,
+#     143,
+#     0)
+# img = cv2.imread('./Screen.png')
+# gbw.draw_borders(img)
+# img = cv2.imread('Screenshot_7.png')
+# gbw = GroupBotWrapper(
+#     VisualTraider_v2,
+#     ['Stock1','Stock2','Stock3','Stock4'],
+#     51,
+#     1364,
+#     529,
+#     222,
+#     474,
+#     499,
+#     701,
+#     60,
+#     0)
+# gbw.draw_borders(img)
 # print(10+int(None))
 # a = np.array([[1,2],[3,4]])
 # b = a[:,1:]

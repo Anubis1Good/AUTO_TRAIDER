@@ -113,20 +113,20 @@ class ST10(VisualTraider_v2):
                 return 'short'
 
     
-    def _test(self, img):
+    def _test(self, img,price):
         m_keys = self._get_keys(img,self.minute_chart_region)
         action = self._get_action(m_keys)
         res1,res2 = 0,0
         if action == 'long':
-            res1 = self._test_send_close(img,'short')
-            res2 = self._test_send_open(img,'long') 
+            res1 = self._test_send_close(img,'short',price=price)
+            res2 = self._test_send_open(img,'long',price=price) 
         if action == 'close_long':
-            res1 = self._test_send_close(img,'long')
+            res1 = self._test_send_close(img,'long',price=price)
         if action == 'short':
-            res1 = self._test_send_close(img,'long')
-            res2 = self._test_send_open(img,'short')
+            res1 = self._test_send_close(img,'long',price=price)
+            res2 = self._test_send_open(img,'short',price=price)
         if action == 'close_short':
-            res1 = self._test_send_close(img,'short')
+            res1 = self._test_send_close(img,'short',price=price)
         if res1 == 1 and res2 == 0:
             self.have_pos = False
             self.free_stop_s = True
