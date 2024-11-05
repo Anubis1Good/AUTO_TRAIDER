@@ -1,21 +1,24 @@
-import cv2
+import sys
 import numpy as np
-
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtGui import QPainter, QBrush, QColor, QPen, QPolygon
 from PyQt5.QtCore import Qt, QTimer, QRect, QPoint
 
-from traider_bots.VisualTraider_v2 import VisualTraider_v2
+from traider_bots.Collector1 import Collector1 as Traider1
+from wrappers.GroupBotWrapper import GroupBotWrapper
 
-def draw_borders(img,traider:VisualTraider_v2):
-    attrs = vars(traider)
-    for item in attrs.items():
-        i = item[1]
-        if type(i) == tuple:
-            if len(i) == 4:
-                points = np.array([[i[0],i[1]],[i[2],i[1]],[i[2],i[3]],[i[0],i[3]]], np.int32)
-                cv2.polylines(img,[points],True,(255,0,0),1)
-    cv2.imwrite('screens\windows.png',img)
+gbw = GroupBotWrapper(
+    Traider1,
+    ['Stock1','Stock2','Stock3','Stock4'],
+    51,
+    1364,
+    529,
+    222,
+    474,
+    499,
+    701,
+    60,
+    1)
 
 
 class DrawingWindow(QMainWindow):
@@ -58,8 +61,14 @@ class DrawingWindow(QMainWindow):
                         qplg.append(QPoint(p[0],p[1]))
                     self.painter.drawPolyline(qplg)
 
-def draw_borders_online(list_traders:list):
-    app = QApplication([])
-    window = DrawingWindow(list_traders)  # Create an instance of the DrawingWindow class with the given coordinates
+
+if __name__ == "__main__":
+    # coordinates = [(524, 474, 818-524, 689-474), (524, 367, 818-524, 473-367)]
+
+    app = QApplication(sys.argv)
+
+    window = DrawingWindow(gbw.traders)  # Create an instance of the DrawingWindow class with the given coordinates
     window.show()  # Display the window
-    app.exec_()
+
+    sys.exit(app.exec_())  # Start the application event loop and exit when it's finished
+

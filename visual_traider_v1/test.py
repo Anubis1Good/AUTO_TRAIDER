@@ -11,8 +11,8 @@ import keyboard
 from wrappers.GroupBotWrapper import GroupBotWrapper
 from traider_bots.VisualTraider_v2 import VisualTraider_v2
 # sleep(5)
-print(sys.argv)
-# pag.screenshot('Screen.png')
+# print(sys.argv)
+# pag.screenshot('screens\Screen.png')
 # gbw = GroupBotWrapper(
 #     VisualTraider_v2,
 #     ['SBER','GAZP','VTBR','LKOH'],
@@ -25,9 +25,9 @@ print(sys.argv)
 #     1035,
 #     143,
 #     0)
-# img = cv2.imread('./Screen.png')
+# img = cv2.imread('screens\Screen.png')
 # gbw.draw_borders(img)
-# img = cv2.imread('Screenshot_7.png')
+# img = cv2.imread('screens\Screenshot_7.png')
 # gbw = GroupBotWrapper(
 #     VisualTraider_v2,
 #     ['Stock1','Stock2','Stock3','Stock4'],
@@ -64,9 +64,9 @@ print(sys.argv)
 #     if keyboard.is_pressed('Esc'):
 #         print("\nyou pressed Esc, so exiting...")
 #         sys.exit(0) 
-#     pag.screenshot('Screen.png')
+#     pag.screenshot('screens\Screen.png')
 
-#     img = cv2.imread('Screen.png')
+#     img = cv2.imread('screens\Screen.png')
 
 #     # x,y = color_search(img,ColorsBtnBGR.best_bid,(1600,49,1918,1050))
 #     region = (1600,49,1918,1050)
@@ -96,3 +96,4 @@ print(sys.argv)
 # cv2.imshow('test',img)
 
 # cv2.waitKey(0)
+

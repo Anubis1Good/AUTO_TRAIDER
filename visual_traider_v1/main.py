@@ -6,13 +6,13 @@ import traceback
 from time import sleep
 from settings import configuration_traiders_v2
 from stock_groups import stock_groups
-from utils.test_utils.windows import draw_borders
+from utils.test_utils.windows import draw_borders,draw_borders_online
 from traider_bots.help_bots.ResearchBot import ResearchBot
 from traider_bots.Collector1 import Collector1 as Traider1
 from wrappers.GroupBotWrapper import GroupBotWrapper
 
 
-param_bots = configuration_traiders_v2('config.txt')
+param_bots = configuration_traiders_v2('config_files\config.txt')
 test_traiders = []
 work_traiders = []
 for i in range(len(stock_groups)):
@@ -39,31 +39,32 @@ for i in range(len(stock_groups)):
 
 
 # print(traider)
-# pag.screenshot('Screen.png')
+# pag.screenshot('screens\Screen.png')
 # img = cv2.imread('Screen.png')
-# draw_borders(img,traider)
+draw_borders_online(gbw.traders)
+# gbw.draw_borders(img)
 
 # sleep(3)
-i = 0
-while True:
-    for i in range(len(test_traiders)):
-        # print(i)
-        sleep(2)
-        keyboard.send('shift')
-        pag.screenshot('Screen.png')
-        img = cv2.imread('Screen.png')
+# i = 0
+# while True:
+#     for i in range(len(test_traiders)):
+#         # print(i)
+#         sleep(2)
+#         keyboard.send('shift')
+#         pag.screenshot('screens\Screen.png')
+#         img = cv2.imread('screens\Screen.png')
 
-        work_traiders[i].run(img)
-        test_traiders[i].run(img)
-        if keyboard.is_pressed('Esc'):
-            print("\nyou pressed Esc, so exiting...")
-            sys.exit(0)
-        # sys.exit(0)
-        try:
-            pag.moveTo(traider.glass_region[0]+10,traider.glass_region[1]+10)
-        except Exception as err:
-            traceback.print_exc()
-        # sleep(1)
-        # i += 1
-        keyboard.send('tab') 
-    # pag.press('space')
+#         work_traiders[i].run(img)
+#         test_traiders[i].run(img)
+#         if keyboard.is_pressed('Esc'):
+#             print("\nyou pressed Esc, so exiting...")
+#             sys.exit(0)
+#         # sys.exit(0)
+#         try:
+#             pag.moveTo(traider.glass_region[0]+10,traider.glass_region[1]+10)
+#         except Exception as err:
+#             traceback.print_exc()
+#         # sleep(1)
+#         # i += 1
+#         keyboard.send('tab') 
+#     # pag.press('space')

@@ -62,7 +62,7 @@ class WorkBot(VisualTraider_v2):
         contours, hierarchy = cv2.findContours(ask_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE,offset=(self.dealfeed_region[0],self.dealfeed_region[1])) 
         cv2.drawContours(img, contours,-1,(120,155,200),3) 
 
-    def _test(self, img):
+    def _test(self, img,price):
         # self._get_dealfeed(img)
 
         # self.draw_all(img,self.day_chart_region)

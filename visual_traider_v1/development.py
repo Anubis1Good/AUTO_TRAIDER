@@ -11,7 +11,7 @@ from traider_bots.help_bots.ResearchBot import ResearchBot
 
 
 # traiders = configurtion_traiders(TestTraider,'config_dev.txt')
-param_bots = configuration_traiders_v2('config_dev.txt')
+param_bots = configuration_traiders_v2('config_files\config.txt')
 traider = ResearchBot(*param_bots,name=stock_groups[0])
 # print(traider)
 # pag.screenshot('Screen.png')
@@ -25,8 +25,8 @@ while True:
         print(i)
         sleep(2)
         keyboard.send('shift')
-        pag.screenshot('Screen.png')
-        img = cv2.imread('Screen.png')
+        pag.screenshot('screens\Screen.png')
+        img = cv2.imread('screens\Screen.png')
         
         traider.name = stock
             # traiders[i].run(img)

@@ -13,7 +13,7 @@ from traider_bots.help_bots.ResearchBot import ResearchBot
 from settings import configuration_traiders_v2, reset_test_json,clear_test_images,clear_logs
 
 
-param_bots = configuration_traiders_v2('config.txt')
+param_bots = configuration_traiders_v2('config_files\config.txt')
 if len(sys.argv) < 2:
     date_stock = '30.07.24d'
 else:

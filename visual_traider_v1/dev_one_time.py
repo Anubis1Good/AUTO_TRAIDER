@@ -5,16 +5,16 @@ import cv2
 from settings import configuration_traiders_v2
 from traider_bots.help_bots.WorkBot import WorkBot as Trader
 # from traider_bots.PT2 import PT2 as Trader
-param_bots = configuration_traiders_v2('config.txt')
+param_bots = configuration_traiders_v2('config_files\config.txt')
 traider = Trader(*param_bots,name='MLTR')
 online = False
 if online:
-    param_bots = configuration_traiders_v2('config_dev.txt')
+    param_bots = configuration_traiders_v2('config_files\config.txt')
     traider = Trader(*param_bots,name='MLTR')
-    pag.screenshot('Screen.png')
-    img = cv2.imread('Screen.png')
+    pag.screenshot('screens\Screen.png')
+    img = cv2.imread('screens\Screen.png')
 else:
-    param_bots = configuration_traiders_v2('config.txt')
+    param_bots = configuration_traiders_v2('config_files\config.txt')
     traider = Trader(*param_bots,name='MLTR')
     list_folder = os.listdir('./test_data/')
     folder = choice(list_folder)
