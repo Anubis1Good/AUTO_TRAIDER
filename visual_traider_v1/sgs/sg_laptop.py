@@ -1,6 +1,14 @@
 stock_groups = [
-    'LKOH',
+    'MXI',
     'ROSN',
+    'LKOH',
     'CHMF',
-    'MXI'
+    'NVTK',
+    'MAGN',
+    'NLMK',
+    'TATN',
+    'APTK',
+    'MTLR',
+    'VTBR',
+    'PIKK'
 ]

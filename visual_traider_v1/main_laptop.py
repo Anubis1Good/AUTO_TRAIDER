@@ -25,30 +25,30 @@ for i in range(len(stock_groups)):
 # print(traider)
 # pag.screenshot('screens\Screen.png')
 # img = cv2.imread('Screen.png')
-draw_borders_online([work_traiders[0]])
+# draw_borders_online([work_traiders[0]])
 # gbw.draw_borders(img)
 
-# sleep(3)
-# i = 0
-# while True:
-#     for i in range(len(test_traiders)):
-#         # print(i)
-#         sleep(2)
-#         keyboard.send('shift')
-#         pag.screenshot('screens\Screen.png')
-#         img = cv2.imread('screens\Screen.png')
+sleep(3)
+i = 0
+while True:
+    for i in range(len(test_traiders)):
+        # print(i)
+        sleep(2)
+        keyboard.send('shift')
+        pag.screenshot('screens\Screen.png')
+        img = cv2.imread('screens\Screen.png')
 
-#         work_traiders[i].run(img)
-#         test_traiders[i].run(img)
-#         if keyboard.is_pressed('Esc'):
-#             print("\nyou pressed Esc, so exiting...")
-#             sys.exit(0)
-#         # sys.exit(0)
-#         try:
-#             pag.moveTo(traider.glass_region[0]+10,traider.glass_region[1]+10)
-#         except Exception as err:
-#             traceback.print_exc()
-#         # sleep(1)
-#         # i += 1
-#         keyboard.send('tab') 
+        work_traiders[i].run(img)
+        test_traiders[i].run(img)
+        if keyboard.is_pressed('Esc'):
+            print("\nyou pressed Esc, so exiting...")
+            sys.exit(0)
+        # sys.exit(0)
+        try:
+            pag.moveTo(work_traiders[i].glass_region[0]+10,work_traiders[i].glass_region[1]+10)
+        except Exception as err:
+            traceback.print_exc()
+        # sleep(1)
+        # i += 1
+        keyboard.send('tab') 
 #     # pag.press('space')
