@@ -29,7 +29,7 @@ class DrawingWindow(QMainWindow):
         self.painter = QPainter()
         self.painter.setRenderHint(QPainter.Antialiasing)
         self.pen_color = QColor(255, 0, 0)  # Set the initial pen color to red
-        self.pen_width = 4  # Set the initial pen width to 4
+        self.pen_width = 1  # Set the initial pen width to 4
         self.trader_list = trader_list  # Store the coordinates for drawing rectangles
         self.draw_timer = QTimer()
         self.draw_timer.start(10)  # Update the window every 10 milliseconds

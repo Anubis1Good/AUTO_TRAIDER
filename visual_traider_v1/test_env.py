@@ -15,7 +15,7 @@ from settings import configuration_traiders_v2, reset_test_json,clear_test_image
 
 param_bots = configuration_traiders_v2('config_files\config.txt')
 if len(sys.argv) < 2:
-    date_stock = '30.07.24d'
+    date_stock = '05.08.24'
 else:
     date_stock = sys.argv[1]
 

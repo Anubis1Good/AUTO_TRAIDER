@@ -5,11 +5,11 @@ import sys
 import traceback
 from time import sleep
 from settings import configuration_traiders_v2
-from stock_groups import stock_groups
+from sgs.sg_laptop import stock_groups
 from utils.test_utils.windows import draw_borders,draw_borders_online
 from traider_bots.help_bots.ResearchBot import ResearchBot
-from traider_bots.Collector1 import Collector1 as Traider1
-from wrappers.GroupBotWrapper import GroupBotWrapper
+from traider_bots.archive.PST1 import PST1 as Traider1
+
 
 
 param_bots = configuration_traiders_v2('config_files\config.txt')
@@ -18,30 +18,14 @@ work_traiders = []
 for i in range(len(stock_groups)):
     traider = ResearchBot(*param_bots,name=stock_groups[i])
     test_traiders.append(traider)
-    gbw = GroupBotWrapper(
-    Traider1,
-    ['Stock1','Stock2','Stock3','Stock4'],
-    51,
-    1277,
-    653,
-    105,
-    599,
-    624,
-    877,
-    108,
-    1)
-    # if i %2 == 0:
-    # traider = Traider1(*param_bots,name=stock_groups[i])
-    # else:
-    #     traider = Traider2(*param_bots,name=stock_groups[i])
-    # gbw.mode = 1
-    work_traiders.append(gbw)
+    traider = Traider1(*param_bots,name=stock_groups[i])
+    work_traiders.append(traider)
 
 
 # print(traider)
 # pag.screenshot('screens\Screen.png')
 # img = cv2.imread('Screen.png')
-draw_borders_online(gbw.traders)
+draw_borders_online([work_traiders[0]])
 # gbw.draw_borders(img)
 
 # sleep(3)
