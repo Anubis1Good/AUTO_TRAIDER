@@ -24,7 +24,8 @@ class VisualTraider_v3():
             chart3:tuple,
             position:tuple,
             name:str,
-            mode:int = 0) -> None:
+            mode:int = 0,
+            fast_close:bool = False) -> None:
         self.cluster_region = cluster
         self.dealfeed_region = dealfeed
         self.glass_region = glass
@@ -36,6 +37,7 @@ class VisualTraider_v3():
         self.traider_name = 'VisualTraider_v3'
         self.mode = mode
         self.TA = BaseTA(self)
+        self.fast_close = fast_close
         self.have_pos_l = None
         self.have_pos_s = None
         self.free_stop_l = None
@@ -186,27 +188,31 @@ class VisualTraider_v3():
         pdi.press(button)
 
     def _send_close(self,img,direction):
-        if direction == 'long':
-            x,y = self._color_search(img, ColorsBtnBGR.best_ask,self.glass_region,reverse=True)
-            if x < 0:
-                x,y = self._color_search(img, ColorsBtnBGR.ask,self.glass_region,reverse=True)
-            x -= 50
-            y -= 5
-            button = 'right'
-        elif direction == 'short':
-            x,y = self._color_search(img, ColorsBtnBGR.best_bid,self.glass_region,reverse=False)
-            if x < 0:
-                x,y = self._color_search(img, ColorsBtnBGR.bid,self.glass_region,reverse=False)
-            x += 10
-            y += 5
-            button = 'left'
+        if self.fast_close:
+            rev_direction = 'long' if direction == 'short' else 'short'
+            self._send_open(rev_direction)
         else:
-            return None
-        pag.moveTo(x,y)
-        pdi.press('f')
-        pdi.keyDown('altleft')
-        pag.click(x, y,button=button)
-        pdi.keyUp('altleft')
+            if direction == 'long':
+                x,y = self._color_search(img, ColorsBtnBGR.best_ask,self.glass_region,reverse=True)
+                if x < 0:
+                    x,y = self._color_search(img, ColorsBtnBGR.ask,self.glass_region,reverse=True)
+                x -= 50
+                y -= 5
+                button = 'right'
+            elif direction == 'short':
+                x,y = self._color_search(img, ColorsBtnBGR.best_bid,self.glass_region,reverse=False)
+                if x < 0:
+                    x,y = self._color_search(img, ColorsBtnBGR.bid,self.glass_region,reverse=False)
+                x += 10
+                y += 5
+                button = 'left'
+            else:
+                return None
+            pag.moveTo(x,y)
+            pdi.press('f')
+            pdi.keyDown('altleft')
+            pag.click(x, y,button=button)
+            pdi.keyUp('altleft')
     
     def _reverse_pos(self,img,direction):
         if direction == 'long':

@@ -8,7 +8,9 @@ from settings import configuration_traiders_v2
 from sgs.sg_laptop import stock_groups
 from utils.test_utils.windows import draw_borders,draw_borders_online
 from traider_bots.help_bots.ResearchBot import ResearchBot
-from traider_bots.archive.PST1 import PST1 as Traider1
+from traider_bots.PST1 import PST1 as Traider1
+from traider_bots.VisualTraider_v3 import VisualTraider_v3 as Trader
+from tas.PTA1_BDDC import PTA1_R_BDDC as TA
 
 
 
@@ -18,7 +20,11 @@ work_traiders = []
 for i in range(len(stock_groups)):
     traider = ResearchBot(*param_bots,name=stock_groups[i])
     test_traiders.append(traider)
-    traider = Traider1(*param_bots,name=stock_groups[i],mode=1)
+    if stock_groups[i] == 'MXI':
+        traider = Trader(*param_bots,name=stock_groups[i],mode=1,fast_close=True)
+        traider.TA = TA(traider)
+    else:
+        traider = Traider1(*param_bots,name=stock_groups[i],mode=1)
     work_traiders.append(traider)
 
 

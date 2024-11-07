@@ -4,7 +4,7 @@ import cv2
 from tqdm import tqdm
 from stock_groups import stock_groups
 # from traider_bots.Collector1 import Collector1 as Trader
-from traider_bots.archive.PT1 import PT1 as Trader
+from traider_bots.archive.ST5 import ST5a as Trader
 # from traider_bots.VisualTraider_v3 import VisualTraider_v3 as Trader
 # from tas.PTA1_BDDC import PTA1_R_BDDC as TA
 from traider_bots.help_bots.ResearchBot import ResearchBot
