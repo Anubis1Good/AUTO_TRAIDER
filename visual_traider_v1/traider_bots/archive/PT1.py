@@ -71,22 +71,22 @@ class PT1(VisualTraider_v2):
     def _check_price_in_trend(self,keys):
         return keys['top_trend'][-1][1] < keys['cur_price'][1] < keys['bottom_trend'][-1][1]
     
-    def _test(self, img):
+    def _test(self, img,price):
         h_keys = self._get_keys(img,self.hour_chart_region)
         m_keys = self._get_keys(img,self.minute_chart_region)
         draw_func = lambda img:self._all_draw(img,m_keys,h_keys)
         # open
         if self._check_price_in_trend(h_keys):
             if self._check_over_limit(m_keys) == 1 and h_keys['slope'] < 0.1:
-                self._test_send_open(img,'long',draw_func)
+                self._test_send_open(img,'long',draw_func,price)
         if self._check_price_in_trend(h_keys):
             if self._check_over_limit(m_keys) == -1 and h_keys['slope'] > -0.1:
-                self._test_send_open(img,'short',draw_func)         
+                self._test_send_open(img,'short',draw_func,price)         
         # close
         if m_keys['cur_price'][1] > m_keys['m_sma'][-1][1]:
-            self._test_send_close(img,'short',draw_func)
+            self._test_send_close(img,'short',draw_func,price)
         if m_keys['cur_price'][1] < m_keys['m_sma'][-1][1]:
-            self._test_send_close(img,'long',draw_func)
+            self._test_send_close(img,'long',draw_func,price)
     
     def _traide(self, img):
         pos = self._check_position(img)

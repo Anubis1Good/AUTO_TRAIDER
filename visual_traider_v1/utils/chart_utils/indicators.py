@@ -263,17 +263,20 @@ def get_borders(region,divider=4):
     bottom_line =np.array(((10,heigth-buff),(width-10,heigth-buff)))
     return top_line,bottom_line
 
-def get_donchan_channel(half_bars:list[HalfBar],period=20):
+def get_donchan_channel(half_bars:list[HalfBar],period=20,delay=0):
     ups,downs = [],[]
-    for i in range(period,len(half_bars)):
+    avarage = []
+    for i in range(period,len(half_bars)-delay):
         slice = half_bars[i-period:i]
-        max_hb = half_bars[i-period].hpt
-        min_hb = half_bars[i-period].lpt
+        max_hb = half_bars[i].hpt
+        min_hb = half_bars[i].lpt
         for j in slice:
             if j.yh < max_hb[1]:
-                max_hb = j.hpt
+                max_hb = max_hb[0],j.yh
             if j.yl > min_hb[1]:
-                min_hb = j.lpt
+                min_hb = max_hb[0],j.yl
         ups.append(max_hb)
         downs.append(min_hb)
-    return np.array(ups),np.array(downs)
+        avarage_y = (min_hb[1] + max_hb[1])//2
+        avarage.append((max_hb[0],avarage_y))
+    return np.array(ups),np.array(downs),np.array(avarage)

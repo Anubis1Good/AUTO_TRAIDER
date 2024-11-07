@@ -1,11 +1,27 @@
+import cv2
+import numpy as np
+from dataclasses import dataclass
 from tas.BaseTA import BaseTA,Keys
 from utils.chart_utils.indicators import get_bollinger_bands, get_SMA
 
-class Keys1(Keys):
-    sma_20:int
+@dataclass
+class KeysWork(Keys):
+    sma_sm:int
+    bbd_sm:int
+    bbu_sm:int
+    bbu_attached:bool
+    bbd_attached:bool
+    over_bbd:bool
+    over_bbu:bool
+    stop_long:int
+    stop_short:int
+    direction:int
+    take_long:int
+    take_short:int
 
 class STA1(BaseTA):
-    def get_keys(self,img, region) -> Keys:
+    def get_keys(self,img) -> KeysWork:
+        region = self.trader.chart_region
         chart = self.trader._get_chart(img,region)
         candle_mask = self.trader._get_candle_mask(chart)
         volume_mask = self.trader._get_volume_mask(chart)
@@ -17,7 +33,7 @@ class STA1(BaseTA):
         sma_sm,bbu_sm,bbd_sm = get_bollinger_bands(np.array(mpts))
 
         sma_low = get_SMA(mpts,50)
-        sma_fast = get_SMA(mpts,30)
+        sma_fast = get_SMA(mpts,10)
 
         direction = 1 if sma_low[-1][1] > sma_fast[-1][1] else -1
         bbu_attached = half_bars[-2].y_in_bar(bbu_sm[-1][1]) or half_bars[-1].y_in_bar(bbu_sm[-1][1])
@@ -35,13 +51,14 @@ class STA1(BaseTA):
         take_long = (half_bars[-1].x,half_bars[-1].yh-volatility[-1][1]*3)
         take_short = (half_bars[-1].x,half_bars[-1].yl+volatility[-1][1]*3)
 
-        if not self.trader.free_stop:
+        if not self.trader.free_stop_l:
             stop_long = stop_long if stop_long[1] < self.trader.stop_long else (half_bars[-1].x,self.trader.stop_long)
-            stop_short = stop_short if stop_short[1] > self.trader.stop_short else (half_bars[-1].x,self.trader.stop_short)
             take_long = (half_bars[-1].x,self.trader.take_long)
+        if not self.trader.free_stop_s:
+            stop_short = stop_short if stop_short[1] > self.trader.stop_short else (half_bars[-1].x,self.trader.stop_short)
             take_short = (half_bars[-1].x,self.trader.take_short)
       
-        keys = Keys(
+        keys = KeysWork(
             cur_price[1],
             sma_sm[-1][1],
             bbd_sm[-1][1],
@@ -57,7 +74,7 @@ class STA1(BaseTA):
             take_short[1]
             )
             
-        if self.mode != 1:
+        if self.trader.mode != 1:
             cv2.circle(chart,stop_long,1,(0,200,0),2)
             cv2.circle(chart,stop_short,1,(200,200,0),2)
             cv2.circle(chart,take_long,1,(0,250,100),1)
@@ -76,7 +93,7 @@ class STA1(BaseTA):
 
             # cv2.putText(chart,"Wave: "+str(wave),(0,110),cv2.FONT_HERSHEY_SIMPLEX,0.8,(155,205,155),2)
         return keys
-    def get_action(self):
+    def get_action(self,keys:KeysWork):
         self.trader.stop_long = keys.stop_long
         self.trader.stop_short = keys.stop_short
         self.trader.take_long = keys.take_long

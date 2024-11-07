@@ -28,13 +28,16 @@ class WorkBot(VisualTraider_v2):
         lpts = np.array(list(map(lambda x: x.lpt,half_bars)))
 
         vpts = np.array(list(map(lambda x: x.vpt,half_bars)))
-        # ups,downs = get_donchan_channel(half_bars)
-        top_line,bottom_line = get_borders(region,5)
+        ups,downs,avarage = get_donchan_channel(half_bars)
+        ups1,downs1,avarage1 = get_donchan_channel(half_bars,40)
         # ups,downs = get_williams_fractals(hpts,lpts,8,True)
-        # cv2.polylines(chart,[ups],False,(255,0,200),2)
-        # cv2.polylines(chart,[downs],False,(55,200,250),2)
-        cv2.polylines(chart,[top_line],False,(255,0,200),2)
-        cv2.polylines(chart,[bottom_line],False,(55,200,250),2)
+        cv2.polylines(chart,[ups],False,(255,0,200),2)
+        cv2.polylines(chart,[downs],False,(55,200,250),2)
+        cv2.polylines(chart,[avarage],False,(155,100,250),2)
+        cv2.polylines(chart,[ups1],False,(255,0,200),1)
+        cv2.polylines(chart,[downs1],False,(55,200,250),1)
+        cv2.polylines(chart,[avarage1],False,(155,100,250),1)
+
         # print(chart.shape)
 
 

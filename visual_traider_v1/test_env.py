@@ -4,18 +4,16 @@ import cv2
 from tqdm import tqdm
 from stock_groups import stock_groups
 # from traider_bots.Collector1 import Collector1 as Trader
-from traider_bots.archive.PT2ov1 import PT2 as Trader
-# from traider_bots.ST14 import ST14 as Trader
-# from traider_bots.ST8 import ST8 as Trader4
-# from traider_bots.PST1 import PST1a as Trader5
-# from traider_bots.PST1 import PST1 as Trader6
+from traider_bots.archive.PT1 import PT1 as Trader
+# from traider_bots.VisualTraider_v3 import VisualTraider_v3 as Trader
+# from tas.PTA1_BDDC import PTA1_R_BDDC as TA
 from traider_bots.help_bots.ResearchBot import ResearchBot
 from settings import configuration_traiders_v2, reset_test_json,clear_test_images,clear_logs
 
 
 param_bots = configuration_traiders_v2('config_files\config.txt')
 if len(sys.argv) < 2:
-    date_stock = '05.08.24'
+    date_stock = '01.08.24'
 else:
     date_stock = sys.argv[1]
 
@@ -31,13 +29,9 @@ reset_test_json()
 # stock_groups = ['MXI','SBER']
 # stock_groups = ['CNY']
 for ticker in tqdm(stock_groups):
-    traider = Trader(*param_bots,name=ticker)
-    # traider2 = Trader2(*param_bots,name=ticker)
-    # traider3 = Trader3(*param_bots,name=ticker)
-    # traider4 = Trader4(*param_bots,name=ticker)
-    # traider5 = Trader5(*param_bots,name=ticker)
-    # traider6 = Trader6(*param_bots,name=ticker)
-    # traider7 = Trader7(*param_bots,name=ticker)
+    # traider = Trader(*param_bots,name=ticker)
+    traider = Trader(*param_bots,ticker)
+    # traider.TA = TA(traider)
     # test_traider = ResearchBot(*param_bots,name=ticker)
     # print(ticker)
     for img in imgs:
@@ -49,12 +43,5 @@ for ticker in tqdm(stock_groups):
             
             traider.run(image,price)
             # traider2.run(image)
-            # traider3.run(image)
-            # traider3.draw_research(image)
-            # traider4.run(image)
-            # traider5.run(image)
-            # traider6.run(image)
-            # traider7.run(image)
-            # traider.draw_research(image)
             # test_traider.run(image)
 print('done')

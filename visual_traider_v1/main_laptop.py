@@ -18,7 +18,7 @@ work_traiders = []
 for i in range(len(stock_groups)):
     traider = ResearchBot(*param_bots,name=stock_groups[i])
     test_traiders.append(traider)
-    traider = Traider1(*param_bots,name=stock_groups[i])
+    traider = Traider1(*param_bots,name=stock_groups[i],mode=1)
     work_traiders.append(traider)
 
 

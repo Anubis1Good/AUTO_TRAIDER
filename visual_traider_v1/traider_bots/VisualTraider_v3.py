@@ -1,6 +1,6 @@
 import traceback
 import os
-import time
+from time import time
 import cv2
 import numpy as np
 import numpy.typing as npt
@@ -11,6 +11,7 @@ from utils.config import ColorsBtnBGR
 from utils.chart_utils.dtype import HalfBar
 from utils.config import TemplateCandle
 from utils.test_utils.test_traide import test_open,test_close
+from tas.BaseTA import BaseTA
 
 class VisualTraider_v3():
     def __init__(
@@ -18,38 +19,52 @@ class VisualTraider_v3():
             cluster:tuple,
             dealfeed:tuple,
             glass:tuple,
-            chart:tuple,
+            chart1:tuple,
+            chart2:tuple,
+            chart3:tuple,
             position:tuple,
             name:str,
             mode:int = 0) -> None:
         self.cluster_region = cluster
         self.dealfeed_region = dealfeed
         self.glass_region = glass
-        self.chart_region = chart
+        self.chart_region = chart3
+        self.chart_region1 = chart1
+        self.chart_region2 = chart2
         self.position_region = position
         self.name = name 
         self.traider_name = 'VisualTraider_v3'
         self.mode = mode
-        self.TA = None
+        self.TA = BaseTA(self)
+        self.have_pos_l = None
+        self.have_pos_s = None
+        self.free_stop_l = None
+        self.free_stop_s = None
+        self.stop_long = 10000
+        self.stop_short = -1
+        self.take_short = 10000
+        self.take_long = -1
+        self.bbu_attached = False
+        self.bbd_attached = False
 
     def __repr__(self) -> str:
         return f'{self.traider_name} - {self.name}'
     
     # work function
-    def _test(self, img):
-        action,keys = self.ТА(self,img)
+    def _test(self, img,price):
+        action,keys = self.TA(img)
         res1_l,res2_l = 0,0
         res1_s,res2_s = 0,0
         if action == 'long':
-            res1_s = self._test_send_close(img,'short')
-            res2_l = self._test_send_open(img,'long') 
+            res1_s = self._test_send_close(img,'short',price=price)
+            res2_l = self._test_send_open(img,'long',price=price) 
         if action == 'close_long':
-            res1_l = self._test_send_close(img,'long')
+            res1_l = self._test_send_close(img,'long',price=price)
         if action == 'short':
-            res1_l = self._test_send_close(img,'long')
-            res2_s = self._test_send_open(img,'short')
+            res1_l = self._test_send_close(img,'long',price=price)
+            res2_s = self._test_send_open(img,'short',price=price)
         if action == 'close_short':
-            res1_s = self._test_send_close(img,'short')
+            res1_s = self._test_send_close(img,'short',price=price)
         if res1_s == 1 and res2_l == 0:
             self.have_pos_s = False
             self.free_stop_s = True
@@ -121,16 +136,16 @@ class VisualTraider_v3():
             self._reset_req()
 
     
-    def run(self,img):
+    def run(self,img,price=0.0):
         copy_img = img.copy()
         try:
             if self.mode == 0:
-                self._test(copy_img)
+                self._test(copy_img,price)
             elif self.mode == 1:
                 self._traide(copy_img)
             elif self.mode == 2:
                 self._traide(copy_img)
-                self._test(copy_img)
+                self._test(copy_img,price)
         except Exception as err:
             traceback.print_exc()
         return copy_img
@@ -225,11 +240,11 @@ class VisualTraider_v3():
         pdi.press('f')
     # test trade_function
 
-    def _test_send_open(self,img,direction,draw=lambda img:img):
-        return test_open(img,self.name,direction,self.traider_name,draw)
+    def _test_send_open(self,img,direction,draw=lambda img:img,price=0.0):
+        return test_open(img,self.name,direction,self.traider_name,draw,price)
 
-    def _test_send_close(self,img,direction,draw=lambda img:img):
-        return test_close(img,self.name,direction,self.traider_name,draw)
+    def _test_send_close(self,img,direction,draw=lambda img:img,price=0.0):
+        return test_close(img,self.name,direction,self.traider_name,draw,price)
 
     def _draw(self,img,keys,region):
         pass
