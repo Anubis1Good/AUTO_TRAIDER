@@ -24,5 +24,8 @@ stock_groups = [
     'FEES',
     'HYDR',
     'MXI',
-    'RUAL'
+    'RUAL',
+    'APTK',
+    'PIKK',
+    'TATN'
 ]

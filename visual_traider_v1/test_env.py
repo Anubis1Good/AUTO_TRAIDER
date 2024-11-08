@@ -4,7 +4,7 @@ import cv2
 from tqdm import tqdm
 from stock_groups import stock_groups
 # from traider_bots.Collector1 import Collector1 as Trader
-from traider_bots.archive.ST5 import ST5a as Trader
+from traider_bots.archive.OGT2 import OGT2 as Trader
 # from traider_bots.VisualTraider_v3 import VisualTraider_v3 as Trader
 # from tas.PTA1_BDDC import PTA1_R_BDDC as TA
 from traider_bots.help_bots.ResearchBot import ResearchBot
@@ -17,9 +17,12 @@ if len(sys.argv) < 2:
 else:
     date_stock = sys.argv[1]
 
-img_path = './test_data/'
-
-full_path = img_path + date_stock + '/'
+img_path = 'test_data'
+data_variant = 'old_data'
+# data_variant = 'new_data1'
+# data_variant = 'new_data2'
+full_path = os.path.join(img_path,data_variant,date_stock) + '/'
+# full_path = img_path + date_stock + '/'
 
 imgs = os.listdir(full_path)
 clear_test_images()

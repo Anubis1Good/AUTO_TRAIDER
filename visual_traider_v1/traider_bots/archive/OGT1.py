@@ -228,7 +228,7 @@ class OGT1(VisualTraider_v2):
 
 
     
-    def _test(self, img):
+    def _test(self, img,price):
         m_keys = self._get_keys(img,self.minute_chart_region)
         action = self._get_action(m_keys)
         res,res2 = 0,0
@@ -237,15 +237,15 @@ class OGT1(VisualTraider_v2):
             self.i+=1
             cv2.imwrite('./test_images/'+self.name+str(self.i)+'.png',img)
         if action == 'long':
-            res = self._test_send_close(img,'short')
-            res2 = self._test_send_open(img,'long') 
+            res = self._test_send_close(img,'short',price=price)
+            res2 = self._test_send_open(img,'long',price=price) 
         if action == 'close_long':
-            res = self._test_send_close(img,'long')
+            res = self._test_send_close(img,'long',price=price)
         if action == 'short':
-            res = self._test_send_close(img,'long')
-            res2 = self._test_send_open(img,'short')
+            res = self._test_send_close(img,'long',price=price)
+            res2 = self._test_send_open(img,'short',price=price)
         if action == 'close_short':
-            res = self._test_send_close(img,'short')
+            res = self._test_send_close(img,'short',price=price)
         if res == 1 or res2 == 1:
             self._reset_check()
 

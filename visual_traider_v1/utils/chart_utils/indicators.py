@@ -41,7 +41,7 @@ def get_bollinger_bands(points:npt.NDArray,k:int=2,step=20) -> tuple[npt.NDArray
 def SA_point(points):
     return (np.average(points[:,0],axis=0).astype(np.int32),np.average(points[:,1],axis=0).astype(np.int32))
 
-def get_trend_lines(x,y):
+def get_trend_lines(x,y) -> tuple[npt.NDArray]:
     std_y = np.std(y)
     slope,intercept = get_linear_regress(x,y)
     middle_line = list(map(lambda x:get_points_linear_reg(x,slope,intercept,0), x))
@@ -63,7 +63,7 @@ def get_linear_reg_clear(x,y):
     trend = np.column_stack([x1, middle_line])
     return trend[-1]
 
-def get_fractals(hpts,lpts,n=5):
+def get_fractals(hpts,lpts,n=5) -> tuple[npt.NDArray]:
     maxs = []
     mins = []
     for i in range(n,len(hpts),n):
@@ -82,7 +82,7 @@ def get_fractals(hpts,lpts,n=5):
         maxs.append(np.array(ph))
         mins.append(np.array(pl))
 
-def get_williams_fractals(hpts:npt.NDArray,lpts:npt.NDArray,n=2,is_qual=False):
+def get_williams_fractals(hpts:npt.NDArray,lpts:npt.NDArray,n=2,is_qual=False) -> tuple[npt.NDArray]:
     maxs = []
     mins = []
     hpts = list(hpts.tolist())
@@ -209,7 +209,7 @@ def get_rsi(half_bars:list[HalfBar],period=14):
     # RSI = 100 – 100 / (1 + RS),
     # RS = EMAn(Up) / EMAn(Down)
 
-def get_spred_channel(half_bars:list[HalfBar],period=14):
+def get_spred_channel(half_bars:list[HalfBar],period=14) -> tuple[npt.NDArray]:
     ma = []
     ups,downs = [],[]
     ups2,downs2 = [],[]
@@ -238,7 +238,7 @@ def get_spred_channel(half_bars:list[HalfBar],period=14):
 
 
 
-def get_bb_points(ups,downs,step=10):
+def get_bb_points(ups,downs,step=10) -> tuple[npt.NDArray]:
     creeks = []
     ices = []
     for i in range(step,len(ups)-(step+1)):
@@ -255,7 +255,7 @@ def get_bb_points(ups,downs,step=10):
     return creeks,ices
 
 
-def get_borders(region,divider=4):
+def get_borders(region,divider=4)  -> tuple[npt.NDArray]:
     heigth = region[3]-region[1]
     width = region[2] - region[0]
     buff = heigth // divider
@@ -263,7 +263,7 @@ def get_borders(region,divider=4):
     bottom_line =np.array(((10,heigth-buff),(width-10,heigth-buff)))
     return top_line,bottom_line
 
-def get_donchan_channel(half_bars:list[HalfBar],period=20,delay=0):
+def get_donchan_channel(half_bars:list[HalfBar],period=20,delay=0)  -> tuple[npt.NDArray]:
     ups,downs = [],[]
     avarage = []
     for i in range(period,len(half_bars)-delay):
@@ -280,3 +280,6 @@ def get_donchan_channel(half_bars:list[HalfBar],period=20,delay=0):
         avarage_y = (min_hb[1] + max_hb[1])//2
         avarage.append((max_hb[0],avarage_y))
     return np.array(ups),np.array(downs),np.array(avarage)
+
+def get_level_DC():
+    pass

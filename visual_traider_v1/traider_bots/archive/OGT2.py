@@ -83,7 +83,7 @@ class OGT2(VisualTraider_v2):
 
 
     
-    def _test(self, img):
+    def _test(self, img,price):
         m_keys = self._get_keys(img,self.minute_chart_region)
         action = self._get_action(m_keys)
         res_l,res2_l = 0,0
@@ -92,18 +92,18 @@ class OGT2(VisualTraider_v2):
             self.i+=1
             cv2.imwrite('./test_images/'+self.name+str(self.i)+'.png',img)
         if action == 'long':
-            res_s = self._test_send_close(img,'short')
-            res2_l = self._test_send_open(img,'long') 
+            res_s = self._test_send_close(img,'short',price=price)
+            res2_l = self._test_send_open(img,'long',price=price) 
         if action == 'close_long':
-            res_l = self._test_send_close(img,'long')
+            res_l = self._test_send_close(img,'long',price=price)
         if action == 'short':
-            res_l = self._test_send_close(img,'long')
-            res2_s = self._test_send_open(img,'short')
+            res_l = self._test_send_close(img,'long',price=price)
+            res2_s = self._test_send_open(img,'short',price=price)
         if action == 'close_short':
-            res_s = self._test_send_close(img,'short')
+            res_s = self._test_send_close(img,'short',price=price)
         if action == 'close_all':
-            res_s = self._test_send_close(img,'short')
-            res_l = self._test_send_close(img,'long')
+            res_s = self._test_send_close(img,'short',price=price)
+            res_l = self._test_send_close(img,'long',price=price)
         if res_s == 1 and res2_l == 0:
             self._reset_stop()
         if res_l == 1 and res2_s == 0:

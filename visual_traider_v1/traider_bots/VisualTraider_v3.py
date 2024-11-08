@@ -38,10 +38,12 @@ class VisualTraider_v3():
         self.mode = mode
         self.TA = BaseTA(self)
         self.fast_close = fast_close
+        self.close_long = False
+        self.close_short = False
         self.have_pos_l = None
         self.have_pos_s = None
-        self.free_stop_l = None
-        self.free_stop_s = None
+        self.free_stop_l = True
+        self.free_stop_s = True
         self.stop_long = 10000
         self.stop_short = -1
         self.take_short = 10000
@@ -92,16 +94,20 @@ class VisualTraider_v3():
             self.have_pos_s = False
             self.free_stop_l = True
             self.free_stop_s = True
+            self.close_long = False
+            self.close_short = False
         if pos == 1:
             self.have_pos_l = True
             self.have_pos_s = False
             self.free_stop_l = False
             self.free_stop_s = True
+            self.close_short = False
         if pos == -1:
             self.have_pos_l = False
             self.have_pos_s = True
             self.free_stop_l = True
             self.free_stop_s = False
+            self.close_long = False
         action,keys = self.TA(img)
         if action:
             if action == 'long':
