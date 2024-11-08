@@ -102,7 +102,7 @@ class VisualTraider_v3():
             self.have_pos_s = True
             self.free_stop_l = True
             self.free_stop_s = False
-        action,keys = self.ТА(self,img)
+        action,keys = self.TA(img)
         if action:
             if action == 'long':
                 if pos == -1:
