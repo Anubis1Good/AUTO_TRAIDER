@@ -7,13 +7,13 @@ class GroupBotWrapper:
         width_trader = width//len(trader_names)
         for i in range(len(trader_names)):
             trader = trader_type(
-                cluster=(width_trader*i,top,width_trader*i+cluster_width,top_pos),
-                dealfeed=(width_trader*i+cluster_width,top,width_trader*(i+1)-width_glass,top_pos),
-                glass=(width_trader*(i+1)-width_glass,top,width_trader*(i+1),top_pos),
-                day=(width_trader*i,top_chart,width_trader*(i+1),bottom),
-                hour=(width_trader*i,top_chart,width_trader*(i+1),bottom),
-                minute=(width_trader*i,top_chart,width_trader*(i+1),bottom),
-                position=(width_trader*i,top_pos,width_trader*(i+1),bottom_pos),
+                (width_trader*i,top,width_trader*i+cluster_width,top_pos),
+                (width_trader*i+cluster_width,top,width_trader*(i+1)-width_glass,top_pos),
+                (width_trader*(i+1)-width_glass,top,width_trader*(i+1),top_pos),
+                (width_trader*i,top_chart,width_trader*(i+1),bottom),
+                (width_trader*i,top_chart,width_trader*(i+1),bottom),
+                (width_trader*i,top_chart,width_trader*(i+1),bottom),
+                (width_trader*i,top_pos,width_trader*(i+1),bottom_pos),
                 name=trader_names[i],
                 mode=mode,
                 fast_close=fast_close
