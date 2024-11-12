@@ -26,7 +26,7 @@ work_traiders = []
 for i in range(len(stock_groups)):
     traider = ResearchBot(*param_bots,name=stock_groups[i])
     test_traiders.append(traider)
-    ta = lambda: None
+    ta = lambda t: None
     if stock_groups[i] in PTA_R_group:
         traider = VisualTraider_v3
         ta = PTA1_R_BDDC
