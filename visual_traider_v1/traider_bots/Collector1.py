@@ -16,8 +16,8 @@ class Keys:
 
 
 class Collector1(VisualTraider_v2):
-    def __init__(self, cluster: tuple, dealfeed: tuple, glass: tuple, day: tuple, hour: tuple, minute: tuple, position: tuple, name: str, mode: int = 0) -> None:
-        super().__init__(cluster, dealfeed, glass, day, hour, minute, position, name, mode)
+    def __init__(self, cluster: tuple, dealfeed: tuple, glass: tuple, day: tuple, hour: tuple, minute: tuple, position: tuple, name: str, mode: int = 0,**kw) -> None:
+        super().__init__(cluster, dealfeed, glass, day, hour, minute, position, name, mode,**kw)
         self.traider_name = 'Collector1'
         self.close_long = False
         self.close_short = False

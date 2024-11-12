@@ -133,3 +133,14 @@ class PTA1_R4_BDDC(PTA1_BDDC):
                 return 'close_long'
             if keys.cur_price > keys.middle_fast:
                 return 'close_short'
+            
+class PTA1_R5_BDDC(PTA1_BDDC):
+    def get_action(self, keys):
+        if keys.h_last_hb == keys.ups_slow:
+            return 'short'
+        if keys.l_last_hb == keys.downs_slow:
+            return 'long'
+        if keys.cur_price < keys.middle_slow:
+            return 'close_long'
+        if keys.cur_price > keys.middle_slow:
+            return 'close_short'

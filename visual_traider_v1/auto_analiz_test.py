@@ -3,7 +3,7 @@ import sys
 import pandas as pd
 
 file_name = 'test.json'
-trader_name = 'OGT2'
+trader_name = 'PTA1_R5_BDDC'
 if len(sys.argv) < 2:
     date = '01.08.24'
 else:
@@ -22,6 +22,7 @@ def get_quity(row):
 df['quity'] = df.apply(get_quity,axis=1)
 res = df.groupby('name')['quity'].agg(['sum','count'])
 res = res.sort_values(by='count',axis=0,ascending=False)
+res['part'] = res['sum'] / res['count']
 path_output = os.path.join('test_results',trader_name + '_' + date + "_output.xlsx")
 with pd.ExcelWriter(path_output) as writer:  
     df.to_excel(writer,sheet_name='total') 

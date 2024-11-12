@@ -1,0 +1,5 @@
+PT1_group = ['ROSN','LKOH','MAGN','ALRS','SOFL']
+PT2ov_group = ['CHMF','MTLR','GMKN','MOEX','SELG']
+PST1_group = ['RUAL','HYDR']
+PTA_R_group = ['MXI']
+PTA_R5_group = ['NVTK','TATN','APTK','PIKK','GAZP','AFKS','CNY','FEES','ABIO','BSPB','MRKP']

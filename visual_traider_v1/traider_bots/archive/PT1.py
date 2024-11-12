@@ -5,8 +5,8 @@ import numpy.typing as npt
 from traider_bots.VisualTraider_v2 import VisualTraider_v2
 from utils.chart_utils.indicators import get_bollinger_bands
 class PT1(VisualTraider_v2):
-    def __init__(self, cluster: tuple, dealfeed: tuple, glass: tuple, day: tuple, hour: tuple, minute: tuple, position: tuple, name: str, mode: int = 0) -> None:
-        super().__init__(cluster, dealfeed, glass, day, hour, minute, position, name, mode)
+    def __init__(self, cluster: tuple, dealfeed: tuple, glass: tuple, day: tuple, hour: tuple, minute: tuple, position: tuple, name: str, mode: int = 0,**kw) -> None:
+        super().__init__(cluster, dealfeed, glass, day, hour, minute, position, name, mode,**kw)
         self.traider_name = 'PT1'
     
     def _get_keys(self, img, region) -> dict:

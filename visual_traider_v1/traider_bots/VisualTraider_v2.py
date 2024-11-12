@@ -21,7 +21,8 @@ class VisualTraider_v2():
             minute:tuple,
             position:tuple,
             name:str,
-            mode:int = 0) -> None:
+            mode:int = 0,
+            **kw) -> None:
         self.cluster_region = cluster
         self.dealfeed_region = dealfeed
         self.glass_region = glass
