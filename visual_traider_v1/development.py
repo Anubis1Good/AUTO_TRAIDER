@@ -4,7 +4,7 @@ import keyboard
 import sys
 from time import sleep
 from settings import configuration_traiders_v2
-from sg_dev import stock_groups
+from sgs.sg_dev import stock_groups
 from utils.test_utils.windows import draw_borders
 from traider_bots.help_bots.ResearchBot import ResearchBot
 

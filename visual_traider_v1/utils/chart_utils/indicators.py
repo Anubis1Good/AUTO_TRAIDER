@@ -281,5 +281,29 @@ def get_donchan_channel(half_bars:list[HalfBar],period=20,delay=0)  -> tuple[npt
         avarage.append((max_hb[0],avarage_y))
     return np.array(ups),np.array(downs),np.array(avarage)
 
-def get_level_DC():
-    pass
+def help_level_DC(seq:npt.NDArray,seq2:npt.NDArray,threshold:int,width:int):
+    zone = []
+    temp_zone = []
+    start = None
+    for i in range(len(seq)-1):
+        if seq[i][1] == seq[i+1][1]:
+            if not start:
+                start = seq[i][0]
+            temp_zone.append(seq[i+1][1])
+        else:
+            if start:
+                if len(temp_zone) >= threshold:
+                    delta = abs(seq[i][1] - seq2[i][1])//width
+                    zone.append(np.array([
+                        [start,seq[i][1]+delta],
+                        [seq[i][0],seq[i][1]-delta]
+                        ]))
+                start = None
+                temp_zone.clear()
+    return np.array(zone)
+
+def get_level_DC(ups:npt.NDArray,downs:npt.NDArray,threshold:int=20,width:int=20):
+
+    sell_zone = help_level_DC(ups,downs,threshold,width)
+    bye_zone = help_level_DC(downs,ups,threshold,width)
+    return sell_zone,bye_zone

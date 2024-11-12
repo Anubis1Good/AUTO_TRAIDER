@@ -38,7 +38,7 @@ class VisualTraider_v2():
         return f'{self.traider_name} - {self.name}'
     
     # work function
-    def _test(self,img,path_img):
+    def _test(self,img,price):
         print(self,'the _test method is not implemented')
 
     def _traide(self,img):
