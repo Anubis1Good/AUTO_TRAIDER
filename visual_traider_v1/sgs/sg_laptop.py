@@ -5,10 +5,10 @@ stock_groups = [
     'CHMF',
     'NVTK',
     'MAGN',
-    'NLMK',
+    'AFKS',
     'TATN',
-    'APTK',
+    'GAZP',
     'MTLR',
     'VTBR',
-    'PIKK'
+    'BSPB'
 ]
