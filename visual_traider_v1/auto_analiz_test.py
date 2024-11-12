@@ -3,7 +3,7 @@ import sys
 import pandas as pd
 
 file_name = 'test.json'
-trader_name = 'PTA1_R5_BDDC'
+trader_name = 'PTA1_R7_BDDC'
 if len(sys.argv) < 2:
     date = '01.08.24'
 else:

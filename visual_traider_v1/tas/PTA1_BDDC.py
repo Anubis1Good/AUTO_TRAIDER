@@ -144,3 +144,75 @@ class PTA1_R5_BDDC(PTA1_BDDC):
             return 'close_long'
         if keys.cur_price > keys.middle_slow:
             return 'close_short'
+        
+class PTA1_R6_BDDC(PTA1_R5_BDDC):
+    def get_keys(self, img)-> KeysW:
+        region = self.trader.chart_region
+        chart = self.trader._get_chart(img,region)
+        candle_mask = self.trader._get_candle_mask(chart)
+        volume_mask = self.trader._get_volume_mask(chart)
+        candle_cords = self.trader._get_cords_on_mask(candle_mask)
+        volume_cords = self.trader._get_cords_on_mask(volume_mask)
+        half_bars = self.trader._get_half_bars(candle_mask,candle_cords,volume_cords)
+        cur_price = self.trader._get_current_price(chart)
+        ups,downs,middle = get_donchan_channel(half_bars)
+        ups1,downs1,middle1 = get_donchan_channel(half_bars,60)
+        last_hb = half_bars[-1]
+        if self.trader.mode != 1:
+            cv2.polylines(chart,[ups],False,(255,0,200),2)
+            cv2.polylines(chart,[downs],False,(55,200,250),2)
+            cv2.polylines(chart,[middle],False,(155,100,250),2)
+            cv2.polylines(chart,[ups1],False,(255,0,200),1)
+            cv2.polylines(chart,[downs1],False,(55,200,250),1)
+            cv2.polylines(chart,[middle1],False,(155,100,250),1)
+
+
+        return KeysW(
+            cur_price=cur_price[1],
+            ups_fast=ups[-1][1],
+            downs_fast=downs[-1][1],
+            middle_fast=middle[-1][1],
+            h_last_hb=last_hb.yh,
+            l_last_hb=last_hb.yl,
+            ups_slow=ups1[-1][1],
+            downs_slow=downs1[-1][1],
+            middle_slow=middle1[-1][1],
+            stop_up=ups1[-10][1],
+            stop_down=downs1[-10][1]
+        )
+    
+class PTA1_R7_BDDC(PTA1_R5_BDDC):
+    def get_keys(self, img)-> KeysW:
+        region = self.trader.chart_region
+        chart = self.trader._get_chart(img,region)
+        candle_mask = self.trader._get_candle_mask(chart)
+        volume_mask = self.trader._get_volume_mask(chart)
+        candle_cords = self.trader._get_cords_on_mask(candle_mask)
+        volume_cords = self.trader._get_cords_on_mask(volume_mask)
+        half_bars = self.trader._get_half_bars(candle_mask,candle_cords,volume_cords)
+        cur_price = self.trader._get_current_price(chart)
+        ups,downs,middle = get_donchan_channel(half_bars)
+        ups1,downs1,middle1 = get_donchan_channel(half_bars,10)
+        last_hb = half_bars[-1]
+        if self.trader.mode != 1:
+            cv2.polylines(chart,[ups],False,(255,0,200),2)
+            cv2.polylines(chart,[downs],False,(55,200,250),2)
+            cv2.polylines(chart,[middle],False,(155,100,250),2)
+            cv2.polylines(chart,[ups1],False,(255,0,200),1)
+            cv2.polylines(chart,[downs1],False,(55,200,250),1)
+            cv2.polylines(chart,[middle1],False,(155,100,250),1)
+
+
+        return KeysW(
+            cur_price=cur_price[1],
+            ups_fast=ups[-1][1],
+            downs_fast=downs[-1][1],
+            middle_fast=middle[-1][1],
+            h_last_hb=last_hb.yh,
+            l_last_hb=last_hb.yl,
+            ups_slow=ups1[-1][1],
+            downs_slow=downs1[-1][1],
+            middle_slow=middle1[-1][1],
+            stop_up=ups1[-10][1],
+            stop_down=downs1[-10][1]
+        )

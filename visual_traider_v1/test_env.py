@@ -6,7 +6,7 @@ from stock_groups import stock_groups
 # from traider_bots.Collector1 import Collector1 as Trader
 from traider_bots.archive.ST4 import ST4 as Trader
 from traider_bots.VisualTraider_v3 import VisualTraider_v3 as Trader
-from tas.PTA1_BDDC import PTA1_R5_BDDC as TA
+from tas.PTA1_BDDC import PTA1_R7_BDDC as TA
 from traider_bots.help_bots.ResearchBot import ResearchBot
 from settings import configuration_traiders_v2, reset_test_json,clear_test_images,clear_logs
 
