@@ -33,15 +33,16 @@ for i in range(len(stock_groups)):
     if stock_groups[i] in PTA_R5_group:
         traider = VisualTraider_v3
         ta = PTA1_R5_BDDC
-    elif stock_groups[i] in PT1_group:
-        traider = PT1
-    elif stock_groups[i] in PST1_group:
-        traider = PST1
-    elif stock_groups[i] in PT2ov_group:
-        traider = PT2
+    # elif stock_groups[i] in PT1_group:
+    #     traider = PT1
+    # elif stock_groups[i] in PST1_group:
+    #     traider = PST1
+    # elif stock_groups[i] in PT2ov_group:
+    #     traider = PT2
     else:
-        traider = VisualTraider_v3
-        ta = BaseTA
+        traider = PT2
+        # traider = VisualTraider_v3
+        # ta = BaseTA
     gbw = GroupBotWrapper(
     traider,
     ['Stock1','Stock2','Stock3','Stock4'],
