@@ -13,7 +13,6 @@ from traider_bots.PT2ov1 import PT2
 from traider_bots.PST1 import PST1 
 from traider_bots.archive.PT1 import PT1 
 from traider_bots.VisualTraider_v3 import VisualTraider_v3 
-from tas.PTA1_BDDC import PTA1_R_BDDC, PTA1_R5_BDDC, PTA1_R6_BDDC 
 from tas.PTA2_DDC import PTA2_DDC
 from tas.BaseTA import BaseTA
 
@@ -26,13 +25,13 @@ for i in range(len(stock_groups)):
     traider = ResearchBot(*param_bots,name=stock_groups[i])
     test_traiders.append(traider)
     if stock_groups[i] in PTA_R_group:
-        traider = VisualTraider_v3(*param_bots,name=stock_groups[i],mode=1,fast_close=True)
+        traider = VisualTraider_v3(*param_bots,name=stock_groups[i],mode=1)
         traider.TA = PTA2_DDC(traider,20)
     elif stock_groups[i] in PTA_R5_group:
-        traider = VisualTraider_v3(*param_bots,name=stock_groups[i],mode=1,fast_close=True)
+        traider = VisualTraider_v3(*param_bots,name=stock_groups[i],mode=1)
         traider.TA = PTA2_DDC(traider,30)
     elif stock_groups[i] in PTA_R6_group:
-        traider = VisualTraider_v3(*param_bots,name=stock_groups[i],mode=1,fast_close=True)
+        traider = VisualTraider_v3(*param_bots,name=stock_groups[i],mode=1)
         traider.TA = PTA2_DDC(traider,60)
     elif stock_groups[i] in PT1_group:
         traider = PT1(*param_bots,name=stock_groups[i],mode=1)

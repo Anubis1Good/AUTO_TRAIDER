@@ -25,7 +25,7 @@ class VisualTraider_v3():
             position:tuple,
             name:str,
             mode:int = 0,
-            fast_close:bool = False) -> None:
+            fast_close:bool = True) -> None:
         self.cluster_region = cluster
         self.dealfeed_region = dealfeed
         self.glass_region = glass
@@ -196,7 +196,9 @@ class VisualTraider_v3():
     def _send_close(self,img,direction):
         if self.fast_close:
             rev_direction = 'long' if direction == 'short' else 'short'
+            pdi.press('z')
             self._send_open(rev_direction)
+            pdi.press('z')
         else:
             if direction == 'long':
                 x,y = self._color_search(img, ColorsBtnBGR.best_ask,self.glass_region,reverse=True)
