@@ -33,6 +33,7 @@ class VisualTraider_v2():
         self.name = name 
         self.traider_name = 'VisualTraider_v2'
         self.mode = mode
+        self.fast_close = True
 
     def __repr__(self) -> str:
         return f'{self.traider_name} - {self.name}'
@@ -96,27 +97,33 @@ class VisualTraider_v2():
         pdi.press(button)
 
     def _send_close(self,img,direction):
-        if direction == 'long':
-            x,y = self._color_search(img, ColorsBtnBGR.best_ask,self.glass_region,reverse=True)
-            if x < 0:
-                x,y = self._color_search(img, ColorsBtnBGR.ask,self.glass_region,reverse=True)
-            x -= 50
-            y -= 5
-            button = 'right'
-        elif direction == 'short':
-            x,y = self._color_search(img, ColorsBtnBGR.best_bid,self.glass_region,reverse=False)
-            if x < 0:
-                x,y = self._color_search(img, ColorsBtnBGR.bid,self.glass_region,reverse=False)
-            x += 10
-            y += 5
-            button = 'left'
+        if self.fast_close:
+            rev_direction = 'long' if direction == 'short' else 'short'
+            pdi.press('z')
+            self._send_open(rev_direction)
+            pdi.press('z')
         else:
-            return None
-        pag.moveTo(x,y)
-        pdi.press('f')
-        pdi.keyDown('altleft')
-        pag.click(x, y,button=button)
-        pdi.keyUp('altleft')
+            if direction == 'long':
+                x,y = self._color_search(img, ColorsBtnBGR.best_ask,self.glass_region,reverse=True)
+                if x < 0:
+                    x,y = self._color_search(img, ColorsBtnBGR.ask,self.glass_region,reverse=True)
+                x -= 50
+                y -= 5
+                button = 'right'
+            elif direction == 'short':
+                x,y = self._color_search(img, ColorsBtnBGR.best_bid,self.glass_region,reverse=False)
+                if x < 0:
+                    x,y = self._color_search(img, ColorsBtnBGR.bid,self.glass_region,reverse=False)
+                x += 10
+                y += 5
+                button = 'left'
+            else:
+                return None
+            pag.moveTo(x,y)
+            pdi.press('f')
+            pdi.keyDown('altleft')
+            pag.click(x, y,button=button)
+            pdi.keyUp('altleft')
     
     def _reverse_pos(self,img,direction):
         if direction == 'long':

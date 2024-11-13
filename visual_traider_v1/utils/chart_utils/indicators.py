@@ -81,6 +81,7 @@ def get_fractals(hpts,lpts,n=5) -> tuple[npt.NDArray]:
                 pl = lpts[j]
         maxs.append(np.array(ph))
         mins.append(np.array(pl))
+    return maxs,mins 
 
 def get_williams_fractals(hpts:npt.NDArray,lpts:npt.NDArray,n=2,is_qual=False) -> tuple[npt.NDArray]:
     maxs = []

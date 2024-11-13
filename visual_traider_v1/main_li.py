@@ -11,7 +11,8 @@ from utils.test_utils.windows import draw_borders,draw_borders_online
 from traider_bots.help_bots.ResearchBot import ResearchBot
 from traider_bots.PT2ov1 import PT2 
 from traider_bots.PST1 import PST1 
-from traider_bots.archive.PT1 import PT1 
+from traider_bots.PT1 import PT1 
+from traider_bots.ST4 import ST4
 from traider_bots.VisualTraider_v3 import VisualTraider_v3 
 from tas.PTA2_DDC import PTA2_DDC
 from tas.BaseTA import BaseTA
@@ -39,6 +40,8 @@ for i in range(len(stock_groups)):
         traider = PST1(*param_bots,name=stock_groups[i],mode=1)
     elif stock_groups[i] in PT2ov_group:
         traider = PT2(*param_bots,name=stock_groups[i],mode=1)
+    elif stock_groups[i] in ST4_group:
+        traider = ST4(*param_bots,name=stock_groups[i],mode=1)
     else:
         traider = VisualTraider_v3(*param_bots,name=stock_groups[i],mode=1)
         traider.TA = BaseTA(traider)

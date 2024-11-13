@@ -46,16 +46,16 @@ class ST6(VisualTraider_v2):
         mean_spred = np.average(spreds)
         last_hb = half_bars[-2]
         keys = Keys(cur_price[1],stop_long[1],stop_short[1],enter_long[1],enter_short[1],mean_spred,volatility[-1][1],last_hb)
-        if self.mode != 1:
-            cv2.circle(chart,stop_long,1,(0,200,0),2)
-            cv2.circle(chart,stop_short,1,(200,200,0),2)
-            cv2.circle(chart,enter_short,1,(200,0,200),2)
-            cv2.circle(chart,enter_long,1,(0,100,100),2)
-            cv2.polylines(chart,[max_hb],False,(200,200,0))
-            cv2.polylines(chart,[min_hb],False,(200,200,200))
-            cv2.putText(chart,"CP: " +str(cur_price[1]),(0,20),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,255,255),2)
-            cv2.putText(chart,"ES: " +str(enter_short[1]),(0,40),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,255,255),2)
-            cv2.putText(chart,"EL: " +str(enter_long[1]),(0,60),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,255,255),2)
+        # if self.mode != 1:
+        #     cv2.circle(chart,stop_long,1,(0,200,0),2)
+        #     cv2.circle(chart,stop_short,1,(200,200,0),2)
+        #     cv2.circle(chart,enter_short,1,(200,0,200),2)
+        #     cv2.circle(chart,enter_long,1,(0,100,100),2)
+        #     cv2.polylines(chart,[max_hb],False,(200,200,0))
+        #     cv2.polylines(chart,[min_hb],False,(200,200,200))
+        #     cv2.putText(chart,"CP: " +str(cur_price[1]),(0,20),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,255,255),2)
+        #     cv2.putText(chart,"ES: " +str(enter_short[1]),(0,40),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,255,255),2)
+        #     cv2.putText(chart,"EL: " +str(enter_long[1]),(0,60),cv2.FONT_HERSHEY_SIMPLEX,0.6,(255,255,255),2)
         return keys
 
     def _get_action(self,keys:Keys):

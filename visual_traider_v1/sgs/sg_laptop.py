@@ -10,5 +10,5 @@ stock_groups = [
     'GAZP',
     'MTLR',
     'VTBR',
-    'BSPB'
+    'SBER'
 ]
