@@ -4,9 +4,9 @@ import cv2
 from tqdm import tqdm
 from stock_groups import stock_groups
 # from traider_bots.Collector1 import Collector1 as Trader
-# from traider_bots.archive.ST8 import ST8 as Trader
-from traider_bots.VisualTraider_v3 import VisualTraider_v3 as Trader
-from tas.PTA2_DDC import PTA2_DDC as TA
+from traider_bots.PST1 import PST1 as Trader
+# from traider_bots.VisualTraider_v3 import VisualTraider_v3 as Trader
+# from tas.PTA2_DDC import PTA2_DDC as TA
 from traider_bots.help_bots.ResearchBot import ResearchBot
 from settings import configuration_traiders_v2, reset_test_json,clear_test_images,clear_logs
 
@@ -37,7 +37,7 @@ reset_test_json()
 for ticker in tqdm(stock_groups):
     # traider = Trader(*param_bots,name=ticker)
     traider = Trader(*param_bots,ticker)
-    traider.TA = TA(traider,20)
+    # traider.TA = TA(traider,20)
     # test_traider = ResearchBot(*param_bots,name=ticker)
     # print(ticker)
     for img in imgs:
