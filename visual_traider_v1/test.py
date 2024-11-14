@@ -4,12 +4,17 @@ from time import sleep
 import numpy as np
 from utils.config import ColorsBtnBGR
 from utils.utils import color_search
-from time import time
+from datetime import datetime
 import cv2
 import sys
 import keyboard
 from wrappers.GroupBotWrapper import GroupBotWrapper
 from traider_bots.VisualTraider_v2 import VisualTraider_v2
+now = datetime.now()
+hour = now.hour
+minute = now.minute
+print(hour)
+print(minute)
 # sleep(5)
 # print(sys.argv)
 # pag.screenshot('screens\Screen.png')

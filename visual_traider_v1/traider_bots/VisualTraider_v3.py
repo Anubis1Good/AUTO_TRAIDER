@@ -130,6 +130,13 @@ class VisualTraider_v3():
                 if pos == -1:
                     self.close_short = True
                     self._send_close(img,'short')
+            if action == 'close_all':
+                if pos == -1:
+                    self.close_short = True
+                    self._send_close(img,'short')
+                if pos == 1:
+                    self.close_long = True
+                    self._send_close(img,'long')
         elif self.close_long:
             if pos == 1:
                 self._send_close(img,'long')
