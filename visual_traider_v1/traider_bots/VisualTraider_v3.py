@@ -62,12 +62,12 @@ class VisualTraider_v3():
         if action == 'long':
             res1_s = self._test_send_close(img,'short',price=price)
             res2_l = self._test_send_open(img,'long',price=price) 
-        if action == 'close_long':
+        elif action == 'close_long':
             res1_l = self._test_send_close(img,'long',price=price)
-        if action == 'short':
+        elif action == 'short':
             res1_l = self._test_send_close(img,'long',price=price)
             res2_s = self._test_send_open(img,'short',price=price)
-        if action == 'close_short':
+        elif action == 'close_short':
             res1_s = self._test_send_close(img,'short',price=price)
         if res1_s == 1 and res2_l == 0:
             self.have_pos_s = False
@@ -96,13 +96,13 @@ class VisualTraider_v3():
             self.free_stop_s = True
             self.close_long = False
             self.close_short = False
-        if pos == 1:
+        elif pos == 1:
             self.have_pos_l = True
             self.have_pos_s = False
             self.free_stop_l = False
             self.free_stop_s = True
             self.close_short = False
-        if pos == -1:
+        elif pos == -1:
             self.have_pos_l = False
             self.have_pos_s = True
             self.free_stop_l = True
@@ -126,27 +126,33 @@ class VisualTraider_v3():
                     self._reverse_pos(img,'long')
                 if pos == 0:
                     self._send_open('long')
-            if action == 'close_long':
+            elif action == 'close_long':
                 if pos == 1:
                     self.close_long = True
                     self._send_close(img,'long')
-            if action == 'short':
+                else:
+                    self._reset_req()
+            elif action == 'short':
                 if pos == 1:
                     self.close_long = True
                     self._reverse_pos(img,'short')
                 if pos == 0:
                     self._send_open('short')
-            if action == 'close_short':
+            elif action == 'close_short':
                 if pos == -1:
                     self.close_short = True
                     self._send_close(img,'short')
-            if action == 'close_all':
+                else:
+                    self._reset_req()
+            elif action == 'close_all':
                 if pos == -1:
                     self.close_short = True
                     self._send_close(img,'short')
-                if pos == 1:
+                elif pos == 1:
                     self.close_long = True
                     self._send_close(img,'long')
+                else:
+                    self._reset_req()
         else:
             self._reset_req()
 

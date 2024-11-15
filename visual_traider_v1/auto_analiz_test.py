@@ -23,14 +23,17 @@ def get_quity(row):
     else:
         quity = row.open_price- row.close_price
     return quity
-df['quity'] = df.apply(get_quity,axis=1)
-df['percent'] = round(df['quity'] / df['open_price'],4)*100
-res = df.groupby('name')['quity'].agg(['sum','count'])
-res = res.sort_values(by='count',axis=0,ascending=False)
-res['part'] = res['sum'] / res['count']
-res['total_percent'] = df.groupby('name')['percent'].agg(['sum'])['sum']
-res['average_percent'] = round(res['total_percent']/ res['count'],2)
-path_output = os.path.join('test_results',trader_name + '_' + date + "_output.xlsx")
-with pd.ExcelWriter(path_output) as writer:  
-    df.to_excel(writer,sheet_name='total') 
-    res.to_excel(writer,sheet_name='sum_count') 
+try:
+    df['quity'] = df.apply(get_quity,axis=1)
+    df['percent'] = round(df['quity'] / df['open_price'],4)*100
+    res = df.groupby('name')['quity'].agg(['sum','count'])
+    res = res.sort_values(by='count',axis=0,ascending=False)
+    res['part'] = res['sum'] / res['count']
+    res['total_percent'] = df.groupby('name')['percent'].agg(['sum'])['sum']
+    res['average_percent'] = round(res['total_percent']/ res['count'],2)
+    path_output = os.path.join('test_results',trader_name + '_' + date + "_output.xlsx")
+    with pd.ExcelWriter(path_output) as writer:  
+        df.to_excel(writer,sheet_name='total') 
+        res.to_excel(writer,sheet_name='sum_count') 
+except:
+    print('not data')

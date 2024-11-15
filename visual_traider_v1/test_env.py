@@ -22,6 +22,11 @@ if len(sys.argv) < 4:
     bot_name = 'ST1'
 else:
     bot_name = sys.argv[3]
+if len(sys.argv) > 4:
+    temp = sys.argv[4].split('_')
+    if len(temp) > 0:
+        stock_groups = temp
+
 
 
 

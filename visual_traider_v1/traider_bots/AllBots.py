@@ -62,8 +62,6 @@ VT3_bots = {
     'BaseTA':(BaseTA,()),
     'SleepTA':(SleepTA,()),
     'CloserTA':(CloserTA,()),
-    'PTA2_DDC_5':(PTA2_DDC,(5,)),
-    'PTA2_DDC_10':(PTA2_DDC,(10,)),
     'PTA2_DDC_15':(PTA2_DDC,(15,)),
     'PTA2_DDC_20':(PTA2_DDC,(20,)),
     'PTA2_DDC_30':(PTA2_DDC,(30,)),
@@ -72,8 +70,12 @@ VT3_bots = {
     'PTA2a_DDC_15':(PTA2a_DDC,(15,)),
     'PTA2a_DDC_30':(PTA2a_DDC,(30,)),
     'PTA2a_DDC_60':(PTA2a_DDC,(60,)),
-    'PTA3a_DDC_15':(PTA3a_ADDC,(15,1.5)),
-    'PTA3_DDC_15':(PTA3_ADDC,(15,1.5))
+    'PTA3a_ADDC_10_3':(PTA3a_ADDC,(10,3)),
+    'PTA3_ADDC_10_3':(PTA3_ADDC,(10,3)),
+    'PTA3_ADDC_10_4':(PTA3_ADDC,(10,4)),
+    'PTA3_ADDC_30_2':(PTA3_ADDC,(30,2)),
+    'PTA3_ADDC_30_1d5':(PTA3_ADDC,(30,1.5)),
+    'PTA3a_ADDC_30_1d5':(PTA3a_ADDC,(30,1.5)),
 }
 
 
