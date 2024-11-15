@@ -25,7 +25,7 @@ work_traiders = []
 for i in range(len(stock_groups)):
     traider = ResearchBot(*param_bots,name=stock_groups[i])
     test_traiders.append(traider)
-    traider = init_trader(stock_groups,i,param_bots)
+    traider = init_trader(stock_groups[i],param_bots)
     if 23 > hour > 18:
         if isinstance(traider,VisualTraider_v3):
             if isinstance(traider.TA,SleepTA):

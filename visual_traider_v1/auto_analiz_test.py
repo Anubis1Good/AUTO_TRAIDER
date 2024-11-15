@@ -3,11 +3,15 @@ import sys
 import pandas as pd
 
 file_name = 'test.json'
-trader_name = 'ST2'
+
 if len(sys.argv) < 2:
     date = '01.08.24'
 else:
     date = sys.argv[1]
+if len(sys.argv) < 3:
+    trader_name = 'ST2'
+else:
+    trader_name = sys.argv[2]
 
 
 df = pd.read_json(file_name)

@@ -17,8 +17,8 @@ class KeysW(Keys):
 
 
 class PTA2_DDC(BaseTA):
-    def __init__(self, trader,period=60):
-        super().__init__(trader)
+    def __init__(self, trader,period=60,*args):
+        super().__init__(trader,*args)
         self.period = period
     def get_keys(self, img)-> KeysW:
         region = self.trader.chart_region
@@ -55,3 +55,13 @@ class PTA2_DDC(BaseTA):
         if keys.cur_price > keys.middle_fast:
             return 'close_short'
 
+class PTA2a_DDC(PTA2_DDC):
+    def get_action(self, keys:KeysW):
+        if keys.h_last_hb == keys.ups_fast:
+            return 'short'
+        if keys.l_last_hb == keys.downs_fast:
+            return 'long'
+        if keys.h_last_hb < keys.middle_fast:
+            return 'close_long'
+        if keys.l_last_hb > keys.middle_fast:
+            return 'close_short'

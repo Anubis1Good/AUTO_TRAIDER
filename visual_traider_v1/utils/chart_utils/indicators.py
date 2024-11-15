@@ -3,7 +3,7 @@ import numpy.typing as npt
 from utils.ML_utils.LR_utils import get_linear_regress,get_points_linear_reg
 from utils.chart_utils.dtype import HalfBar
 
-def get_SMA(points:npt.NDArray,step) -> npt.NDArray:
+def get_SMA(points:npt.NDArray,step:int=14) -> npt.NDArray:
     moving_averages = []
     # cum_sumx = np.cumsum(points[:,0])
     i = step 
@@ -193,7 +193,7 @@ def check_zona(zona,half_bars,cur_price=None,method=None):
             is_zona = False
     return is_zona
 
-# strange_result
+# TODO
 def get_rsi(half_bars:list[HalfBar],period=14):
     ups,downs = [],[]
     for i in range(len(half_bars)-period,len(half_bars)):
@@ -282,6 +282,28 @@ def get_donchan_channel(half_bars:list[HalfBar],period=20,delay=0)  -> tuple[npt
         avarage.append((max_hb[0],avarage_y))
     return np.array(ups),np.array(downs),np.array(avarage)
 
+def get_adaptive_DC(half_bars:list[HalfBar],step_sma:int=14,delay:int=0,multer:float=1.0)  -> tuple[npt.NDArray]:
+    ups,downs = [],[]
+    avarage = []
+    volatility = get_SMA(np.array(list(map(lambda x: x.spred_pt,half_bars))),step_sma)
+    for i in range(step_sma,len(half_bars)-delay):
+        period = int(volatility[i-step_sma][1]*multer)
+        if period > i:
+            period = i
+        slice = half_bars[i-period:i]
+        max_hb = half_bars[i].hpt
+        min_hb = half_bars[i].lpt
+        for j in slice:
+            if j.yh < max_hb[1]:
+                max_hb = max_hb[0],j.yh
+            if j.yl > min_hb[1]:
+                min_hb = max_hb[0],j.yl
+        ups.append(max_hb)
+        downs.append(min_hb)
+        avarage_y = (min_hb[1] + max_hb[1])//2
+        avarage.append((max_hb[0],avarage_y))
+    return np.array(ups),np.array(downs),np.array(avarage)
+
 def help_level_DC(seq:npt.NDArray,seq2:npt.NDArray,threshold:int,width:int):
     zone = []
     temp_zone = []
@@ -308,3 +330,44 @@ def get_level_DC(ups:npt.NDArray,downs:npt.NDArray,threshold:int=20,width:int=20
     sell_zone = help_level_DC(ups,downs,threshold,width)
     bye_zone = help_level_DC(downs,ups,threshold,width)
     return sell_zone,bye_zone
+
+def get_FVG(half_bars:list[HalfBar],threshold:int=10,delay=1):
+    half_bars = half_bars[:-delay]
+    yhs = np.array(list(map(lambda x: x.yh,half_bars)))
+    yls = np.array(list(map(lambda x: x.yl,half_bars)))
+    bullish_FGV = []
+    bearish_FGV = []
+    for i in range(2,len(half_bars)):
+        low = half_bars[i].lpt
+        low1 = half_bars[i-1].lpt
+        low2 = half_bars[i-2].lpt
+        high = half_bars[i].hpt
+        high1 = half_bars[i-1].hpt
+        high2 = half_bars[i-2].hpt
+        delta = (low1[1] - high1[1])//3
+        if high2[1] - low[1] > threshold:
+            tepm = yls[i:]
+            if np.all(tepm <= high2[1]-delta):
+                zone = np.array([high2,low])
+                bullish_FGV.append(zone)
+        if low1[1] >= low2[1] and low1[1] - low[1] > threshold:
+            tepm = yls[i:]
+            if np.all(tepm < low1[1]-delta):
+                zone = np.array([low1,low])
+                bullish_FGV.append(zone)
+        if high[1] - low2[1] > threshold:
+            tepm = yhs[i:]
+            if np.all(tepm >= low2[1]+delta):
+                zone = np.array([low2,high])
+                bearish_FGV.append(zone)
+        if high1[1] <= high2[1] and high[1] - high1[1] > threshold:
+            tepm = yhs[i:]
+            if np.all(tepm > high1[1]+delta):
+                zone = np.array([high1,high])
+                bearish_FGV.append(zone)
+    
+    bullish_FGV = np.array(bullish_FGV)
+    bearish_FGV = np.array(bearish_FGV)
+    return bullish_FGV,bearish_FGV
+        
+        

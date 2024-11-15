@@ -5,7 +5,7 @@ class Keys:
     cur_price:int
 
 class BaseTA:
-    def __init__(self,trader):
+    def __init__(self,trader,*args):
         self.trader = trader
     def get_keys(self,img) -> Keys:
         return Keys(1000)

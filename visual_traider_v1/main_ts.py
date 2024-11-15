@@ -21,7 +21,7 @@ minute = now.minute
 param_bots = configuration_traiders_v2('config_files\config_ts.txt')
 work_traiders = []
 for i in range(len(stock_groups)):
-    traider = init_trader(stock_groups,i,param_bots)
+    traider = init_trader(stock_groups[i],param_bots)
     if isinstance(traider,VisualTraider_v3):
         if isinstance(traider.TA,SleepTA):
             traider.TA = PTA2_DDC(traider,60)
