@@ -109,7 +109,17 @@ class VisualTraider_v3():
             self.free_stop_s = False
             self.close_long = False
         action,keys = self.TA(img)
-        if action:
+        if self.close_long:
+            if pos == 1:
+                self._send_close(img,'long')
+            else:
+                self.close_long = False
+        elif self.close_short:
+            if pos == -1:
+                self._send_close(img,'short')
+            else:
+                self.close_long = False
+        elif action:
             if action == 'long':
                 if pos == -1:
                     self.close_short = True
@@ -137,16 +147,6 @@ class VisualTraider_v3():
                 if pos == 1:
                     self.close_long = True
                     self._send_close(img,'long')
-        elif self.close_long:
-            if pos == 1:
-                self._send_close(img,'long')
-            else:
-                self.close_long = False
-        elif self.close_short:
-            if pos == -1:
-                self._send_close(img,'short')
-            else:
-                self.close_long = False
         else:
             self._reset_req()
 

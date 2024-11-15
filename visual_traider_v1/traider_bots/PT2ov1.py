@@ -6,10 +6,10 @@ from utils.chart_utils.indicators import get_bollinger_bands, get_dynamics, chec
 from utils.chart_utils.ProSveT import ProSveT
 
 
-class PT2(VisualTraider_v2):
+class PT2ov(VisualTraider_v2):
     def __init__(self, cluster: tuple, dealfeed: tuple, glass: tuple, day: tuple, hour: tuple, minute: tuple, position: tuple, name: str, mode: int = 0,**kw) -> None:
         super().__init__(cluster, dealfeed, glass, day, hour, minute, position, name, mode,**kw)
-        self.traider_name = 'PT2'
+        self.traider_name = 'PT2ov'
         self.bbu_attached = False
         self.bbd_attached = False
         self.close_long = False

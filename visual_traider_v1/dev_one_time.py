@@ -4,8 +4,8 @@ import pyautogui as pag
 import cv2
 from settings import configuration_traiders_v2
 from traider_bots.VisualTraider_v3 import VisualTraider_v3 as Trader
-from tas.PSTA1 import PSTA1 as TA
-from traider_bots.help_bots.WorkBot import WorkBot as Trader
+from tas.WorkTA import WorkTA as TA
+# from traider_bots.help_bots.WorkBot import WorkBot as Trader
 
 param_bots = configuration_traiders_v2('config_files\config.txt')
 traider = Trader(*param_bots,name='MXI')

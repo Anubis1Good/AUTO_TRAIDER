@@ -1,4 +1,4 @@
-from traider_bots.PT2ov1 import PT2 
+from traider_bots.PT2ov1 import PT2ov
 from traider_bots.PST1 import PST1 
 from traider_bots.PT1 import PT1 
 from traider_bots.ST4 import ST4
@@ -29,7 +29,7 @@ def init_trader(stock_groups,i,param_bots):
     elif stock_groups[i] in PST1_group:
         traider = PST1(*param_bots,name=stock_groups[i],mode=1)
     elif stock_groups[i] in PT2ov_group:
-        traider = PT2(*param_bots,name=stock_groups[i],mode=1)
+        traider = PT2ov(*param_bots,name=stock_groups[i],mode=1)
     elif stock_groups[i] in ST4_group:
         traider = ST4(*param_bots,name=stock_groups[i],mode=1)
     elif stock_groups[i] in ST6_group:
