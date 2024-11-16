@@ -10,11 +10,12 @@ import sys
 import keyboard
 from wrappers.GroupBotWrapper import GroupBotWrapper
 from traider_bots.VisualTraider_v2 import VisualTraider_v2
-now = datetime.now()
-hour = now.hour
-minute = now.minute
-print(hour)
-print(minute)
+# now = datetime.now()
+# hour = now.hour
+# minute = now.minute
+# print(hour)
+# print(minute)
+print('_'.split('_'))
 # sleep(5)
 # print(sys.argv)
 # pag.screenshot('screens\Screen.png')

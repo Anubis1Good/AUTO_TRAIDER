@@ -1,10 +1,10 @@
 import os
 test_data = 'test_data'
 result_dir = 'test_results'
-bot_name = 'PTA2_DDC_5'
+bot_name = 'LTA1_C'
 variants = os.listdir(test_data)
-# stock_group = '_'
-stock_group = 'MXI'
+stock_group = '_'
+# stock_group = 'MXI'
 for variant in variants:
     print(variant)
     folders = os.listdir(test_data+'/'+variant)
