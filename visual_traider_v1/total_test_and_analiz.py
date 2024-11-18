@@ -1,7 +1,7 @@
 import os
 test_data = 'test_data'
 result_dir = 'test_results'
-bot_name = 'LTA1_C'
+bot_name = 'PTA3_ADDC_10_3'
 variants = os.listdir(test_data)
 stock_group = '_'
 # stock_group = 'MXI'
