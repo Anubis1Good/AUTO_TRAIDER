@@ -11,7 +11,9 @@ from utils.config import ColorsBtnBGR
 from utils.chart_utils.dtype import HalfBar
 from utils.config import TemplateCandle
 from utils.test_utils.test_traide import test_open,test_close
+from utils.middlewares.close_on_time import only_close
 from tas.BaseTA import BaseTA
+
 
 class VisualTraider_v3():
     def __init__(
@@ -109,6 +111,8 @@ class VisualTraider_v3():
             self.free_stop_s = False
             self.close_long = False
         action,keys = self.TA(img)
+        action = only_close(action,18,15)
+        action = only_close(action,23,15)
         if self.close_long:
             if pos == 1:
                 self._send_close(img,'long')
