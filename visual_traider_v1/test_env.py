@@ -41,11 +41,9 @@ reset_test_json()
 # stock_groups = ['MXI','SBER']
 # stock_groups = ['CNY']
 for ticker in tqdm(stock_groups):
-    # traider = Trader(*param_bots,name=ticker)
+    
     trader = init_test(bot_name,param_bots,ticker)
-    # traider.TA = TA(traider,20)
-    # test_traider = ResearchBot(*param_bots,name=ticker)
-    # print(ticker)
+
     for img in imgs:
         if ticker in img:
             # print(img)
@@ -54,6 +52,5 @@ for ticker in tqdm(stock_groups):
             price = float(img.split('_')[-1][:-4])
             
             trader.run(image,price)
-            # traider2.run(image)
-            # test_traider.run(image)
+
 print('done')

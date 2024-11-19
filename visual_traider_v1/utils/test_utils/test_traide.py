@@ -42,7 +42,7 @@ def test_open(image,name,pos,traider,draw,price):
         "pos":pos,
         "traider":traider,
         "open_price":price,
-        "close_price":price
+        "close_price":""
     })
     send_save_test(saves)
     return 1

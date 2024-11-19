@@ -1,11 +1,12 @@
 import os
 import sys
+import json
 import pandas as pd
 
 file_name = 'test.json'
 
 if len(sys.argv) < 2:
-    date = '01.08.24'
+    date = '31.07.24'
 else:
     date = sys.argv[1]
 if len(sys.argv) < 3:
@@ -13,17 +14,29 @@ if len(sys.argv) < 3:
 else:
     trader_name = sys.argv[2]
 
+with open('test_files\last_price.json') as f:
+    last_prices = json.load(f)
+
 
 df = pd.read_json(file_name)
-# print(df.head())
+
+def change_cp(row,lp):
+    if row['close'] == "":
+        if row['name'] in lp:
+            cp = float(lp[row['name']])
+            return cp
+    return row.close_price
+
 def get_quity(row):
-    # print(row)
     if row.pos == 'long':
         quity = row.close_price - row.open_price
     else:
         quity = row.open_price- row.close_price
     return quity
 try:
+    print(df.head())
+    lp = last_prices[date]
+    df.close_price = df.apply(lambda row:change_cp(row,lp),axis=1)
     df['quity'] = df.apply(get_quity,axis=1)
     df['percent'] = round(df['quity'] / df['open_price'],4)*100
     res = df.groupby('name')['quity'].agg(['sum','count'])
