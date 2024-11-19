@@ -1,12 +1,13 @@
 
-sleep_group = ['LKOH','PIKK','VTBR','MRKP','RUAL','CNY','BSPB']
+sleep_group = ['LKOH','PIKK','MRKP','RUAL','CNY','BSPB']
 
 
 bot_on_ticker = {
-    'ST1a' : ['CHMF','SELG'],
+    'ST1a' : ['SELG'],
     'ST1' : ['GMKN','ROSN','SBERP','HYDR','MTLR'],
-    'ST4' : ['MOEX'],
     'PTA2_DDC_60' : ['GAZP'],
+    'PTA2_DDC_80' : ['NVTK'],
     'PTA2a_DDC_15' : ['MXI'],
-    'LTA1_C':['MAGN','SOFL','SIBN','SBER','NLMK','ALRS','NVTK','TATN','APTK','AFKS','FEES','ABIO']
+    'LTA1_C':['SIBN','ALRS','TATN','APTK','AFKS','FEES','SBER','ABIO'],
+    'PTA4_WDDC_100_10_20':['CHMF','NLMK','MAGN','VTBR','SOFL','MOEX']
 }

@@ -68,6 +68,7 @@ VT3_bots = {
     'LTA1_C2':(LTA1_C2,(5,2.5)),
     'PTA2_DDC_15':(PTA2_DDC,(15,)),
     'PTA2_DDC_60':(PTA2_DDC,(60,)),
+    'PTA2_DDC_80':(PTA2_DDC,(80,)),
     'PTA2a_DDC_15':(PTA2a_DDC,(15,)),
     'PTA2a_DDC_30':(PTA2a_DDC,(30,)),
     'PTA2a_DDC_60':(PTA2a_DDC,(60,)),
