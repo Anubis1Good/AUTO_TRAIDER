@@ -4,7 +4,8 @@ workBot
 import numpy as np
 import cv2
 from tas.BaseTA import BaseTA,Keys
-from utils.chart_utils.indicators import get_donchan_channel,get_SMA,get_FVG,get_adaptive_DC,get_borders,get_rsi,get_strong_index, get_rocket_meteor_index
+from utils.chart_utils.indicators import *
+from utils.test_utils.test_draws_funcs import draw_bollinger
 from dataclasses import dataclass
 
 
@@ -24,24 +25,30 @@ class WorkTA(BaseTA):
         half_bars = self.trader._get_half_bars(candle_mask,candle_cords,volume_cords)
         cur_price = self.trader._get_current_price(chart)
         # volatility = np.array(list(map(lambda x: x.spred,half_bars)))
+        mpts = np.array(list(map(lambda x: x.mpt,half_bars)))
         # volatility = np.mean(volatility)
         # bullish_FGV,bearish_FGV = get_FVG(half_bars,volatility,2)
-        # ups,downs,middle = get_adaptive_DC(half_bars,self.period,multer=1.5)
+        ups,downs,middle = get_donchan_channel(half_bars,60)
+        bbm,bbu,bbd = get_bollinger_bands(mpts)
         rsi = get_rsi(half_bars)
         # siu,sid = get_strong_index(half_bars)
-        siu,sid = get_rocket_meteor_index(half_bars)
+        ri,mi = get_rocket_meteor_index(half_bars,14)
         # sma = get_SMA(np.array(list(map(lambda x: x.mpt,half_bars))))
         print(rsi)
-        print(siu[-1][1])
-        print(sid[-1][1])
+        print(ri[-1][1])
+        print(mi[-1][1])
+        if ri[-1][1] > 60:
+            print('long')
+        elif mi[-1][1] > 60:
+            print('short')
+        else:
+            print('range')
         if self.trader.mode != 1:
-            1
-            # cv2.line(chart,top_line[0],top_line[1],(200,33,150),2)
-            # cv2.line(chart,bottom_line[0],bottom_line[1],(100,233,250),2)
-            # cv2.line(chart,top_line2[0],top_line2[1],(200,233,50),2)
-            # cv2.line(chart,bottom_line2[0],bottom_line2[1],(200,33,150),2)
-            cv2.polylines(chart,[siu],False,(0,200,100),2)
-            cv2.polylines(chart,[sid],False,(255,100,150),2)
+            cv2.polylines(chart,[ri],False,(0,200,100),2)
+            cv2.polylines(chart,[mi],False,(255,100,150),2)
+            draw_bollinger(chart,bbm,bbu,bbd,thickness=2)
+            for pl in [ups,downs,middle]:
+                cv2.polylines(chart,[pl],False,(0,200,0))
             # cv2.polylines(chart,[middle],False,(155,100,250),2)
             # cv2.polylines(chart,[sma],False,(255,100,0),1)
             # for zone in bullish_FGV:
