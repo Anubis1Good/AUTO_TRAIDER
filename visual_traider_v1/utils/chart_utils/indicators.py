@@ -195,9 +195,10 @@ def check_zona(zona,half_bars,cur_price=None,method=None):
 
 # TODO
 def get_rsi(half_bars:list[HalfBar],period=14):
+
     ups,downs = [],[]
     for i in range(len(half_bars)-period,len(half_bars)):
-        if half_bars[i].yh > half_bars[i-1].yh:
+        if half_bars[i].yh < half_bars[i-1].yh:
             ups.append(half_bars[i].spred)
         else:
             downs.append(half_bars[i].spred)
@@ -209,6 +210,46 @@ def get_rsi(half_bars:list[HalfBar],period=14):
     return rsi
     # RSI = 100 – 100 / (1 + RS),
     # RS = EMAn(Up) / EMAn(Down)
+def get_strong_index(half_bars:list[HalfBar],period=14):
+    siu,sid = [],[]
+    i = period
+    while i <= len(half_bars):
+        ups,downs = 0,0
+        slice = half_bars[i-period:i]
+        j = 1
+        while j < len(slice):
+            if slice[j].yh < slice[j-1].yh:
+                ups += 1
+            if slice[j].yl > slice[j-1].yl:
+                downs += 1
+            j+= 1
+        u = int((ups/period)*100)
+        d = int((downs/period)*100)
+        siu.append(np.array([half_bars[i-1].x,u]))
+        sid.append(np.array([half_bars[i-1].x,d]))
+        i += 1
+    return np.array(siu),np.array(sid)
+
+def get_rocket_meteor_index(half_bars:list[HalfBar],period=14):
+    ri,mi = [],[]
+    i = period
+    while i <= len(half_bars):
+        rocket,meteor,other = 0,0,0
+        slice = half_bars[i-period:i]
+        j = 1
+        while j < len(slice):
+            if slice[j].yh < slice[j-1].yh:
+                rocket += slice[j].spred
+            if slice[j].yl > slice[j-1].yl:
+                meteor += slice[j].spred
+            other += slice[j].spred
+            j+= 1
+        u = int((rocket/other)*100)
+        d = int((meteor/other)*100)
+        ri.append(np.array([half_bars[i-1].x,u]))
+        mi.append(np.array([half_bars[i-1].x,d]))
+        i += 1
+    return np.array(ri),np.array(mi)
 
 def get_spred_channel(half_bars:list[HalfBar],period=14) -> tuple[npt.NDArray]:
     ma = []

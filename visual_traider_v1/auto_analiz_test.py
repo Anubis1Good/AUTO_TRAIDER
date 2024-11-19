@@ -3,7 +3,12 @@ import sys
 import json
 import pandas as pd
 
-file_name = 'test.json'
+fast_test_env = True
+
+if fast_test_env:
+    file_name = 'test_files/fast_test.json'
+else:
+    file_name = 'test.json'
 
 if len(sys.argv) < 2:
     date = '31.07.24'
@@ -34,7 +39,6 @@ def get_quity(row):
         quity = row.open_price- row.close_price
     return quity
 try:
-    print(df.head())
     lp = last_prices[date]
     df.close_price = df.apply(lambda row:change_cp(row,lp),axis=1)
     df['quity'] = df.apply(get_quity,axis=1)

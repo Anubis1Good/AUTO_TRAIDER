@@ -37,6 +37,19 @@ def reset_test_json():
     with open('test.json','w') as f:
         json.dump(saves,f)
 
+def reset_fast_test_json():
+    saves = [
+        {
+        "name": "pupse",
+        "open": True,
+        "close": True,
+        "pos": "long",
+        "trader": "VT"
+        }
+    ]
+    with open('test_files/fast_test.json','w') as f:
+        json.dump(saves,f)
+
 def clear_test_images():
     shutil.rmtree('./test_images') 
     os.mkdir('./test_images')

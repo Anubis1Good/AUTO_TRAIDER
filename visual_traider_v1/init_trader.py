@@ -24,3 +24,13 @@ def init_test(bot_name,param_bots,ticker):
     else:
         trader.TA = SleepTA(trader)
     return trader
+
+def init_fast_test(bot_name,param_bots,ticker):
+    if bot_name in VT2_bots:
+        return VT2_bots[bot_name](*param_bots,ticker,mode=4)
+    trader = VisualTraider_v3(*param_bots,ticker,mode=4)
+    if bot_name in VT3_bots:
+        trader.TA = VT3_bots[bot_name][0](trader,*VT3_bots[bot_name][1])
+    else:
+        trader.TA = SleepTA(trader)
+    return trader

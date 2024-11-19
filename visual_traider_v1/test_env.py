@@ -3,10 +3,10 @@ import sys
 import cv2
 from tqdm import tqdm
 from stock_groups import stock_groups
-from init_trader import init_test
-from settings import configuration_traiders_v2, reset_test_json,clear_test_images,clear_logs
+from init_trader import init_test,init_fast_test
+from settings import configuration_traiders_v2, reset_test_json,clear_test_images,clear_logs,reset_fast_test_json
 
-
+fast_test_env = True
 param_bots = configuration_traiders_v2('config_files\config.txt')
 if len(sys.argv) < 2:
     date_stock = '13.11.2024'
@@ -19,7 +19,7 @@ if len(sys.argv) < 3:
 else:
     data_variant = sys.argv[2]
 if len(sys.argv) < 4:
-    bot_name = 'ST1'
+    bot_name = 'PTA3_ADDC_10_5'
 else:
     bot_name = sys.argv[3]
 if len(sys.argv) > 4:
@@ -37,13 +37,17 @@ imgs = os.listdir(full_path)
 clear_test_images()
 clear_logs()
 reset_test_json()
+reset_fast_test_json()
 # stock_groups = ['MTLR','SBER','AFKS','SOFL','SELG']
 # stock_groups = ['MXI','SBER']
 # stock_groups = ['CNY']
 for ticker in tqdm(stock_groups):
     
-    trader = init_test(bot_name,param_bots,ticker)
-
+    if fast_test_env:
+        trader = init_fast_test(bot_name,param_bots,ticker)
+    else:
+        trader = init_test(bot_name,param_bots,ticker)
+        
     for img in imgs:
         if ticker in img:
             # print(img)

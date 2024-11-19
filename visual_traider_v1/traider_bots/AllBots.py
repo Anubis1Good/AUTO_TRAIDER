@@ -24,10 +24,11 @@ from traider_bots.Collector1 import Collector1
 from traider_bots.VisualTraider_v3 import VisualTraider_v3
 from tas.BaseTA import BaseTA
 from tas.CloserTA import CloserTA
+from tas.SleepTA import SleepTA
 from tas.PTA2_DDC import PTA2_DDC,PTA2a_DDC
 from tas.PTA3_ADDC import PTA3_ADDC,PTA3a_ADDC
-from tas.SleepTA import SleepTA
 from tas.LTA1_C import LTA1_C
+from tas.PTA4_WDDC import PTA4_WDDC
 
 VT2_bots = {
     'OGT1':OGT1,
@@ -65,20 +66,12 @@ VT3_bots = {
     'CloserTA':(CloserTA,()),
     'LTA1_C':(LTA1_C,(4,)),
     'PTA2_DDC_15':(PTA2_DDC,(15,)),
-    'PTA2_DDC_20':(PTA2_DDC,(20,)),
-    'PTA2_DDC_30':(PTA2_DDC,(30,)),
-    'PTA2_DDC_40':(PTA2_DDC,(40,)),
     'PTA2_DDC_60':(PTA2_DDC,(60,)),
-    'PTA2_DDC_80':(PTA2_DDC,(80,)),
-    'PTA2_DDC_100':(PTA2_DDC,(100,)),
     'PTA2a_DDC_15':(PTA2a_DDC,(15,)),
     'PTA2a_DDC_30':(PTA2a_DDC,(30,)),
     'PTA2a_DDC_60':(PTA2a_DDC,(60,)),
-    'PTA3a_ADDC_10_5':(PTA3a_ADDC,(10,5)),
-    'PTA3_ADDC_10_5':(PTA3_ADDC,(10,5)),
     'PTA3_ADDC_30_2':(PTA3_ADDC,(30,2)),
-    'PTA3_ADDC_30_1d5':(PTA3_ADDC,(30,1.5)),
-    'PTA3a_ADDC_30_1d5':(PTA3a_ADDC,(30,1.5)),
+    'PTA4_WDDC_15_15_20':(PTA4_WDDC,(15,15,20))
 }
 
 

@@ -11,7 +11,7 @@ from utils.test_utils.windows import draw_borders_online
 from traider_bots.VisualTraider_v3 import VisualTraider_v3 
 from tas.SleepTA import SleepTA
 from tas.CloserTA import CloserTA
-from tas.PTA2_DDC import PTA2_DDC
+from tas.LTA1_C import LTA1_C
 from init_trader import init_trader
 
 now = datetime.now()
@@ -24,7 +24,7 @@ for i in range(len(stock_groups)):
     traider = init_trader(stock_groups[i],param_bots)
     if isinstance(traider,VisualTraider_v3):
         if isinstance(traider.TA,SleepTA):
-            traider.TA = PTA2_DDC(traider,60)
+            traider.TA = LTA1_C(traider)
     work_traiders.append(traider)
 
 
@@ -41,10 +41,10 @@ while True:
         pag.screenshot('screens\Screen.png')
         img = cv2.imread('screens\Screen.png')
 
-        if hour == 18 and minute > 25:
-            work_traiders[i].TA = CloserTA(work_traiders[i])
-        if hour == 23 and minute > 25:
-            work_traiders[i].TA = CloserTA(work_traiders[i])
+        # if hour == 18 and minute > 25:
+        #     work_traiders[i].TA = CloserTA(work_traiders[i])
+        # if hour == 23 and minute > 25:
+        #     work_traiders[i].TA = CloserTA(work_traiders[i])
 
         work_traiders[i].run(img)
         if keyboard.is_pressed('Esc'):
