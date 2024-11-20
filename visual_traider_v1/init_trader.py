@@ -1,7 +1,7 @@
 from sgs.sg_on_bot import *
 from traider_bots.AllBots import *
 
-def init_trader(ticker,param_bots):
+def init_trader(ticker,param_bots,bot_on_ticker=bot_on_ticker):
     bot_name = ''
     for bot in bot_on_ticker:
         if ticker in bot_on_ticker[bot]:

@@ -11,8 +11,9 @@ from utils.test_utils.windows import draw_borders_online
 from traider_bots.VisualTraider_v3 import VisualTraider_v3 
 from tas.SleepTA import SleepTA
 from tas.CloserTA import CloserTA
-from tas.LTA1_C import LTA1_C
+from tas.PTA2_DDC import PTA2_DDC
 from init_trader import init_trader
+from sgs.sg_on_bot import bot_on_ticker_5m
 
 now = datetime.now()
 hour = now.hour
@@ -21,10 +22,10 @@ minute = now.minute
 param_bots = configuration_traiders_v2('config_files\config_ts.txt')
 work_traiders = []
 for i in range(len(stock_groups)):
-    traider = init_trader(stock_groups[i],param_bots)
+    traider = init_trader(stock_groups[i],param_bots,bot_on_ticker_5m)
     if isinstance(traider,VisualTraider_v3):
         if isinstance(traider.TA,SleepTA):
-            traider.TA = LTA1_C(traider)
+            traider.TA = PTA2_DDC(traider)
     work_traiders.append(traider)
 
 
