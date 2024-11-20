@@ -12,7 +12,7 @@ from traider_bots.help_bots.ResearchBot import ResearchBot
 from traider_bots.VisualTraider_v3 import VisualTraider_v3 
 from tas.SleepTA import SleepTA
 from tas.CloserTA import CloserTA
-from tas.LTA1_C import LTA1_C
+from tas.PTA2_DDC import PTA2_DDC
 from init_trader import init_trader
 
 now = datetime.now()
@@ -29,7 +29,7 @@ for i in range(len(stock_groups)):
     if 23 > hour > 18:
         if isinstance(traider,VisualTraider_v3):
             if isinstance(traider.TA,SleepTA):
-                traider.TA = LTA1_C(traider)
+                traider.TA = PTA2_DDC(traider,100)
     work_traiders.append(traider)
 
 # draw_borders_online([work_traiders[0]])

@@ -1,7 +1,7 @@
 import os
 test_data = 'test_data'
 result_dir = 'test_results'
-bot_name = 'LTA1_C2'
+bot_name = 'OGTA1_Rails'
 variants = os.listdir(test_data)
 stock_group = '_'
 # stock_group = 'MXI'

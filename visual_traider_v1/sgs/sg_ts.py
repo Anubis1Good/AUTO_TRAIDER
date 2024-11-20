@@ -1,14 +1,14 @@
 stock_groups = [
-    'AFKS',
-    'GAZP',
-    'ABIO',
+    'CHMF',
+    'NVTK',
+    'SOFL',
     'RENI',
-    'MRKP',
-    'MRKC',
-    'MRKV',
-    'GEMC',
+    'ALRS',
+    'MAGN',
+    'NLMK',
+    'ROSN',
     'VTBR',
     'WUSH',
-    'OKEY',
+    'GMKN',
     'MTLR'
 ]
