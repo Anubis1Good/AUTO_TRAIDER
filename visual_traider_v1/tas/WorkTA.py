@@ -31,7 +31,9 @@ class WorkTA(BaseTA):
         # volatility = np.mean(volatility)
         # bullish_FGV,bearish_FGV = get_FVG(half_bars,volatility,2)
         ups,downs,middle = get_donchan_channel(half_bars,60)
-        bbm,bbu,bbd = get_bollinger_bands(mpts)
+        max_hb,min_hb,middle_hb = get_donchan_channel_lite(half_bars,60)
+        up,down,mup,mdown = get_van_gerchick_p(max_hb,min_hb,middle_hb)
+        # bbm,bbu,bbd = get_bollinger_bands(mpts)
         rsi = get_rsi(half_bars)
         # siu,sid = get_strong_index(half_bars)
         ri,mi = get_rocket_meteor_index(half_bars,14)
@@ -46,12 +48,19 @@ class WorkTA(BaseTA):
         else:
             print('range')
         if self.trader.mode != 1:
-            vsa.draw_all(chart)
+            cv2.circle(chart,(half_bars[-1].x,up),1,(0,255,0))
+            cv2.circle(chart,(half_bars[-1].x,down),1,(255,0,0))
+            cv2.circle(chart,(half_bars[-1].x,mup),1,(0,255,255))
+            cv2.circle(chart,(half_bars[-1].x,mdown),1,(255,0,255))
+            cv2.circle(chart,(half_bars[-1].x,max_hb),1,(255,255,255),2)
+            cv2.circle(chart,(half_bars[-1].x,min_hb),1,(255,255,255),2)
+            cv2.circle(chart,(half_bars[-1].x,middle_hb),1,(255,255,255),2)
+            # vsa.draw_all(chart)
             # cv2.polylines(chart,[ri],False,(0,200,100),2)
             # cv2.polylines(chart,[mi],False,(255,100,150),2)
             # draw_bollinger(chart,bbm,bbu,bbd,thickness=2)
-            # for pl in [ups,downs,middle]:
-            #     cv2.polylines(chart,[pl],False,(0,200,0))
+            for pl in [ups,downs,middle]:
+                cv2.polylines(chart,[pl],False,(0,200,0))
             # cv2.polylines(chart,[middle],False,(155,100,250),2)
             # cv2.polylines(chart,[sma],False,(255,100,0),1)
             # for zone in bullish_FGV:

@@ -323,6 +323,28 @@ def get_donchan_channel(half_bars:list[HalfBar],period=20,delay=0)  -> tuple[npt
         avarage.append((max_hb[0],avarage_y))
     return np.array(ups),np.array(downs),np.array(avarage)
 
+def get_donchan_channel_lite(half_bars:list[HalfBar],period=20,delay=0)  -> tuple[int]:
+    i = len(half_bars)-delay-1
+    slice = half_bars[i-period:i]
+    max_hb = half_bars[i].yh
+    min_hb = half_bars[i].yl
+    for j in slice:
+        if j.yh < max_hb:
+            max_hb = j.yh
+        if j.yl > min_hb:
+            min_hb = j.yl
+
+    middle_hb = (min_hb + max_hb)//2
+    return max_hb,min_hb,middle_hb
+
+def get_van_gerchick_p(up,down,middle,divider=10):
+    buffer = (down - up)//divider
+    up += buffer
+    down -= buffer
+    mup = middle - buffer
+    mdown = middle + buffer
+    return up,down,mup,mdown
+
 def get_adaptive_DC(half_bars:list[HalfBar],step_sma:int=14,delay:int=0,multer:float=1.0)  -> tuple[npt.NDArray]:
     ups,downs = [],[]
     avarage = []

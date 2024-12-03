@@ -5,12 +5,13 @@
 import cv2
 from tas.BaseTA import BaseTA,Keys
 from utils.chart_utils.VSA import VSA
-from utils.chart_utils.dtype import FullBar
+from utils.chart_utils.dtype import FullBar,HalfBar
 from dataclasses import dataclass
+from utils.middlewares.reverse import simple_reverse
 
 @dataclass
 class KeysW(Keys):
-    last_fb:FullBar
+    last_hb:HalfBar
 
 
 
@@ -27,23 +28,25 @@ class OGTA1_Rails(BaseTA):
         half_bars = self.trader._get_half_bars(candle_mask,candle_cords,volume_cords)
 
         cur_price = self.trader._get_current_price(chart)
-        vsa = VSA(half_bars)
-        last_fb = vsa.full_bars[-1]
+        last_hb = half_bars[-2]
+        # vsa = VSA(half_bars)
+        # last_fb = vsa.full_bars[-1]
         if self.trader.mode in (2,3):
             pass
 
         return KeysW(
             cur_price=cur_price[1],
-            last_fb=last_fb
+            last_hb=last_hb
 
         )
-
+    def classic_get_action(self, keys:KeysW):
+        if keys.cur_price > keys.last_hb.yl:
+            return 'short'
+        if keys.cur_price < keys.last_hb.yh:
+            return 'long'
+        
     def get_action(self, keys:KeysW):
-        if keys.last_fb.over_vsai:
-            if keys.cur_price > keys.last_fb.yl:
-                return 'short'
-            if keys.cur_price < keys.last_fb.yh:
-                return 'long'
+        return simple_reverse(self.classic_get_action(keys))
         # if keys.cur_price < keys.top_close:
         #     return 'close_long'
         # if keys.cur_price > keys.top_close:
