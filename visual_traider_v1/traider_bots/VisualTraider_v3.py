@@ -10,7 +10,7 @@ from scipy import stats
 from utils.config import ColorsBtnBGR
 from utils.chart_utils.dtype import HalfBar
 from utils.config import TemplateCandle
-from utils.test_utils.test_traide import test_open,test_close,f_test_close,f_test_open
+from utils.test_utils.test_traide import test_open,test_close,f_test_close,f_test_open,smart_test_open,smart_test_close
 from utils.middlewares.close_on_time import only_close
 from tas.BaseTA import BaseTA
 
@@ -56,21 +56,7 @@ class VisualTraider_v3():
     def __repr__(self) -> str:
         return f'{self.traider_name} - {self.name}'
     
-    # work function
-    def _test(self, img,price):
-        action,keys = self.TA(img)
-        res1_l,res2_l = 0,0
-        res1_s,res2_s = 0,0
-        if action == 'long':
-            res1_s = self._test_send_close(img,'short',price=price)
-            res2_l = self._test_send_open(img,'long',price=price) 
-        elif action == 'close_long':
-            res1_l = self._test_send_close(img,'long',price=price)
-        elif action == 'short':
-            res1_l = self._test_send_close(img,'long',price=price)
-            res2_s = self._test_send_open(img,'short',price=price)
-        elif action == 'close_short':
-            res1_s = self._test_send_close(img,'short',price=price)
+    def _stops_test(self,res1_s,res2_l,res1_l,res2_s):
         if res1_s == 1 and res2_l == 0:
             self.have_pos_s = False
             self.free_stop_s = True
@@ -87,6 +73,22 @@ class VisualTraider_v3():
             self.have_pos_l = False
             self.free_stop_s = False
             self.free_stop_l = True
+    # work function
+    def _test(self, img,price):
+        action,keys = self.TA(img)
+        res1_l,res2_l = 0,0
+        res1_s,res2_s = 0,0
+        if action == 'long':
+            res1_s = self._test_send_close(img,'short',price=price)
+            res2_l = self._test_send_open(img,'long',price=price) 
+        elif action == 'close_long':
+            res1_l = self._test_send_close(img,'long',price=price)
+        elif action == 'short':
+            res1_l = self._test_send_close(img,'long',price=price)
+            res2_s = self._test_send_open(img,'short',price=price)
+        elif action == 'close_short':
+            res1_s = self._test_send_close(img,'short',price=price)
+        self._stops_test(res1_s,res2_l,res1_l,res2_s)
         self.write_logs(keys,action)
 
     def _traide(self, img):
@@ -174,26 +176,27 @@ class VisualTraider_v3():
             res2_s = self._f_test_send_open('short',price)
         elif action == 'close_short':
             res1_s = self._f_test_send_close('short',price)
-        if res1_s == 1 and res2_l == 0:
-            self.have_pos_s = False
-            self.free_stop_s = True
-        if res1_l == 1 and res2_s == 0:
-            self.have_pos_l = False
-            self.free_stop_l = True
-        if res2_l == 1:
-            self.have_pos_l = True
-            self.have_pos_s = False
-            self.free_stop_l = False
-            self.free_stop_s = True
-        if res2_s == 1:
-            self.have_pos_s = True
-            self.have_pos_l = False
-            self.free_stop_s = False
-            self.free_stop_l = True
+        self._stops_test(res1_s,res2_l,res1_l,res2_s)
+
+    def _smart_test(self, img,price,store,close_store):
+        action,keys = self.TA(img)
+        res1_l,res2_l = 0,0
+        res1_s,res2_s = 0,0
+        if action == 'long':
+            res1_s = self._smart_test_send_close('short',price,store,close_store)
+            res2_l = self._smart_test_send_open('long',price,store) 
+        elif action == 'close_long':
+            res1_l = self._smart_test_send_close('long',price,store,close_store)
+        elif action == 'short':
+            res1_l = self._smart_test_send_close('long',price,store,close_store)
+            res2_s = self._smart_test_send_open('short',price,store)
+        elif action == 'close_short':
+            res1_s = self._smart_test_send_close('short',price,store,close_store)
+        self._stops_test(res1_s,res2_l,res1_l,res2_s)
 
 
     
-    def run(self,img,price=0.0):
+    def run(self,img,price=0.0,store=[],close_store=[]):
         copy_img = img.copy()
         try:
             if self.mode == 0:
@@ -205,6 +208,8 @@ class VisualTraider_v3():
                 self._test(copy_img,price)
             elif self.mode == 4:
                 self._fast_test(copy_img,price)
+            elif self.mode == 5:
+                self._smart_test(copy_img,price,store,close_store)
         except Exception as err:
             traceback.print_exc()
         return copy_img
@@ -316,6 +321,12 @@ class VisualTraider_v3():
     
     def _f_test_send_close(self,direction,price):
         return f_test_close(self.name,direction,self.traider_name,price)
+    
+    def _smart_test_send_open(self,direction,price,store):
+        return smart_test_open(self.name,direction,self.traider_name,price,store)
+    
+    def _smart_test_send_close(self,direction,price,store,close_store):
+        return smart_test_close(self.name,direction,self.traider_name,price,store,close_store)
 
     def _draw(self,img,keys,region):
         pass

@@ -103,6 +103,33 @@ def test_close(image,name,pos,traider,draw,price):
     else:
         return 0
 
+
+def smart_test_open(name,pos,trader,price,store:list):
+    store_length = len(store)
+    for i in range(store_length-1,-1,-1):
+        if store[i]['name'] == name and not store[i]['close'] and store[i]['trader'] == trader:
+            return 0
+    store.append({
+        "name":name,
+        "open":True,
+        "close":"",
+        "pos":pos,
+        "trader":trader,
+        "open_price":price,
+        "close_price":""
+    })
+    return 1
+
+def smart_test_close(name,pos,trader,price,store:list,close_store:list):
+    store_length = len(store)
+    for i in range(store_length-1,-1,-1):
+        if store[i]['name'] == name and not store[i]['close'] and store[i]['pos'] == pos and store[i]['trader'] == trader:
+            store[i]['close'] = True
+            store[i]['close_price'] = price
+            close_store.append(store.pop(i))
+            return 1
+    else:
+        return 0
 # print('name' in get_save_test()[0])
 # test_open(1,'moex')
 # test_close(1,'moex')
