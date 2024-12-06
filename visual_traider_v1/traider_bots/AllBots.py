@@ -22,6 +22,7 @@ from traider_bots.archive.ST13 import ST13
 from traider_bots.archive.ST14 import ST14
 from traider_bots.Collector1 import Collector1
 from traider_bots.VisualTraider_v3 import VisualTraider_v3
+from traider_bots.VisualTraider_v4 import VisualTraider_v4
 from tas.BaseTA import BaseTA
 from tas.CloserTA import CloserTA
 from tas.SleepTA import SleepTA

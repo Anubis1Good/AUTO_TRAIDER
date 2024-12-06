@@ -2,7 +2,7 @@ import pyautogui as pag
 import pydirectinput as pdi 
 from time import sleep,time
 import numpy as np
-from utils.config import ColorsBtnBGR
+from utils.config import ColorsBtnBGR,ColorsBtnGray
 from utils.utils import color_search
 from datetime import datetime
 import cv2
@@ -11,57 +11,18 @@ import keyboard
 from wrappers.GroupBotWrapper import GroupBotWrapper
 from traider_bots.VisualTraider_v2 import VisualTraider_v2
 import threading
-from multiprocessing import Pool
+from multiprocessing import Pool,cpu_count
 
-# def if_prime(x):
-#     if x <= 1:
-#         return 0
-#     elif x <= 3:
-#         return x
-#     elif x % 2 == 0 or x % 3 == 0:
-#         return 0
-#     i = 5
-#     while i**2 <= x:
-#         if x % i == 0 or x % (i + 2) == 0:
-#             return 0
-#         i += 6
-#     return x
-
-# a = time()
-# answer = 0
-
-# if __name__ == '__main__':
-#     with Pool(6) as p:
-#         answer = sum(p.map(if_prime, list(range(1000000))))
-# print(time() - a)
-
-a = [1,2,3]
-b = ['a','b','c']
-c = [10]*len(a)
-print(list(zip(a,b,c)))
-
-# now = datetime.now()
-# hour = now.hour
-# minute = now.minute
-# print(hour)
-# print(minute)
-# print('_'.split('_'))
-# sleep(5)
-# print(sys.argv)
-# pag.screenshot('screens\Screen.png')
-# gbw = GroupBotWrapper(
-#     VisualTraider_v2,
-#     ['SBER','GAZP','VTBR','LKOH'],
-#     51,
-#     1918,
-#     766,
-#     151,
-#     709,
-#     737,
-#     1035,
-#     143,
-#     0)
-# img = cv2.imread('screens\Screen.png')
+print(cpu_count())
+# img = cv2.imread('screens\Screen.png',0)
+# mask1 = cv2.inRange(img,ColorBtnGray.candle_color_1,ColorBtnGray.candle_color_1)
+# mask2 = cv2.inRange(img,ColorBtnGray.candle_color_2,ColorBtnGray.candle_color_2)
+# mask = cv2.add(mask1,mask2)
+# kernel = np.ones((2, 1), np.uint8) 
+# mask = cv2.erode(mask,kernel)
+# cv2.imshow('mask',mask)
+# cv2.waitKey(0)
+# cv2.imwrite('test.png',img)
 # gbw.draw_borders(img)
 # img = cv2.imread('screens\Screenshot_7.png')
 # gbw = GroupBotWrapper(

@@ -35,3 +35,19 @@ class TemplateCandle:
         [0,255,255,0]
     ],dtype=np.uint8)
 
+class ColorsBtnGray:
+    ask = 67
+    bid = 76
+    best_ask = 109
+    best_bid = 99
+    large_value_1 = 119
+    large_value_2 = 151
+    color_x = 80
+    color_x_shadow = 70
+    color_x_bb = 75
+    cur_price_1 = 95
+    cur_price_2 = 104
+    candle_color_1 = 111
+    candle_color_2 = 200
+    volume_color_1 = 92
+    volume_color_2 = 101

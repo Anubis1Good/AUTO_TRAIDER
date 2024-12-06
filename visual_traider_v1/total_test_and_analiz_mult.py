@@ -6,7 +6,7 @@ result_dir = 'test_results'
 bot_name = 'PTA2_DDC2_15'
 variants = os.listdir(test_data)
 stock_group = '_'
-stock_group = 'MXI'
+# stock_group = 'MXI'
 
 def mult_test(folder,variant):
     files = os.listdir(result_dir)

@@ -91,14 +91,16 @@ class PTA2_DDC2(BaseTA):
         max_hb,min_hb,middle_hb = get_donchan_channel_lite(half_bars,self.period)
         up,down,mup,mdown = get_van_gerchick_p(max_hb,min_hb,middle_hb)
         last_hb = half_bars[-1]
-        if self.trader.mode in (2,3):
-            cv2.circle(chart,(half_bars[-1].x,up),1,(255,255,255))
-            cv2.circle(chart,(half_bars[-1].x,down),1,(255,255,255))
-            cv2.circle(chart,(half_bars[-1].x,mup),1,(255,255,255))
-            cv2.circle(chart,(half_bars[-1].x,mdown),1,(255,255,255))
-            cv2.circle(chart,(half_bars[-1].x,max_hb),1,(255,255,255))
-            cv2.circle(chart,(half_bars[-1].x,min_hb),1,(255,255,255))
-            cv2.circle(chart,(half_bars[-1].x,middle_hb),1,(255,255,255))
+        if self.trader.mode in (2,0):
+            # cv2.circle(chart,(half_bars[-1].x,up),1,(255,255,255))
+            # cv2.circle(chart,(half_bars[-1].x,down),1,(255,255,255))
+            # cv2.circle(chart,(half_bars[-1].x,mup),1,(255,255,255))
+            # cv2.circle(chart,(half_bars[-1].x,mdown),1,(255,255,255))
+            # cv2.circle(chart,(half_bars[-1].x,max_hb),1,(255,255,255))
+            # cv2.circle(chart,(half_bars[-1].x,min_hb),1,(255,255,255))
+            # cv2.circle(chart,(half_bars[-1].x,middle_hb),1,(255,255,255))
+            cv2.circle(chart,cur_price,1,(255,255,255))
+            print(cur_price)
 
         return KeysW2(
             cur_price=cur_price[1],
