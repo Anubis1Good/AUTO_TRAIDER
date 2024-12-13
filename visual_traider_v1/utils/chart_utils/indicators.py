@@ -105,6 +105,32 @@ def get_williams_fractals(hpts:npt.NDArray,lpts:npt.NDArray,n=2,is_qual=False) -
                 mins.append(np.array(lpts[i]))
     return np.array(maxs),np.array(mins)
 
+def clear_fractals(fractals,top:bool=True) -> npt.NDArray:
+    clear_fractals = []
+    if top:
+        for i in range(1,len(fractals)-1):
+            if fractals[i-1][1] > fractals[i][1] <= fractals[i-1][1]:
+                clear_fractals.append(fractals[i])
+    else:
+        for i in range(1,len(fractals)-1):
+            if fractals[i-1][1] < fractals[i][1] >= fractals[i-1][1]:
+                clear_fractals.append(fractals[i])
+    return np.array(clear_fractals)
+
+def check_michael_harris_pattern(hbs:list[HalfBar],long:bool = True):
+    cur_pos = -1
+    operation = np.int64.__lt__ if long else np.int64.__gt__
+    conditions = []
+    conditions.append(operation(hbs[cur_pos].yh,hbs[cur_pos-1].yh))
+    conditions.append(operation(hbs[cur_pos-1].yh,hbs[cur_pos].yl))
+    conditions.append(operation(hbs[cur_pos].yl,hbs[cur_pos-2].yh))
+    conditions.append(operation(hbs[cur_pos-2].yh,hbs[cur_pos-1].yl))
+    conditions.append(operation(hbs[cur_pos-1].yl,hbs[cur_pos-3].yh))
+    conditions.append(operation(hbs[cur_pos-3].yh,hbs[cur_pos-2].yl))
+    conditions.append(operation(hbs[cur_pos-2].yl,hbs[cur_pos-3].yl))
+    return all(conditions)
+
+
 def get_context(half_bars):
     max_hb_i,min_hb_i = 0,0
     max_hb,min_hb = half_bars[0],half_bars[0]

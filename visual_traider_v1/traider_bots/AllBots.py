@@ -28,8 +28,9 @@ from tas.CloserTA import CloserTA
 from tas.SleepTA import SleepTA
 from tas.PTA2_DDC import PTA2_DDC,PTA2a_DDC,PTA2_DDC2,PTA2a_DDC2
 from tas.PTA3_ADDC import PTA3_ADDC,PTA3a_ADDC
-from tas.LTA1_C import LTA1_C,LTA1_C2
 from tas.PTA4_WDDC import PTA4_WDDC,PTA4_WDDC2
+from tas.PTA5_MHP import PTA5_MHP
+from tas.LTA1_C import LTA1_C,LTA1_C2
 from tas.OGTA1_Rails import OGTA1_Rails
 
 VT2_bots = {
@@ -79,6 +80,7 @@ VT3_bots = {
     'PTA3_ADDC_30_2':(PTA3_ADDC,(30,2)),
     'PTA4_WDDC_100_10_20':(PTA4_WDDC,(100,10,20)),
     'PTA4_WDDC2_100_10_20':(PTA4_WDDC2,(100,10,20)),
+    'PTA5_MHP':(PTA5_MHP,()),
     'OGTA1_Rails':(OGTA1_Rails,())
 }
 

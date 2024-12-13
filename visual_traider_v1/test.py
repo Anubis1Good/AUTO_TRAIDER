@@ -12,8 +12,22 @@ from wrappers.GroupBotWrapper import GroupBotWrapper
 from traider_bots.VisualTraider_v2 import VisualTraider_v2
 import threading
 from multiprocessing import Pool,cpu_count
+from sklearn.metrics.pairwise import cosine_similarity
+# print(cpu_count())
+import numpy as np
 
-print(cpu_count())
+# # Задаем два числовых массива
+# nums1 = np.array([1, 2, 3])
+# nums2 = np.array([4, 5, 6])
+# nums3 = np.array([5, 5, 5])
+
+# # Рассчитываем косинусную меру сходства
+# cosine_similarity1 = np.dot(nums3, nums2) / (np.linalg.norm(nums3) * np.linalg.norm(nums2))
+# print(cosine_similarity1)  # Выводим результат — итоговый коэффициент сходства 
+
+# print(cosine_similarity([nums1,nums3],[nums2]))
+
+print(int.__lt__(14,12))
 # img = cv2.imread('screens\Screen.png',0)
 # mask1 = cv2.inRange(img,ColorBtnGray.candle_color_1,ColorBtnGray.candle_color_1)
 # mask2 = cv2.inRange(img,ColorBtnGray.candle_color_2,ColorBtnGray.candle_color_2)
