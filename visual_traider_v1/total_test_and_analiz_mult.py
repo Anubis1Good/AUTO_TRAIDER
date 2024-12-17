@@ -3,7 +3,7 @@ from time import time
 from multiprocessing import Pool
 test_data = 'test_data'
 result_dir = 'test_results'
-bot_name = 'PTA5_MHP'
+bot_name = 'STA2_PPP_30'
 variants = os.listdir(test_data)
 stock_group = '_'
 # stock_group = 'MXI'

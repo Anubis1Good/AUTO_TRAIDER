@@ -459,4 +459,11 @@ def get_FVG(half_bars:list[HalfBar],threshold:int=10,delay=1):
     bearish_FGV = np.array(bearish_FGV)
     return bullish_FGV,bearish_FGV
         
-        
+def get_projection(hbs,hb_in,hb_out):
+    h_max = np.array(list(map(lambda x: x.yh,hbs))).min()
+    l_min = np.array(list(map(lambda x: x.yl,hbs))).max()
+    delta_h = hb_in.yh - h_max     
+    delta_l = hb_in.yl - l_min
+    h_out = hb_out.yh - delta_h
+    l_out = hb_out.yl - delta_l
+    return h_out,l_out

@@ -32,6 +32,7 @@ from tas.PTA4_WDDC import PTA4_WDDC,PTA4_WDDC2
 from tas.PTA5_MHP import PTA5_MHP
 from tas.LTA1_C import LTA1_C,LTA1_C2
 from tas.OGTA1_Rails import OGTA1_Rails
+from tas.STA2_PPP import STA2_PPP,STA2_R_PPP
 
 VT2_bots = {
     'OGT1':OGT1,
@@ -81,7 +82,9 @@ VT3_bots = {
     'PTA4_WDDC_100_10_20':(PTA4_WDDC,(100,10,20)),
     'PTA4_WDDC2_100_10_20':(PTA4_WDDC2,(100,10,20)),
     'PTA5_MHP':(PTA5_MHP,()),
-    'OGTA1_Rails':(OGTA1_Rails,())
+    'OGTA1_Rails':(OGTA1_Rails,()),
+    'STA2_PPP_30':(STA2_PPP,(30,10)),
+    'STA2_R_PPP':(STA2_R_PPP,()),
 }
 
 

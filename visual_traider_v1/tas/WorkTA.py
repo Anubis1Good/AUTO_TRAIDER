@@ -7,6 +7,7 @@ from tas.BaseTA import BaseTA,Keys
 from utils.chart_utils.indicators import *
 from utils.chart_utils.VSA import VSA
 from utils.test_utils.test_draws_funcs import draw_bollinger
+from utils.ML_utils.cls_utils import most_similar_point_cs,most_similar_point_cs_mult
 from dataclasses import dataclass
 
 
@@ -29,24 +30,28 @@ class WorkTA(BaseTA):
         print(distance_per_hb)
         hpts = np.array(list(map(lambda x: x.hpt,half_bars)))
         lpts = np.array(list(map(lambda x: x.lpt,half_bars)))
-        maxs,mins =  get_williams_fractals(hpts,lpts,is_qual=True)
-        maxs = clear_fractals(maxs)
-        mins = clear_fractals(mins,False)
-        mean_maxs = maxs[:,0].mean()
-        mean_mins = mins[:,0].mean()
-        print(mean_maxs,mean_maxs//distance_per_hb)
-        print(mean_mins,mean_mins//distance_per_hb)
-        mean_all = int(mean_maxs//distance_per_hb + mean_mins//distance_per_hb)//2
-        print(mean_all)
-        print(check_michael_harris_pattern(half_bars))
-        print(check_michael_harris_pattern(half_bars,False))
+        yms = np.array(list(map(lambda x: x.yh,half_bars)))
+        ms_i = most_similar_point_cs_mult(half_bars)
+        h_out,l_out = get_projection(half_bars[ms_i+11:ms_i+21],half_bars[ms_i+10],half_bars[-1])
+        # ms_i = most_similar_point_cs(yms)
+        # maxs,mins =  get_williams_fractals(hpts,lpts,is_qual=True)
+        # maxs = clear_fractals(maxs)
+        # mins = clear_fractals(mins,False)
+        # mean_maxs = maxs[:,0].mean()
+        # mean_mins = mins[:,0].mean()
+        # print(mean_maxs,mean_maxs//distance_per_hb)
+        # print(mean_mins,mean_mins//distance_per_hb)
+        # mean_all = int(mean_maxs//distance_per_hb + mean_mins//distance_per_hb)//2
+        # print(mean_all)
+        # print(check_michael_harris_pattern(half_bars))
+        # print(check_michael_harris_pattern(half_bars,False))
         # vsa = VSA(half_bars)
         # vsa.draw_all(chart)
         # # volatility = np.array(list(map(lambda x: x.spred,half_bars)))
         # mpts = np.array(list(map(lambda x: x.mpt,half_bars)))
         # # volatility = np.mean(volatility)
         # # bullish_FGV,bearish_FGV = get_FVG(half_bars,volatility,2)
-        ups,downs,middle = get_donchan_channel(half_bars,mean_all//2)
+        # max_hb,min_hb,middle_hb = get_donchan_channel_lite(half_bars[ms_i+10:ms_i+20],10)
         # max_hb,min_hb,middle_hb = get_donchan_channel_lite(half_bars,60)
         # up,down,mup,mdown = get_van_gerchick_p(max_hb,min_hb,middle_hb)
         # # bbm,bbu,bbd = get_bollinger_bands(mpts)
@@ -64,7 +69,13 @@ class WorkTA(BaseTA):
         # else:
         #     print('range')
         if self.trader.mode != 1:
-            1
+            cv2.polylines(chart,[half_bars[ms_i].draw_line],False,(255,255,255),2)
+            cv2.polylines(chart,[half_bars[ms_i+10].draw_line],False,(255,255,255),2)
+            cv2.polylines(chart,[half_bars[-1].draw_line],False,(0,255,0),2)
+            cv2.polylines(chart,[half_bars[-11].draw_line],False,(0,255,0),2)
+
+            cv2.circle(chart,(half_bars[-1].x,h_out),1,(100,255,0),2)
+            cv2.circle(chart,(half_bars[-1].x,l_out),1,(255,50,0),2)
             # cv2.circle(chart,(half_bars[-1].x,up),1,(0,255,0))
             # cv2.circle(chart,(half_bars[-1].x,down),1,(255,0,0))
             # cv2.circle(chart,(half_bars[-1].x,mup),1,(0,255,255))
@@ -73,11 +84,11 @@ class WorkTA(BaseTA):
             # cv2.circle(chart,(half_bars[-1].x,min_hb),1,(255,255,255),2)
             # cv2.circle(chart,(half_bars[-1].x,middle_hb),1,(255,255,255),2)
             # vsa.draw_all(chart)
-            cv2.polylines(chart,[ups],False,(255,0,200),1)
-            cv2.polylines(chart,[downs],False,(55,200,250),1)
-            cv2.polylines(chart,[middle],False,(155,100,250),1)
-            cv2.polylines(chart,[maxs],False,(0,200,100),2)
-            cv2.polylines(chart,[mins],False,(255,100,150),2)
+            # cv2.polylines(chart,[ups],False,(255,0,200),1)
+            # cv2.polylines(chart,[downs],False,(55,200,250),1)
+            # cv2.polylines(chart,[middle],False,(155,100,250),1)
+            # cv2.polylines(chart,[maxs],False,(0,200,100),2)
+            # cv2.polylines(chart,[mins],False,(255,100,150),2)
             # draw_bollinger(chart,bbm,bbu,bbd,thickness=2)
             # for pl in [ups,downs,middle]:
             #     cv2.polylines(chart,[pl],False,(0,200,0))
