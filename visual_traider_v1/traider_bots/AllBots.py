@@ -31,6 +31,7 @@ from tas.PTA3_ADDC import PTA3_ADDC,PTA3a_ADDC
 from tas.PTA4_WDDC import PTA4_WDDC,PTA4_WDDC2
 from tas.PTA5_MHP import PTA5_MHP
 from tas.LTA1_C import LTA1_C,LTA1_C2
+from tas.LTA2_SP import LTA2_SP
 from tas.OGTA1_Rails import OGTA1_Rails
 from tas.STA2_PPP import STA2_PPP,STA2_R_PPP
 
@@ -70,6 +71,7 @@ VT3_bots = {
     'CloserTA':(CloserTA,()),
     'LTA1_C':(LTA1_C,(4,)),
     'LTA1_C2':(LTA1_C2,(5,2.5)),
+    'LTA2_SP_25':(LTA2_SP,(0.25,)),
     'PTA2_DDC_15':(PTA2_DDC,(15,)),
     'PTA2_DDC_60':(PTA2_DDC,(60,)),
     'PTA2_DDC_80':(PTA2_DDC,(80,)),

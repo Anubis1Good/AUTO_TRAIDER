@@ -25,6 +25,13 @@ class WorkTA(BaseTA):
         candle_cords = self.trader._get_cords_on_mask(candle_mask)
         volume_cords = self.trader._get_cords_on_mask(volume_mask)
         half_bars = self.trader._get_half_bars(candle_mask,candle_cords,volume_cords)
+        dhbs = self.trader._get_dir_half_bars(chart,volume_cords)
+        for i,dhb in enumerate(dhbs):
+            # if i % 10 == 0:
+            #     cv2.putText(chart,str(i),(dhb.x,100),cv2.FONT_HERSHEY_COMPLEX,0.5,(255,255,255))
+            # print(dhb.x,dhb.direction)
+            color = (0,255,0) if dhb.direction == 1 else (100,100,255)
+            cv2.polylines(chart,[dhb.draw_line],False,color,1)
         cur_price = self.trader._get_current_price(chart)
         distance_per_hb = half_bars[1].x - half_bars[0].x
         print(distance_per_hb)

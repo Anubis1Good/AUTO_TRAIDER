@@ -6,7 +6,7 @@ from settings import configuration_traiders_v2
 from traider_bots.VisualTraider_v3 import VisualTraider_v3 as Trader
 # from traider_bots.VisualTraider_v4 import VisualTraider_v4 as Trader
 from tas.WorkTA import WorkTA as TA
-from tas.STA2_PPP import STA2_PPP as TA
+# from tas.LTA2_SP import LTA2_SP as TA
 # from traider_bots.help_bots.WorkBot import WorkBot as Trader
 
 param_bots = configuration_traiders_v2('config_files\config.txt')

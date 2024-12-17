@@ -49,7 +49,10 @@ class FullBar(HalfBar):
 
 
 
-
+class DirHalfBar(HalfBar):
+    def __init__(self, x, yh, yl, yv,direction):
+        super().__init__(x, yh, yl, yv)
+        self.direction = direction
 
 
 

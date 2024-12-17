@@ -8,7 +8,7 @@ import pyautogui as pag
 import pydirectinput as pdi
 # from scipy import stats
 from utils.config import ColorsBtnGray
-from utils.chart_utils.dtype import HalfBar
+from utils.chart_utils.dtype import HalfBar,DirHalfBar
 from utils.config import TemplateCandle
 from utils.test_utils.test_traide import test_open,test_close,f_test_close,f_test_open,smart_test_open,smart_test_close
 from utils.middlewares.close_on_time import only_close
@@ -395,6 +395,33 @@ class VisualTraider_v4():
                 half_bars.append(HalfBar(res_top[i][1],res_top[i][0],y_b,y_v))
         return np.array(half_bars)
     
+    def _get_dir_hb_help(self,chart,color,volume_cords: npt.NDArray,direction):
+        kernel = np.ones((2, 1), np.uint8) 
+        mask1 = self._get_mask(chart,color)
+        candle_mask = cv2.erode(mask1,kernel)
+        candle_cords = self._get_cords_on_mask(candle_mask)
+        res_top = cv2.matchTemplate(candle_mask,TemplateCandle.candle_top,cv2.TM_CCOEFF_NORMED)
+        res_top = np.argwhere(res_top >= 0.9)
+        res_top = res_top[res_top[:, 1].argsort()]
+        dir_half_bars:list[DirHalfBar] = []
+        for i in range(res_top.shape[0]):
+            res_top[i] = (res_top[i][0],res_top[i][1]+1)
+            point_b = candle_cords[np.where(candle_cords[:,1] == res_top[i][1])]
+            point_v = volume_cords[np.where(volume_cords[:,1] == res_top[i][1])]
+            y_b = point_b[:,0].max()
+            y_v = point_v[:,0].min()
+            dir_half_bars.append(DirHalfBar(res_top[i][1],res_top[i][0],y_b,y_v,direction))
+        return dir_half_bars
+
+    def _get_dir_half_bars(self,
+            chart,
+            volume_cords: npt.NDArray
+            ) -> list[DirHalfBar]: 
+        dhb_long = self._get_dir_hb_help(chart,ColorsBtnGray.candle_color_1,volume_cords,-1)
+        dhb_short = self._get_dir_hb_help(chart,ColorsBtnGray.candle_color_2,volume_cords,1)
+        dir_half_bars = dhb_long + dhb_short
+        dir_half_bars = sorted(dir_half_bars,key=lambda dhb: dhb.x)
+        return np.array(dir_half_bars)
     # def _get_mean(self,cords:npt.NDArray):
     #     mean_val = (10,int(np.mean(cords,axis=0)[0]))
     #     return mean_val
