@@ -27,7 +27,7 @@ import numpy as np
 
 # print(cosine_similarity([nums1,nums3],[nums2]))
 
-print(int.__lt__(14,12))
+# print(int.__lt__(14,12))
 # img = cv2.imread('screens\Screen.png',0)
 # mask1 = cv2.inRange(img,ColorBtnGray.candle_color_1,ColorBtnGray.candle_color_1)
 # mask2 = cv2.inRange(img,ColorBtnGray.candle_color_2,ColorBtnGray.candle_color_2)
@@ -107,4 +107,3 @@ print(int.__lt__(14,12))
 # cv2.imshow('test',img)
 
 # cv2.waitKey(0)
-

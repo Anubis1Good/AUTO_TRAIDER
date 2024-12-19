@@ -30,3 +30,13 @@ def draw_bollinger(chart,ma,ups,downs,color=(200,0,0),thickness=1):
     cv2.polylines(chart,[ma],False,color,thickness)
     cv2.polylines(chart,[ups],False,color,thickness)
     cv2.polylines(chart,[downs],False,color,thickness)
+
+def draw_dhbs(chart,dhbs):
+    for dhb in dhbs:
+        color = (0,255,0) if dhb.direction == 1 else (100,100,255)
+        cv2.polylines(chart,[dhb.draw_line],False,color,1)
+
+def draw_rsi(chart,rsi,hbs,limits:int=30,color:tuple=(255,255,255)):
+    cv2.polylines(chart,[rsi],False,color)
+    cv2.line(chart,(hbs[0].x,0+limits),(hbs[-1].x,0+limits),color)
+    cv2.line(chart,(hbs[0].x,100-limits),(hbs[-1].x,100-limits),color)

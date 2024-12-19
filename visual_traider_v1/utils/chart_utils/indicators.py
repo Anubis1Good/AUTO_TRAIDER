@@ -1,7 +1,7 @@
 import numpy as np
 import numpy.typing as npt
 from utils.ML_utils.LR_utils import get_linear_regress,get_points_linear_reg
-from utils.chart_utils.dtype import HalfBar
+from utils.chart_utils.dtype import HalfBar,DirHalfBar
 
 def get_SMA(points:npt.NDArray,step:int=14) -> npt.NDArray:
     moving_averages = []
@@ -277,6 +277,23 @@ def get_rocket_meteor_index(half_bars:list[HalfBar],period=14):
         i += 1
     return np.array(ri),np.array(mi)
 
+def get_bull_power_index(dhbs:list[DirHalfBar],period:int=20):
+    i = period
+    bpi = []
+    while i < len(dhbs):
+        slice = dhbs[i-period:i]
+        bull,bear = 0,0
+        for dhb in slice:
+            if dhb.direction == 1:
+                bull += dhb.spred
+            else:
+                bear += dhb.spred
+        bull_power = int((bull/(bull+bear))*100)
+        bpi.append(np.array([dhbs[i].x,bull_power]))
+        i += 1
+    bpi = np.array(bpi)
+    return bpi
+
 def get_spred_channel(half_bars:list[HalfBar],period=14) -> tuple[npt.NDArray]:
     ma = []
     ups,downs = [],[]
@@ -467,3 +484,14 @@ def get_projection(hbs,hb_in,hb_out):
     h_out = hb_out.yh - delta_h
     l_out = hb_out.yl - delta_l
     return h_out,l_out
+
+def get_mean_delta(points,hbs,period,direction):
+    if direction == 1:
+        locals = np.array(list(map(lambda x: x.yl,hbs)))
+    if direction == -1:
+        locals = np.array(list(map(lambda x: x.yh,hbs)))
+    locals = locals[period:]
+    deltas = []
+    for i in range(len(points)):
+        deltas.append(points[i][1]-locals[i])
+    return int(np.array(deltas).mean())

@@ -371,6 +371,13 @@ class VisualTraider_v3():
         cords = np.argwhere(mask == 255)
         return cords
     
+    def _get_candle_volume_cords(self,chart):
+        candle_mask = self._get_candle_mask(chart)
+        volume_mask = self._get_volume_mask(chart)
+        candle_cords = self._get_cords_on_mask(candle_mask)
+        volume_cords = self._get_cords_on_mask(volume_mask)
+        return candle_cords,volume_cords,candle_mask
+    
     def _get_half_bars(
             self,
             candle_mask: npt.ArrayLike,
@@ -408,10 +415,9 @@ class VisualTraider_v3():
             dir_half_bars.append(DirHalfBar(res_top[i][1],res_top[i][0],y_b,y_v,direction))
         return dir_half_bars
 
-    def _get_dir_half_bars(self,
-            chart,
-            volume_cords: npt.NDArray
-            ) -> list[DirHalfBar]: 
+    def _get_dir_half_bars(self,chart) -> list[DirHalfBar]: 
+        volume_mask = self._get_volume_mask(chart)
+        volume_cords = self._get_cords_on_mask(volume_mask)
         dhb_long = self._get_dir_hb_help(chart,ColorsBtnBGR.candle_color_1,volume_cords,-1)
         dhb_short = self._get_dir_hb_help(chart,ColorsBtnBGR.candle_color_2,volume_cords,1)
         dir_half_bars = dhb_long + dhb_short
