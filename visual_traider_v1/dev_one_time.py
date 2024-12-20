@@ -6,12 +6,13 @@ from settings import configuration_traiders_v2
 from traider_bots.VisualTraider_v3 import VisualTraider_v3 as Trader
 # from traider_bots.VisualTraider_v4 import VisualTraider_v4 as Trader
 from tas.WorkTA import WorkTA as TA
-from tas.PTA6_work import PTA6_work as TA
+from tas.PTA6_COMA import PTA6_COMA as TA
 # from traider_bots.help_bots.WorkBot import WorkBot as Trader
 
 param_bots = configuration_traiders_v2('config_files\config.txt')
 traider = Trader(*param_bots,name='MXI')
 online = False
+chart_mode = True
 if online:
     param_bots = configuration_traiders_v2('config_files\config.txt')
     traider = Trader(*param_bots,name='MXI')
@@ -29,6 +30,9 @@ else:
     img = cv2.imread('./test_data/old_data/'+ folder + '/' + rand_img)
     
 img = traider.run(img)
+if chart_mode:
+    img = traider._get_chart(img,traider.chart_region)
+    img = cv2.resize(img,(img.shape[1]*2,img.shape[0]*2))
 cv2.imshow('work',img)
 cv2.moveWindow('work',-10,-10)
 cv2.waitKey(0)

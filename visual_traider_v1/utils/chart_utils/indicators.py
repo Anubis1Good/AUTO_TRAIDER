@@ -117,6 +117,23 @@ def clear_fractals(fractals,top:bool=True) -> npt.NDArray:
                 clear_fractals.append(fractals[i])
     return np.array(clear_fractals)
 
+def get_extreme_walker(pts,start_long:bool=True) -> npt.NDArray:
+    exteme_points = []
+    fflag = False
+    dir_long = start_long
+    for i in range(1,len(pts)-2):
+        if dir_long:
+            if pts[i][1] < pts[i+1][1]:
+                exteme_points.append(pts[i])
+                dir_long = not dir_long
+        else:
+            if pts[i][1] > pts[i+1][1]:
+                exteme_points.append(pts[i])
+                dir_long = not dir_long
+    exteme_points = np.array(exteme_points)
+    return exteme_points
+
+
 def check_michael_harris_pattern(hbs:list[HalfBar],long:bool = True):
     cur_pos = -1
     operation = np.int64.__lt__ if long else np.int64.__gt__

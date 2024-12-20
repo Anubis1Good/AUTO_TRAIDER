@@ -40,3 +40,10 @@ def draw_rsi(chart,rsi,hbs,limits:int=30,color:tuple=(255,255,255)):
     cv2.polylines(chart,[rsi],False,color)
     cv2.line(chart,(hbs[0].x,0+limits),(hbs[-1].x,0+limits),color)
     cv2.line(chart,(hbs[0].x,100-limits),(hbs[-1].x,100-limits),color)
+
+def draw_points(chart,points,color1:tuple=(255,255,255),thickness:int=3,two_classes:bool=False,color2:tuple=(250,100,200)):
+    color = color1
+    for i,pt in enumerate(points):
+        if two_classes:
+            color = color1 if i % 2 == 0 else color2
+        cv2.circle(chart,pt,1,color,thickness)
