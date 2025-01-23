@@ -2,6 +2,7 @@ import traceback
 import os
 from time import time
 import cv2
+import pandas as pd
 import numpy as np
 import numpy.typing as npt
 import pyautogui as pag
@@ -423,6 +424,38 @@ class VisualTraider_v3():
         dir_half_bars = dhb_long + dhb_short
         dir_half_bars = sorted(dir_half_bars,key=lambda dhb: dhb.x)
         return np.array(dir_half_bars)
+
+    def _get_help_df(self,chart,color,volume_cords: npt.NDArray,direction):
+        kernel = np.ones((2, 1), np.uint8) 
+        mask1 = self._get_mask(chart,color)
+        candle_mask = cv2.erode(mask1,kernel)
+        candle_cords = self._get_cords_on_mask(candle_mask)
+        res_top = cv2.matchTemplate(candle_mask,TemplateCandle.candle_top,cv2.TM_CCOEFF_NORMED)
+        res_top = np.argwhere(res_top >= 0.9)
+        res_top = res_top[res_top[:, 1].argsort()]
+        dir_hb = list()
+        for i in range(res_top.shape[0]):
+            res_top[i] = (res_top[i][0],res_top[i][1]+1)
+            point_b = candle_cords[np.where(candle_cords[:,1] == res_top[i][1])]
+            point_v = volume_cords[np.where(volume_cords[:,1] == res_top[i][1])]
+            y_b = point_b[:,0].max()
+            y_v = point_v[:,0].min()
+            dir_hb.append([res_top[i][1],res_top[i][0],y_b,y_v,direction])
+        dir_hb = pd.DataFrame(dir_hb,columns=['x','yh','yl','yv','direction'])
+        return dir_hb
+    
+    def _get_df(self,chart) -> pd.DataFrame:
+        volume_mask = self._get_volume_mask(chart)
+        volume_cords = self._get_cords_on_mask(volume_mask)
+        dhb_long = self._get_help_df(chart,ColorsBtnBGR.candle_color_1,volume_cords,-1)
+        dhb_short = self._get_help_df(chart,ColorsBtnBGR.candle_color_2,volume_cords,1)
+        dir_df = pd.concat([dhb_long,dhb_short])
+        dir_df = dir_df.sort_values('x',axis=0)
+        dir_df['ym'] = dir_df.apply(lambda row: (row['yh'] + row['yl'])//2,axis=1)
+        dir_df['spred'] = dir_df.apply(lambda row:row['yl']-row['yh'],axis=1)
+        dir_df = dir_df.reset_index(drop=True)
+        # dir_half_bars = sorted(dir_half_bars,key=lambda dhb: dhb.x)
+        return dir_df
     
     def _get_mean(self,cords:npt.NDArray):
         mean_val = (10,int(np.mean(cords,axis=0)[0]))
