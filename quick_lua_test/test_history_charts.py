@@ -16,7 +16,8 @@ def prepare_data(path_file:str):
 def prepare_ticker(ticker:str):
     return f'./DATA/TQBR.{ticker}_D1.txt'
 
-tickers_name = ['VTBR','SBER','GAZP']
+# tickers_name = ['VTBR','SBER','GAZP']
+tickers_name = ['MMH5']
 
 tickers = list(map(prepare_ticker,tickers_name))
 tickers = list(map(prepare_data,tickers))

@@ -24,42 +24,23 @@ class WorkTA(BaseTA):
     def get_keys(self, img)-> Keys:
         region = self.trader.chart_region
         chart = self.trader._get_chart(img,region)
-        # candle_mask = self.trader._get_candle_mask(chart)
-        # volume_mask = self.trader._get_volume_mask(chart)
-        # candle_cords = self.trader._get_cords_on_mask(candle_mask)
-        # volume_cords = self.trader._get_cords_on_mask(volume_mask)
         df = self.trader. _get_df(chart)
+        period = 11
+        df = add_donchan_channel(df,period)
+        df = add_rsi(df,period)
+        df = add_bollinger(df,period)
+        df = add_slice_df(df,period)
         print(df.head())
         df.info()
-        df = get_df_donchan_channel(df,20)
-        df.info()
-        print(df.tail())
-        df.apply(lambda row: draw_df_dc(row,chart),axis=1)
-        df_res = pd.DataFrame(columns=['name_strategy','equity','count'])
-        strategies = ['DDC','EDDC','LDDC','SDDC','LEDDC','SEDDC']
-        for strategy in strategies:
-            data = eval(f"{strategy}(df)")
-            df_res.loc[len(df_res)] = [strategy,data.equity,data.count]
-        # print('DDC:')
-        # data = DDC(df)
-        # df_res.loc[len(df_res)] = ['DDC',data.equity,data.count]
-        # data = EDDC(df)
-        # df_res.loc[len(df_res)] = ['EDDC',data.equity,data.count]
-        # data = LDDC(df)
-        # df_res.loc[len(df_res)] = ['LDDC',data.equity,data.count]
-        # data = SDDC(df)
-        # df_res.loc[len(df_res)] = ['SDDC',data.equity,data.count]
-        # data = LEDDC(df)
-        # df_res.loc[len(df_res)] = ['LEDDC',data.equity,data.count]
-        # data = SEDDC(df)
-        # df_res.loc[len(df_res)] = ['SEDDC',data.equity,data.count]
-        df_res['average_eq'] = df_res['equity'] / df_res['count']
-        # print(df_res.head(10))
-        df_res =df_res.sort_values('equity',axis=0,ascending=False)
-        print(df_res.head(10))
-        print(df_res.iloc[0]['name_strategy'])
-        data_test = DataTest(0,0,0,0)
-        print(eval(f"help_{df_res.iloc[0]['name_strategy']}(df.iloc[-1],data_test)"))
+        print(df['rsi'])
+        # df = get_df_donchan_channel(df,20)
+        # df.info()
+        # print(df.tail())
+        # df.apply(lambda row: draw_df_DC(row,chart),axis=1)
+        draw_df_BB_polyline(df,chart)
+        draw_rsi(df,chart)
+        df.apply(lambda row: draw_df_chart(row,chart),axis=1)
+
 
         
 

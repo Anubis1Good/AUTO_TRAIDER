@@ -3,10 +3,14 @@
 '''
 
 import cv2
+import pandas as pd
 from tas.BaseTA import BaseTA,Keys
 from utils.chart_utils.indicators import get_donchan_channel,get_strong_index, get_rocket_meteor_index,get_bull_power_index, get_donchan_channel_lite
 from utils.test_utils.test_draws_funcs import draw_dhbs,draw_bollinger,draw_rsi
 from dataclasses import dataclass
+
+from utils.df_utils.indicators import add_donchan_channel,add_rsi,add_slice_df,add_vodka_channel
+from utils.df_utils.draw_df import draw_df_chart,draw_df_DC_polyline,draw_df_VC_polyline,draw_rsi
 
 @dataclass
 class KeysW(Keys):
@@ -177,3 +181,78 @@ class PTA4_WDDC3b(PTA4_WDDC3):
             return 'close_long'
         if keys.l_last_hb == keys.downs_fast:
             return 'close_short'
+
+@dataclass
+class KeysWRL1(Keys):
+    row:pd.Series  
+class PTA4_WDDCrRL(BaseTA):
+    def __init__(self, trader,period_dc=11,period_si=11,threshold=30,*args):
+        super().__init__(trader,*args)
+        self.period_dc = period_dc
+        self.period_si = period_si
+        self.threshold = threshold
+    def get_keys(self, img)-> KeysWRL1:
+        region = self.trader.chart_region
+        chart = self.trader._get_chart(img,region)
+        df = self.trader._get_df(chart)
+        df = add_donchan_channel(df,self.period_dc)
+        df = add_rsi(df,self.period_si)
+        max_period = max(self.period_dc,self.period_si)
+        df = add_slice_df(df,max_period)
+        cur_price = self.trader._get_current_price(chart)
+
+        if self.trader.mode in (2,3):
+            draw_df_DC_polyline(df,chart)
+            draw_rsi(df,chart)
+
+        return KeysWRL1(
+            cur_price=cur_price[1],
+            row=df.iloc[-1]
+        )
+
+    def get_action(self, keys:KeysWRL1):
+        row = keys.row
+        nearest_long = keys.cur_price - row['high'] > row['low']  -  keys.cur_price
+        if row['low'] == row['min_hb']:
+            if nearest_long:
+                if row['rsi'] < self.threshold:
+                    return 'long'
+        if row['high'] == row['max_hb']:
+            if row['rsi'] > 100-self.threshold:
+                return 'short'
+            
+class PTA4_WDVCrRL(BaseTA):
+    def __init__(self, trader,period_vc=11,period_si=11,threshold=30,*args):
+        super().__init__(trader,*args)
+        self.period_vc = period_vc
+        self.period_si = period_si
+        self.threshold = threshold
+    def get_keys(self, img)-> KeysWRL1:
+        region = self.trader.chart_region
+        chart = self.trader._get_chart(img,region)
+        df = self.trader._get_df(chart)
+        df = add_vodka_channel(df,self.period_vc)
+        df = add_rsi(df,self.period_si)
+        max_period = max(self.period_vc,self.period_si)
+        df = add_slice_df(df,max_period)
+        cur_price = self.trader._get_current_price(chart)
+
+        if self.trader.mode in (2,3):
+            draw_df_VC_polyline(df,chart)
+            draw_rsi(df,chart)
+
+        return KeysWRL1(
+            cur_price=cur_price[1],
+            row=df.iloc[-1]
+        )
+
+    def get_action(self, keys:KeysWRL1):
+        row = keys.row
+        nearest_long = keys.cur_price - row['high'] > row['low']  -  keys.cur_price
+        if row['low'] > row['bottom_mean']:
+            if nearest_long:
+                if row['rsi'] < self.threshold:
+                    return 'long'
+        if row['high'] < row['top_mean']:
+            if row['rsi'] > 100-self.threshold:
+                return 'short'

@@ -78,22 +78,22 @@ if __name__ == '__main__':  # Точка входа при запуске это
     start_time = time()  # Время начала запуска скрипта
     qp_provider = QuikPy()  # Подключение к локальному запущенному терминалу QUIK
 
-    class_code = 'TQBR'  # Акции ММВБ
-    # class_code = 'SPBFUT'  # Фьючерсы
+    # class_code = 'TQBR'  # Акции ММВБ
+    class_code = 'SPBFUT'  # Фьючерсы
     sec_codes = ('SBER', 'VTBR', 'GAZP', 'MTLR', 'LKOH', 'PLZL', 'SBERP', 'BSPB', 'POLY', 'RNFT',
                  'GMKN', 'AFLT', 'NVTK', 'TATN', 'YNDX', 'MGNT', 'ROSN', 'AFKS', 'NLMK', 'ALRS',
                  'MOEX', 'SMLT', 'MAGN', 'CHMF', 'CBOM', 'MTLRP', 'SNGS', 'BANEP', 'MTSS', 'IRAO',
                  'SNGSP', 'SELG', 'UPRO', 'RUAL', 'TRNFP', 'FEES', 'SGZH', 'BANE', 'PHOR', 'PIKK')  # TOP 40 акций ММВБ
-    # sec_codes = ('SBER',)  # Для тестов
+    sec_codes = ('MMH5',)  # Для тестов
     # sec_codes = ('SiZ3', 'RIZ3')  # Формат фьючерса: <Тикер><Месяц экспирации><Последняя цифра года> Месяц экспирации: 3-H, 6-M, 9-U, 12-Z
     datapath = os.path.join('Data', '')  # Путь сохранения файлов для Windows/Linux
 
     skip_last_date = True  # Если получаем данные внутри сессии, то не берем бары за дату незавершенной сессии
     # skip_last_date = False  # Если получаем данные, когда рынок не работает, то берем все бары
-    save_candles_to_file(class_code, sec_codes, four_price_doji=True)  # Дневные бары
+    # save_candles_to_file(class_code, sec_codes, four_price_doji=True)  # Дневные бары
     # save_candles_to_file(class_code, sec_codes, 'M', 60, skip_last_date=skip_last_date)  # часовые бары
     # save_candles_to_file(class_code, sec_codes, 'M', 15, skip_last_date=skip_last_date)  # 15-и минутные бары
-    # save_candles_to_file(class_code, sec_codes, 'M', 5, skip_last_date=skip_last_date)  # 5-и минутные бары
+    save_candles_to_file(class_code, sec_codes, 'M', 5, skip_last_date=skip_last_date)  # 5-и минутные бары
     # save_candles_to_file(class_code, sec_codes, 'M', 1, skip_last_date=skip_last_date, four_price_doji=True)  # минутные бары
 
     qp_provider.CloseConnectionAndThread()  # Перед выходом закрываем соединение и поток QuikPy

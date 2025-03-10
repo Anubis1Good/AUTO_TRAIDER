@@ -23,7 +23,7 @@ class PTA7_MS1(BaseTA):
     def get_keys(self, img)-> Keys:
         region = self.trader.chart_region
         chart = self.trader._get_chart(img,region)
-        df = self.trader. _get_df(chart)
+        df = self.trader._get_df(chart)
         df = get_df_donchan_channel(df,20)
         df_res = pd.DataFrame(columns=['name_strategy','equity','count'])
         strategies = ['DDC','EDDC','LDDC','SDDC','LEDDC','SEDDC']

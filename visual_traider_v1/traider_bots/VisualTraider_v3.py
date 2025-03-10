@@ -441,7 +441,7 @@ class VisualTraider_v3():
             y_b = point_b[:,0].max()
             y_v = point_v[:,0].min()
             dir_hb.append([res_top[i][1],res_top[i][0],y_b,y_v,direction])
-        dir_hb = pd.DataFrame(dir_hb,columns=['x','yh','yl','yv','direction'])
+        dir_hb = pd.DataFrame(dir_hb,columns=['x','high','low','volume','direction'])
         return dir_hb
     
     def _get_df(self,chart) -> pd.DataFrame:
@@ -451,8 +451,8 @@ class VisualTraider_v3():
         dhb_short = self._get_help_df(chart,ColorsBtnBGR.candle_color_2,volume_cords,1)
         dir_df = pd.concat([dhb_long,dhb_short])
         dir_df = dir_df.sort_values('x',axis=0)
-        dir_df['ym'] = dir_df.apply(lambda row: (row['yh'] + row['yl'])//2,axis=1)
-        dir_df['spred'] = dir_df.apply(lambda row:row['yl']-row['yh'],axis=1)
+        dir_df['middle'] = dir_df.apply(lambda row: (row['high'] + row['low'])//2,axis=1)
+        dir_df['spred'] = dir_df.apply(lambda row:row['low']-row['high'],axis=1)
         dir_df = dir_df.reset_index(drop=True)
         # dir_half_bars = sorted(dir_half_bars,key=lambda dhb: dhb.x)
         return dir_df
