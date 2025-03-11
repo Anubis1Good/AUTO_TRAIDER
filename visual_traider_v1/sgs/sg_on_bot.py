@@ -7,7 +7,7 @@ bot_on_ticker = {
     # 'ST1' : ['GMKN','ROSN','SBERP','HYDR','MTLR'],
     # 'PTA2_DDC_60' : ['GAZP'],
     # 'PTA2_DDC_80' : ['NVTK','AFKS'],
-    'PTA2a_DDC_15' : ['MXI'],
+    'PTA4_WDDCrRL_6_6_30' : ['MXI'],
     # 'LTA1_C':['SIBN','ALRS','TATN','APTK','FEES','SBER','ABIO'],
     # 'PTA4_WDDC_100_10_20':['CHMF','NLMK','MAGN','VTBR','SOFL','MOEX']
 }

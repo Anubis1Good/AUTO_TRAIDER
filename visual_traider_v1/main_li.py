@@ -20,16 +20,16 @@ hour = now.hour
 minute = now.minute
 
 param_bots = configuration_traiders_v2('config_files\config.txt')
-test_traiders = []
+# test_traiders = []
 work_traiders = []
 for i in range(len(stock_groups)):
-    traider = ResearchBot(*param_bots,name=stock_groups[i])
-    test_traiders.append(traider)
+    # traider = ResearchBot(*param_bots,name=stock_groups[i])
+    # test_traiders.append(traider)
     traider = init_trader(stock_groups[i],param_bots)
-    if 23 > hour > 18:
-        if isinstance(traider,VisualTraider_v3):
-            if isinstance(traider.TA,SleepTA):
-                traider.TA = PTA2_DDC(traider,100)
+    # if 23 > hour > 18:
+    #     if isinstance(traider,VisualTraider_v3):
+    #         if isinstance(traider.TA,SleepTA):
+    #             traider.TA = PTA2_DDC(traider,100)
     work_traiders.append(traider)
 
 # draw_borders_online([work_traiders[0]])
@@ -37,7 +37,7 @@ for i in range(len(stock_groups)):
 sleep(3)
 i = 0
 while True:
-    for i in range(len(test_traiders)):
+    for i in range(len(work_traiders)):
         sleep(2)
         keyboard.send('shift')
         pag.screenshot('screens\Screen.png')
@@ -49,7 +49,7 @@ while True:
         #     work_traiders[i].TA = CloserTA(work_traiders[i])
 
         work_traiders[i].run(img)
-        test_traiders[i].run(img)
+        # test_traiders[i].run(img)
         if keyboard.is_pressed('Esc'):
             print("\nyou pressed Esc, so exiting...")
             sys.exit(0)
