@@ -4,20 +4,19 @@ import keyboard
 import sys
 import traceback
 from time import sleep
-from datetime import datetime
+# from datetime import datetime
 from settings import configuration_traiders_v2
 from sgs.sg_laptop import stock_groups
 from utils.test_utils.windows import draw_borders_online
-from traider_bots.help_bots.ResearchBot import ResearchBot
-from traider_bots.VisualTraider_v3 import VisualTraider_v3 
-from tas.SleepTA import SleepTA
-from tas.CloserTA import CloserTA
-from tas.PTA2_DDC import PTA2_DDC
+# from traider_bots.help_bots.ResearchBot import ResearchBot
+# from traider_bots.VisualTraider_v3 import VisualTraider_v3 
+# from tas.SleepTA import SleepTA
+# from tas.CloserTA import CloserTA
 from init_trader import init_trader
 
-now = datetime.now()
-hour = now.hour
-minute = now.minute
+# now = datetime.now()
+# hour = now.hour
+# minute = now.minute
 
 param_bots = configuration_traiders_v2('config_files\config.txt')
 # test_traiders = []
@@ -58,8 +57,8 @@ while True:
         except Exception as err:
             traceback.print_exc()
 
-        now = datetime.now()
-        hour = now.hour
-        minute = now.minute
+        # now = datetime.now()
+        # hour = now.hour
+        # minute = now.minute
 
         keyboard.send('tab') 
