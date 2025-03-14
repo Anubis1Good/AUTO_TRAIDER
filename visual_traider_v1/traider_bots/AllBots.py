@@ -32,6 +32,7 @@ from tas.PTA4_WDDC import PTA4_WDDC,PTA4_WDDC2,PTA4_WDDC3,PTA4_WDDC3b,PTA4_WDDCr
 from tas.PTA5_MHP import PTA5_MHP
 from tas.PTA6_COMA import PTA6_COMA
 from tas.PTA7_MS1 import PTA7_MS1
+from tas.PTA8_DOBBY import PTA8_WDOBBYFrRL
 from tas.LTA1_C import LTA1_C,LTA1_C2
 from tas.LTA2_SP import LTA2_SP
 from tas.OGTA1_Rails import OGTA1_Rails
@@ -97,6 +98,8 @@ VT3_bots = {
     'PTA5_MHP':(PTA5_MHP,()),
     'PTA6_COMA_30_60':(PTA6_COMA,(30,60)),
     'PTA7_MS1_60':(PTA7_MS1,(60,)),
+    'PTA8_WDOBBYFrRL_15_1p5_15_30':(PTA8_WDOBBYFrRL,(15,1.5,15,30)),
+    'PTA8_WDOBBYFrRL_11_0p5_11_30':(PTA8_WDOBBYFrRL,(11,0.5,11,30)),
     'OGTA1_Rails':(OGTA1_Rails,()),
     'STA2_PPP_20':(STA2_PPP,(20,20,10,False)),
     'STA2_R_PPP':(STA2_R_PPP,()),

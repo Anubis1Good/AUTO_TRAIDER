@@ -16,18 +16,20 @@ class KeysWRL1(Keys):
 
 
 class PTA8_WDOBBYFrRL(BaseTA):
-    def __init__(self, trader,period_bb=11,period_si=11,threshold=30,*args):
+    '''trader,period_bb=11,multiplier=2,period_si=11,threshold=30'''
+    def __init__(self, trader,period_bb=11,multiplier=2,period_si=11,threshold=30,*args):
         super().__init__(trader,*args)
         self.period_bb = period_bb
+        self.multiplier = multiplier
         self.period_si = period_si
         self.threshold = threshold
     def get_keys(self, img)-> KeysWRL1:
         region = self.trader.chart_region
         chart = self.trader._get_chart(img,region)
         df = self.trader._get_df(chart)
-        df = add_bollinger(df,self.period_bb)
+        df = add_bollinger(df,self.period_bb,multiplier=self.multiplier)
         df = add_rsi(df,self.period_si)
-        max_period = max(self.period_vc,self.period_si)
+        max_period = max(self.period_bb,self.period_si)
         df = add_slice_df(df,max_period)
         cur_price = self.trader._get_current_price(chart)
 
