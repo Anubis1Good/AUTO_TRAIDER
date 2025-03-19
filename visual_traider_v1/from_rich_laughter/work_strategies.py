@@ -93,7 +93,52 @@ class PTA4_WLISICA(BaseTABitget):
         if row['high'] > row['top_buff']:
             if row['rsi'] > 100-self.threshold:
                 return 'short_pw'
-            
+
+class PTA4_WDDCrVG(BaseTABitget):
+    def __init__(self, symbol="BTCUSDT", granularity="1m", productType="usdt-futures", n_parts=1, period=20,threshold=30):
+        super().__init__(symbol, granularity, productType, n_parts, period)
+        self.threshold = threshold
+    def preprocessing(self, df):
+        df = add_donchan_channel(df,self.period)
+        df = add_vangerchik(df)
+        df = add_enter_price2close(df)
+        df = add_rsi(df,self.period)
+        df = add_slice_df(df,period=self.period)
+        return df
+    def __call__(self, row, *args, **kwds):
+        nearest_long = row['high'] - row['close'] > row['close'] - row['low'] 
+        if row['low'] < row['min_vg']:
+            if nearest_long:
+                if row['rsi'] < self.threshold:
+                    return 'long_pw'
+        if row['high'] > row['max_vg']:
+            if row['rsi'] > 100-self.threshold:
+                return 'short_pw'
+
+class PTA4_WDDCrE(BaseTABitget):
+    def __init__(self, symbol="BTCUSDT", granularity="1m", productType="usdt-futures", n_parts=1, period=20,threshold=30):
+        super().__init__(symbol, granularity, productType, n_parts, period)
+        self.threshold = threshold
+    def preprocessing(self, df):
+        df = add_donchan_channel(df,self.period)
+        df = add_rsi(df,self.period)
+        df = add_enter_price2close(df)
+        df = add_slice_df(df,period=self.period)
+        return df
+    def __call__(self, row, *args, **kwds):
+        nearest_long = row['high'] - row['close'] > row['close'] - row['low'] 
+        if row['low'] == row['min_hb']:
+            if nearest_long:
+                if row['rsi'] < self.threshold:
+                    return 'long_pw'
+                else:
+                    return 'close_short_pw'
+        if row['high'] == row['max_hb']:
+            if row['rsi'] > 100-self.threshold:
+                return 'short_pw'
+            else:
+                return 'close_long_pw'
+
 class PTA8_WDOBBY_FREEr(BaseTABitget):
     def __init__(self, symbol="BTCUSDT", granularity="1m", productType="usdt-futures", n_parts=1, period=20,multiplier=2,threshold=30):
         super().__init__(symbol, granularity, productType, n_parts, period)
