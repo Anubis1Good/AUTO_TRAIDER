@@ -289,10 +289,10 @@ class VisualTraider_v3():
                 button = 's'
             else:
                 button = 'f'
-            pdi.press(button)
             pdi.press('z')
             pdi.press(button)
             pdi.press('z')
+            pdi.press(button)
         else:
             if direction == 'long':
                 button = 'a'
