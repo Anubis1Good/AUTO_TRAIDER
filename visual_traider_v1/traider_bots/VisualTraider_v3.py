@@ -280,31 +280,45 @@ class VisualTraider_v3():
             pdi.keyUp('altleft')
     
     def _reverse_pos(self,img,direction):
-        if direction == 'long':
-            button = 'a'
-            x,y = self._color_search(img, ColorsBtnBGR.best_bid,self.glass_region,reverse=False)
-            if x < 0:
-                x,y = self._color_search(img, ColorsBtnBGR.bid,self.glass_region,reverse=False)
-            x += 10
-            y += 5
-            button_m = 'left'
-        elif direction == 'short':
-            button = 's'
-            x,y = self._color_search(img, ColorsBtnBGR.best_ask,self.glass_region,reverse=True)
-            if x < 0:
-                x,y = self._color_search(img, ColorsBtnBGR.ask,self.glass_region,reverse=True)
-            x -= 50
-            y -= 5
-            button_m = 'right'
+        if self.fast_close:
+            pag.moveTo(self.glass_region[0]+11,self.glass_region[1]+11)
+            pdi.press('f')
+            if direction == 'long':
+                button = 'a'
+            elif direction == 'short':
+                button = 's'
+            else:
+                button = 'f'
+            pdi.press(button)
+            pdi.press('z')
+            pdi.press(button)
+            pdi.press('z')
         else:
-            button = 'f'
-            return None
-        pag.moveTo(x,y)
-        pdi.press('f')
-        pdi.press(button)
-        pdi.keyDown('altleft')
-        pag.click(x, y,button=button_m)
-        pdi.keyUp('altleft')
+            if direction == 'long':
+                button = 'a'
+                x,y = self._color_search(img, ColorsBtnBGR.best_bid,self.glass_region,reverse=False)
+                if x < 0:
+                    x,y = self._color_search(img, ColorsBtnBGR.bid,self.glass_region,reverse=False)
+                x += 10
+                y += 5
+                button_m = 'left'
+            elif direction == 'short':
+                button = 's'
+                x,y = self._color_search(img, ColorsBtnBGR.best_ask,self.glass_region,reverse=True)
+                if x < 0:
+                    x,y = self._color_search(img, ColorsBtnBGR.ask,self.glass_region,reverse=True)
+                x -= 50
+                y -= 5
+                button_m = 'right'
+            else:
+                button = 'f'
+                return None
+            pag.moveTo(x,y)
+            pdi.press('f')
+            pdi.press(button)
+            pdi.keyDown('altleft')
+            pag.click(x, y,button=button_m)
+            pdi.keyUp('altleft')
 
     def _reset_req(self):
         pag.moveTo(self.glass_region[0]+11,self.glass_region[1]+11)
