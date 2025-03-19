@@ -4,11 +4,11 @@ stock_groups = [
     'LKOH',
     'CHMF',
     'NVTK',
-    'CNY',
+    'ALRS',
     'SELG',
     'TATN',
     'RUAL',
     'MTLR',
     'VTBR',
-    'GAZR'
+    'GMKN'
 ]
