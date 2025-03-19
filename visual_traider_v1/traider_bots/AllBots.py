@@ -109,6 +109,10 @@ VT3_bots = {
     'STA2_R_PPP':(STA2_R_PPP,()),
     'RLITA_F_0':(RLITA1,(False,'0')),
     'RLITA_F_1':(RLITA1,(False,'1')),
+    'RLITA_F_3':(RLITA1,(False,'3')),
+    'RLITA_F_4':(RLITA1,(False,'4')),
+    'RLITA_F_5':(RLITA1,(False,'5')),
+    'RLITA_F_6':(RLITA1,(False,'6')),
     'RLITA_T_2':(RLITA1,(True,'2'))
 }
 

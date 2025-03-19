@@ -9,14 +9,18 @@ sleep_group = ['PIKK','MRKP','GAZP','BSPB','SBER']
     # 'PTA4_WDDC_100_10_20':[,'NLMK','SOFL']
 
 bot_on_ticker = {
-    'PTA4_WDDCrRL_11_11_30' : ['MTLR','MOEX','CHMF'],
-    'PTA4_WDDCrRL_6_6_30' : ['VTBR','TATN','GMKN','RUAL','SBRF'],
-    'PTA4_WDVCrRL_11_11_30' : ['ROSN',],
-    'PTA8_WDOBBYFrRL_11_0p5_11_30' : ['SELG','NVTK','MAGN'],
+    'PTA4_WDDCrRL_11_11_30' : ['MTLR','MOEX'],
+    'PTA4_WDDCrRL_6_6_30' : ['GMKN','SBRF'],
+    'PTA4_WDVCrRL_11_11_30' : [],
+    'PTA8_WDOBBYFrRL_11_0p5_11_30' : ['MAGN'],
     'PTA4_WDDCrRL_10_10_20' : ['MOEX',],
-    'PTA4_WWEDDCrRL_7_7_20_35' : ['CNY','GAZR'],
-    'RLITA_F_1' : ['MXI'],
-    'RLITA_T_2' : ['LKOH'],
+    'PTA4_WWEDDCrRL_7_7_20_35' : [],
+    'RLITA_F_1' : ['MXI','CHMF','GAZR','RUAL',],
+    'RLITA_F_3' : ['CNY',],
+    'RLITA_F_4' : ['NVTK',],
+    'RLITA_F_5' : ['SELG',],
+    'RLITA_F_6' : ['VTBR',],
+    'RLITA_T_2' : ['ROSN','LKOH','TATN'],
 }
 
 bot_on_ticker_5m = {

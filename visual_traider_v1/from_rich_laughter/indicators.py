@@ -466,3 +466,16 @@ def add_chop(df,chop_period=14):
     # Расчет CHOP
     df['chop'] = 100 * np.log10(df['tr_sum'] / (df['high_max'] - df['low_min'])) / np.log10(chop_period)
     return df
+
+def help_delta(row):
+    if row['close'] > row['open']:  # Бычья свеча
+        return row['volume']
+    elif row['close'] < row['open']:  # Медвежья свеча
+        return -row['volume']
+    return 0
+
+def add_CDV(df:pd.DataFrame):
+    'add "cdv"'
+    df['delta'] = df.apply(help_delta,axis=1)
+    df['cdv'] = df['delta'].cumsum()  # Кумулятивная сумма
+    return df

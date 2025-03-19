@@ -1,4 +1,4 @@
-from from_rich_laughter.indicators import add_donchan_channel,add_slice_df,add_big_volume,add_dynamics_ma,add_bollinger,add_over_bb,add_enter_price,add_donchan_middle,add_donchan_prev,add_buffer_add,add_buffer_sub,add_vangerchik,add_simple_dynamics_ma,add_vodka_channel,add_rsi,add_enter_price2close,add_macd
+from from_rich_laughter.indicators import *
 
 class BaseTABitget:
     def __init__(self,symbol="BTCUSDT",granularity="1m",productType="usdt-futures",n_parts=1,period=20):
@@ -52,6 +52,26 @@ class PTA4_WDDCr(BaseTABitget):
             if row['rsi'] > 100-self.threshold:
                 return 'short_pw'
             
+class PTA4_WDVCr(BaseTABitget):
+    def __init__(self, symbol="BTCUSDT", granularity="1m", productType="usdt-futures", n_parts=1, period=20,threshold=30):
+        super().__init__(symbol, granularity, productType, n_parts, period)
+        self.threshold = threshold
+    def preprocessing(self, df):
+        df = add_vodka_channel(df,self.period)
+        df = add_enter_price2close(df)
+        df = add_rsi(df,self.period)
+        df = add_slice_df(df,period=self.period)
+        return df
+    def __call__(self, row, *args, **kwds):
+        nearest_long = row['high'] - row['close'] > row['close'] - row['low'] 
+        if row['low'] < row['bottom_mean']:
+            if nearest_long:
+                if row['rsi'] < self.threshold:
+                    return 'long_pw'
+        if row['high'] > row['top_mean']:
+            if row['rsi'] > 100-self.threshold:
+                return 'short_pw'
+            
 class PTA4_WLISICA(BaseTABitget):
     def __init__(self, symbol="BTCUSDT", granularity="1m", productType="usdt-futures", n_parts=1, period=20,divider=1,threshold=30):
         super().__init__(symbol, granularity, productType, n_parts, period)
@@ -94,3 +114,68 @@ class PTA8_WDOBBY_FREEr(BaseTABitget):
         if row['high'] > row['bbu']:
             if row['rsi'] > 100-self.threshold:
                 return 'short_pw'
+            
+class OGTA4_DOG(BaseTABitget):
+    def __init__(self, symbol="BTCUSDT", granularity="1m", productType="usdt-futures", n_parts=1, period=14,threshold=30):
+        super().__init__(symbol, granularity, productType, n_parts, period)
+        self.threshold = threshold
+    def preprocessing(self, df):
+        df = add_CDV(df)
+        df = add_rsi(df,self.period,'cdv')
+        df = add_enter_price2close(df)  
+        df = add_slice_df(df, self.period) 
+        # df['signal'] = add_signal(df) # поиск какого-то сигнала
+        return df
+
+    def __call__(self, row, *args, **kwds):
+        if row['rsi'] < self.threshold:  
+            return 'long_pw'
+        if row['rsi'] > 100-self.threshold:  
+            return 'short_pw'
+        
+class LTA_OKROSHKA(BaseTABitget):
+    def __init__(self, symbol="BTCUSDT", granularity="1m", productType="usdt-futures", n_parts=1, period=15,period_chop=10):
+        super().__init__(symbol, granularity, productType, n_parts, period)
+        self.period_chop = period_chop
+    def preprocessing(self, df):
+        df = add_rsi(df,self.period)
+        df = add_chop(df,self.period_chop)
+        df = add_enter_price2close(df)  
+        period = max(self.period,self.period_chop)
+        df = add_slice_df(df, period) 
+        # df['signal'] = add_signal(df) # поиск какого-то сигнала
+        return df
+
+    def __call__(self, row, *args, **kwds):
+        threshold = 30
+        if 60 > row['chop'] > 45:
+            threshold = 30
+        elif row['chop'] > 60:
+            threshold = 25
+        elif 45 > row['chop'] > 30:
+            threshold = 20
+        else:
+            threshold = 10
+        if row['rsi'] < threshold:  
+            return 'long_pw'
+        if row['rsi'] > 100-threshold:  
+            return 'short_pw'
+        
+class LTA_KROSH(BaseTABitget):
+    def __init__(self, symbol="BTCUSDT", granularity="1m", productType="usdt-futures", n_parts=1, period=15,threshold=30):
+        super().__init__(symbol, granularity, productType, n_parts, period)
+        self.threshold = threshold
+    def preprocessing(self, df):
+        df = add_rsi(df,self.period)
+
+        df = add_enter_price2close(df)  
+
+        df = add_slice_df(df, self.period) 
+        # df['signal'] = add_signal(df) # поиск какого-то сигнала
+        return df
+
+    def __call__(self, row, *args, **kwds):
+        if row['rsi'] < self.threshold:  
+            return 'long_pw'
+        if row['rsi'] > 100-self.threshold:  
+            return 'short_pw'
