@@ -69,3 +69,4 @@ def convert_chart1to5(df):
     df_5min.reset_index(inplace=True)
     df_5min['x'] = df_5min.index
     return df_5min
+

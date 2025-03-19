@@ -37,6 +37,7 @@ from tas.LTA1_C import LTA1_C,LTA1_C2
 from tas.LTA2_SP import LTA2_SP
 from tas.OGTA1_Rails import OGTA1_Rails
 from tas.STA2_PPP import STA2_PPP,STA2_R_PPP
+from tas.RLInterfaceTA import RLITA1
 
 VT2_bots = {
     'OGT1':OGT1,
@@ -106,6 +107,9 @@ VT3_bots = {
     'OGTA1_Rails':(OGTA1_Rails,()),
     'STA2_PPP_20':(STA2_PPP,(20,20,10,False)),
     'STA2_R_PPP':(STA2_R_PPP,()),
+    'RLITA_F_0':(RLITA1,(False,'0')),
+    'RLITA_F_1':(RLITA1,(False,'1')),
+    'RLITA_T_2':(RLITA1,(False,'2'))
 }
 
 

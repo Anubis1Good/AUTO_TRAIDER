@@ -11,10 +11,12 @@ sleep_group = ['PIKK','MRKP','GAZP','BSPB','SBER']
 bot_on_ticker = {
     'PTA4_WDDCrRL_11_11_30' : ['MTLR','MOEX','CHMF'],
     'PTA4_WDDCrRL_6_6_30' : ['VTBR','TATN','GMKN','RUAL','SBRF'],
-    'PTA4_WDVCrRL_11_11_30' : ['ROSN','LKOH'],
+    'PTA4_WDVCrRL_11_11_30' : ['ROSN',],
     'PTA8_WDOBBYFrRL_11_0p5_11_30' : ['SELG','NVTK','MAGN'],
     'PTA4_WDDCrRL_10_10_20' : ['MOEX',],
-    'PTA4_WWEDDCrRL_7_7_20_35' : ['MXI','CNY','GAZR'],
+    'PTA4_WWEDDCrRL_7_7_20_35' : ['CNY','GAZR'],
+    'RLITA_F_1' : ['MXI'],
+    'RLITA_T_2' : ['LKOH'],
 }
 
 bot_on_ticker_5m = {
