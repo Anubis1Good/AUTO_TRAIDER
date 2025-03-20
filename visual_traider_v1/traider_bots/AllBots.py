@@ -38,7 +38,7 @@ from tas.LTA2_SP import LTA2_SP
 from tas.OGTA1_Rails import OGTA1_Rails
 from tas.STA2_PPP import STA2_PPP,STA2_R_PPP
 from tas.RLInterfaceTA import RLITA1
-
+from from_rich_laughter.id_ws import ids_wss
 VT2_bots = {
     'OGT1':OGT1,
     'OGT2':OGT2,
@@ -107,20 +107,36 @@ VT3_bots = {
     # 'OGTA1_Rails':(OGTA1_Rails,()),
     # 'STA2_PPP_20':(STA2_PPP,(20,20,10,False)),
     # 'STA2_R_PPP':(STA2_R_PPP,()),
-    'RLITA_F_0':(RLITA1,(False,'0')),
-    'RLITA_F_1':(RLITA1,(False,'1')),
-    'RLITA_F_3':(RLITA1,(False,'3')),
-    'RLITA_F_4':(RLITA1,(False,'4')),
-    'RLITA_F_5':(RLITA1,(False,'5')),
-    'RLITA_F_6':(RLITA1,(False,'6')),
-    'RLITA_F_7':(RLITA1,(False,'7')),
-    'RLITA_F_8':(RLITA1,(False,'8')),
-    'RLITA_F_9':(RLITA1,(False,'9')),
-    'RLITA_F_10':(RLITA1,(False,'10')),
-    'RLITA_F_11':(RLITA1,(False,'11')),
-    'RLITA_F_12':(RLITA1,(False,'12')),
-    'RLITA_T_2':(RLITA1,(True,'2'))
+    # 'RLITA_F_0':(RLITA1,(False,'0')),
+    # 'RLITA_F_1':(RLITA1,(False,'1')),
+    # 'RLITA_F_3':(RLITA1,(False,'3')),
+    # 'RLITA_F_4':(RLITA1,(False,'4')),
+    # 'RLITA_F_5':(RLITA1,(False,'5')),
+    # 'RLITA_F_6':(RLITA1,(False,'6')),
+    # 'RLITA_F_7':(RLITA1,(False,'7')),
+    # 'RLITA_F_8':(RLITA1,(False,'8')),
+    # 'RLITA_F_9':(RLITA1,(False,'9')),
+    # 'RLITA_F_10':(RLITA1,(False,'10')),
+    # 'RLITA_F_11':(RLITA1,(False,'11')),
+    # 'RLITA_F_12':(RLITA1,(False,'12')),
+    # 'RLITA_F_0':(RLITA1,(False,'0')),
+    # 'RLITA_F_1':(RLITA1,(False,'1')),
+    # 'RLITA_F_3':(RLITA1,(False,'3')),
+    # 'RLITA_F_4':(RLITA1,(False,'4')),
+    # 'RLITA_F_5':(RLITA1,(False,'5')),
+    # 'RLITA_F_6':(RLITA1,(False,'6')),
+    # 'RLITA_F_7':(RLITA1,(False,'7')),
+    # 'RLITA_F_8':(RLITA1,(False,'8')),
+    # 'RLITA_F_9':(RLITA1,(False,'9')),
+    # 'RLITA_F_10':(RLITA1,(False,'10')),
+    # 'RLITA_F_11':(RLITA1,(False,'11')),
+    # 'RLITA_F_12':(RLITA1,(False,'12')),
+
 }
 
-
+for id in ids_wss:
+    name_f = 'RLITA_F_'+id
+    name_t = 'RLITA_T_'+id
+    VT3_bots[name_f] = (RLITA1,(False,id))
+    VT3_bots[name_t] = (RLITA1,(True,id))
 

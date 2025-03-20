@@ -15,7 +15,9 @@ from multiprocessing import Pool,cpu_count
 from sklearn.metrics.pairwise import cosine_similarity
 # print(cpu_count())
 import numpy as np
+from traider_bots.AllBots import VT3_bots
 
+print(VT3_bots)
 # # Задаем два числовых массива
 # nums1 = np.array([1, 2, 3])
 # nums2 = np.array([4, 5, 6])

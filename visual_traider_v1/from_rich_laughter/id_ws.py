@@ -2,10 +2,10 @@ from from_rich_laughter.work_strategies import PTA4_WDDCr,PTA4_WLISICA,PTA8_WDOB
 
 
 ids_wss = { 
-    'ex': PTA4_WDDCr(period=3,threshold=50),
+    # 'ex': PTA4_WDDCr(period=3,threshold=50),
     '0': PTA4_WDDCr(period=11,threshold=30),
     '1': PTA8_WDOBBY_FREEr(period=6,multiplier=0.5,threshold=30),
-    '2': PTA4_WDDCr(period=4,threshold=30), 
+    '2': PTA4_WDDCr(period=10,threshold=20), 
     '3': PTA4_WDVCr(period=11,threshold=30),
     '4': OGTA4_DOG(period=25,threshold=30),
     '5': PTA4_WLISICA(period=7,divider=2,threshold=30),
@@ -16,5 +16,5 @@ ids_wss = {
     '10': PTA4_WDDCrE(period=6,threshold=30), 
     '11': PTA4_WDDCr(period=21,threshold=30),
     '12': PTA8_WDOBBY_FREEr(period=11,multiplier=0.5,threshold=30),
-    
+
     }
