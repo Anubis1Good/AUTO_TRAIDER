@@ -40,7 +40,7 @@ bot_on_ticker = {
     'RLITA_F_19' : ['RTS',],
     'RLITA_F_20' : ['ROSN',],
     'RLITA_F_21' : ['SNGSP',],
-    'RLITA_F_21' : ['TRMK',],
+    'RLITA_F_22' : ['TRMK',],
 
 
 
